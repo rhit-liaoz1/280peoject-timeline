@@ -131,6 +131,9 @@ html{
 }
 
 /* editing detail Page */
+#editingdetailPage #eventImage {
+  margin: 20px 0px;
+}
 
 /* Profile Page */
 
