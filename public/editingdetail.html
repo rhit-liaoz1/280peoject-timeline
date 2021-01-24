@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+  <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
+  <link rel="stylesheet" href="styles/main.css">
+  <title>App Name</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark fixed-top">
+    <div id="profilePictureContainer">
+      <img id="profilePicture" src = "https://i.stack.imgur.com/l60Hf.png"/>
+    </div>
+    <a class="navbar-brand" href="#">Timeline in</a>
+  </nav>
+
+  <div id="editingdetailPage" class="container page-container">
+    
+    <hr class="lineBreak">
+
+    <form>
+
+      <div class="form-group">
+        <label for="eventYear" class="bmd-label-floating">Event Year</label>
+        <textarea class="form-control" id="eventYear" rows="2">1796</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="eventTitle" class="bmd-label-floating">Event Title</label>
+        <textarea class="form-control" id="eventTitle" rows="2">Smallpox Vaccination</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="eventImageURL" class="bmd-label-floating">Event Image URL</label>
+        <textarea class="form-control" id="eventImageURL" rows="2">https://upload.wikimedia.org/wikipedia/commons/4/41/Dryvax.jpg</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="eventDescription" class="bmd-label-floating">Event Description</label>
+        <textarea class="form-control" id="eventDescription" rows="20">
+          The smallpox vaccine was the first vaccine to be developed against a contagious disease. In 1796, the British doctor Edward Jenner demonstrated that an infection with the relatively mild cowpox virus conferred immunity against the deadly smallpox virus. Cowpox served as a natural vaccine until the modern smallpox vaccine emerged in the 19th century. From 1958 to 1977, the World Health Organization conducted a global vaccination campaign that eradicated smallpox, making it the only human disease to be eradicated. Although routine smallpox vaccination is no longer performed on the general public, the vaccine is still being produced to guard against bioterrorism and biological warfare.
+          The term vaccine derives from the Latin word for cow, reflecting the origins of smallpox vaccination. However, the exact origin of the smallpox vaccine is unclear. In the 20th century, the smallpox vaccine was identified as a separate viral species known as vaccinia, which was serologically distinct from cowpox. Whole genome sequencing has shown that vaccinia is 99.7% identical to horsepox, with cowpox being a close relative.
+        </textarea>
+      </div>
+
+    </form>
+
+    <hr class="lineBreak">
+    <div class="buttonContainer">
+      <button id="finishEditingButton" type="button" class="btn btn-raised btn-secondary">Finish Editing</button>
+      <button id="deletePageButton" type="button" class="btn btn-raised btn-secondary">Delete Page</button>
+    </div>
+    <hr class="lineBreak">
+
+  </div>
+
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/popper.js"></script>
+  <script src="scripts/bootstrap-material-design.js"></script>
+  <script>$("body").bootstrapMaterialDesign();</script>
+  <script src="/__/firebase/7.18.0/firebase-app.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-analytics.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-auth.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-firestore.js"></script>
+  <script src="/__/firebase/init.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+
+</html>

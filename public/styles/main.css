@@ -1,12 +1,271 @@
+:root{
+    --main-blue: #6091F1;
+}
+
 body {
-    background: #DDDDDD;
+    /* background-color: white; */
+    background-color: transparent;
+}
+
+html{
+    background-color: white;
 }
 
 .navbar {
-    background-color: #800000;
+    background-color: var(--main-blue);
     color: white;
+    justify-content: center;
+    height: 8vh;
+    display: fixed;
 }
 
 .page-container {
+    /* background-color: white; */
     margin-top: 75px;
+}
+
+/* General */
+.footerButton {
+    margin: 100px auto 50px;
+}
+
+.buttonIcon{ 
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.lineBreak {
+    background: lightsteelblue
+}
+
+.buttonContainer {
+    display: flex;
+} 
+
+.buttonContainer > button {
+    flex: 1 0 auto;
+    margin: 5px 5px;
+}
+
+#profilePictureContainer {
+    position: fixed;
+    left: 5px;
+    border-radius: 50%;
+    overflow: hidden;
+    height: 7vh;
+    width: 7vh;
+}
+
+#profilePicture {
+    height: 7vh;
+    width: auto;   
+    margin-left: -25%;
+}
+
+/* maintimeline */
+/* #maintimeline .dropdown{
+    left: -128px;
+} */
+
+.timeline .timelinedisplay{
+    padding: 1em 0 0 2em;
+    margin: 0;
+    list-style: none;
+    position: relative;
+}
+
+.timeline .timelinedisplay::before {
+    content: ' ';
+    height: 100%;
+    width: 2.2px;
+    background-color: lightskyblue;
+    position: absolute;
+    top: 0;
+    left: 2.4em;
+    z-index: -1;
+  }
+
+.timeline li div{
+    display: inline-block;
+    margin: 1em 0;
+    vertical-align: top;
+  }
+  
+.timeline .bullet{
+    width: 15px;
+    height: 1em;
+    box-sizing: border-box;
+    border-radius: 50%;
+    background: white;
+    z-index: 1;
+    margin-right: 1em;
+    border: 2px solid #1E90FF;
+  }
+.timeline li .btn{
+    background-color: #2A56C6;
+    color: white;
+    left: -13px;
+}
+.desc{
+    width: 60vw;
+}
+
+/* Detail Page */
+#detailPage {
+    text-align: center;
+}
+
+#detailPage #eventImage {
+    margin: 20px 0px;
+}
+
+#detailPage #rightArrowIcon {
+    margin-left: 5px;
+    margin-right: auto;
+}
+
+#detailPage #textDescription{
+    margin-bottom: 50px;
+    text-align: left;
+    text-indent: 10vw;
+}
+
+/* editing detail Page */
+
+/* Profile Page */
+
+#profilePage {
+    text-align: center;
+}
+
+#profilePage #imageContainer{
+    position: relative;
+}
+
+#profilePage #profileName{
+    position: absolute;
+    bottom: 10%;
+    left: 10%;
+    color: white;
+}
+
+#profilePage #profileUsername{
+    position: absolute;
+    bottom: 0%;
+    left: 10%;
+    color: white;
+}
+
+#profilePage #profileSignOutButton{
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+}
+
+#profilePage #profileImageContainer {
+    position: absolute;
+    top: 25%;
+    left: 10%;
+    border-radius: 50%;
+    overflow: hidden;
+    height: 17vw;
+    width: 17vw;
+}
+
+#profilePage #profileImage {
+    height: 17vw;
+    width: auto;   
+    margin-left: -25%;
+}
+
+/* timeline */
+.buttonrow{
+    margin-top: 20px;
+    margin-left: 0;
+    padding-left: 0;
+    width: 10vw;
+    float: left;
+    position: fixed;
+}
+
+
+#Zoomlevel{
+    /* padding: 1em 0 0 2em;
+    margin: 0; */
+    list-style: none;
+    position: fixed;
+}
+
+#Zoomlevel::before {
+    content: ' ';
+    height: 100%;
+    width: 3px;
+    background-color: lightskyblue;
+    position: absolute;
+    top: 1;
+    left:4vw;
+    z-index: -1;
+  }
+  #Zoomlevel .zoombutton{
+      left: -4vw;
+  }
+#Zoomlevel li div{
+    font-size: medium;
+    display: inline-block;
+    vertical-align: top;
+    list-style-type: none;
+  }
+  
+
+#timelinepage{
+    margin-left: 23vw;
+}
+
+#searchbar{
+    position: fixed;
+    right: 20px;
+}
+
+#timelinepage .timeline .timelinedisplay{
+    padding: 1em 0 0 2em;
+    margin: 0;
+    list-style: none;
+    position: relative;
+}
+
+#timelinepage .timeline .timelinedisplay::before {
+    content: ' ';
+    height: 100%;
+    width: 2.2px;
+    background-color: lightskyblue;
+    position: absolute;
+    top: 0;
+    left: 2.4em;
+    z-index: -1;
+  }
+
+  #timelinepage .timeline li div{
+    display: inline-block;
+    /* margin: 1em 0; */
+    vertical-align: top;
+  }
+  
+  #timelinepage .timeline .bullet{
+    width: 15px;
+    height: 1em;
+    box-sizing: border-box;
+    border-radius: 50%;
+    background: white;
+    z-index: 1;
+    margin-right: 1em;
+    border: 2px solid #1E90FF;
+  }
+  #timelinepage .timeline li .btn{
+    background-color: #2A56C6;
+    color: white;
+    left: -13px;
+}
+#timelinepage .desc{
+    width: 60vw;
+    margin-left: 25px;
 }

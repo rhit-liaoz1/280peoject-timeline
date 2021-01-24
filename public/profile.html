@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+  <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
+  <link rel="stylesheet" href="styles/main.css">
+  <title>Timeline in</title>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-dark fixed-top">
+    <a class="navbar-brand" href="#">Timeline in</a>
+  </nav>
+
+  <div id="profilePage" class="container page-container">
+
+    <div id="imageContainer">
+      <img class="img-fluid" src="https://wallpaperaccess.com/full/846241.jpg">
+      <div id="profileImageContainer">
+        <img id="profileImage" src = "https://i.stack.imgur.com/l60Hf.png"/>
+      </div>
+      <h6 id="profileName">Name: Kelsey Smith</h6>
+      <h6 id="profileUsername">Username: smithka</h6>
+      <button id="profileSignOutButton" type="button" class="btn btn-raised btn-secondary">Log Out</button>
+    </div>
+
+    <hr class="lineBreak">
+    <h6>Location: Terre Haute</h6>
+    <hr class="lineBreak">
+    <h6>Age: 22</h6>
+    <hr class="lineBreak">
+    <h6>Member Since: 12/24/2020</h6>
+    <hr class="lineBreak">
+    <div class="buttonContainer">
+      <button type="button" class="btn btn-raised btn-secondary">
+        <i class="material-icons buttonIcon">keyboard_arrow_right</i> Favorite Events
+      </button>
+    </div>
+    <div class="buttonContainer">
+      <button type="button" class="btn btn-raised btn-secondary">
+        <i class="material-icons buttonIcon">keyboard_arrow_right</i> Created Events
+      </button>
+    </div>
+    <div class="buttonContainer">
+      <button type="button" class="btn btn-raised btn-secondary">Settings</button>
+      <button type="button" class="btn btn-raised btn-secondary">Edit Page</button>
+    </div>
+    <hr class="lineBreak">
+
+    <button type="button" class="btn btn-raised btn-secondary footerButton">Main Page</button>
+  </div>
+
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/popper.js"></script>
+  <script src="scripts/bootstrap-material-design.js"></script>
+  <script>$("body").bootstrapMaterialDesign();</script>
+  <script src="/__/firebase/7.18.0/firebase-app.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-analytics.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-auth.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-firestore.js"></script>
+  <script src="/__/firebase/init.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+
+</html>

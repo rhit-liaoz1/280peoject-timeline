@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+  <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
+  <link rel="stylesheet" href="styles/main.css">
+  <title>Timeline in</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark fixed-top">
+    <div id="profilePictureContainer">
+      <img id="profilePicture" src = "https://i.stack.imgur.com/l60Hf.png"/>
+    </div>
+    <a class="navbar-brand" href="#">Timeline in</a>
+  </nav>
+
+  <div id="detailPage" class="container page-container">
+
+    <h1 id="eventDate">1796</h1>
+    <h2 id="eventName">Smallpox Vaccination</h2>
+    <hr class="lineBreak">
+
+    <img id="eventImage" class="img-fluid" src="https://upload.wikimedia.org/wikipedia/commons/4/41/Dryvax.jpg"/>
+    <hr class="lineBreak">
+
+    <div id="textDescription">
+      <p>
+        The smallpox vaccine was the first vaccine to be developed against a contagious disease. In 1796, the British doctor 
+        Edward Jenner demonstrated that an infection with the relatively mild cowpox virus conferred immunity against the deadly 
+        smallpox virus. Cowpox served as a natural vaccine until the modern smallpox vaccine emerged in the 19th century. From 1958 
+        to 1977, the World Health Organization conducted a global vaccination campaign that eradicated smallpox, making it the only 
+        human disease to be eradicated. Although routine smallpox vaccination is no longer performed on the general public, the vaccine 
+        is still being produced to guard against bioterrorism and biological warfare.
+      </p>
+      <p>
+        The term vaccine derives from the Latin word for cow, reflecting the origins of smallpox vaccination. However, the exact 
+        origin of the smallpox vaccine is unclear. In the 20th century, the smallpox vaccine was identified as a separate viral 
+        species known as vaccinia, which was serologically distinct from cowpox. Whole genome sequencing has shown that vaccinia 
+        is 99.7% identical to horsepox, with cowpox being a close relative.
+      </p>
+    </div>
+    <hr class="lineBreak">
+
+    <div class="buttonContainer">
+      <button id="favoriteButton" type="button" class="btn btn-raised btn-secondary">
+        <i id="favoriteIcon" class="material-icons buttonIcon">favorite</i> Favorite
+      </button>
+      <button id="editPageButton" type="button" class="btn btn-raised btn-secondary">Edit Page</button>
+    </div>
+    <div class="buttonContainer">
+      <button id="contributorsButton" type="button" class="btn btn-raised btn-secondary">
+        <i id="rightArrowIcon" class="material-icons buttonIcon">keyboard_arrow_right</i> Contributors
+      </button>
+    </div>
+    <hr class="lineBreak">
+
+    <button type="button" class="btn btn-raised btn-secondary footerButton">Main Page</button>
+
+  </div>
+
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/popper.js"></script>
+  <script src="scripts/bootstrap-material-design.js"></script>
+  <script>$("body").bootstrapMaterialDesign();</script>
+  <script src="/__/firebase/7.18.0/firebase-app.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-analytics.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-auth.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-firestore.js"></script>
+  <script src="/__/firebase/init.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+
+</html>
