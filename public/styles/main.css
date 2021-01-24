@@ -200,23 +200,11 @@ html{
     /* padding: 1em 0 0 2em;
     margin: 0; */
     list-style: none;
-    position: fixed;
+    position: relative;
+    left: 5vw;
 }
-
-#Zoomlevel::before {
-    content: ' ';
-    height: 100%;
-    width: 3px;
-    background-color: lightskyblue;
-    position: absolute;
-    top: 1;
-    left:4vw;
-    z-index: -1;
-  }
-  #Zoomlevel .zoombutton{
-      left: -4vw;
-  }
 #Zoomlevel li div{
+    
     font-size: medium;
     display: inline-block;
     vertical-align: top;
