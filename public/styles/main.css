@@ -182,6 +182,10 @@ html{
 }
 
 /* timeline */
+#zoomSlider {
+  transform: rotate(-90deg);
+}
+
 .buttonrow{
     margin-top: 20px;
     margin-left: 0;
