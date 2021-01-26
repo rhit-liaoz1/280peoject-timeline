@@ -28,35 +28,17 @@
 
   </nav>
 
-  <div id="timePage" class="container page-container">
+  <div id="timelinePage" class="container page-container">
 
     <div class="buttonrow">
       
-      <div>
-        <button id="loginButton" type="button" class="btn btn-dark btn-xs" style="padding-left: 0; margin-left: 0; 
-        text-decoration: underline; font-size: small;">Log in</button>
-      </div>
+      <button id="loginButton" type="button" class="btn btn-dark btn-xs userButton">Log in</button>
+      <button id="newUserButton" type="button" class="btn btn-dark btn-xs userButton">New User</button>
+      <button id="newEventButton" type="button" class="btn btn-dark btn-xs">New Event</button>
 
-      <div>
-        <button id="newUserButton" type="button" class="btn btn-dark btn-xs" style="padding-left: 0; margin-left: 0;
-        text-decoration: underline; font-size: small;">New User</button>
-      </div>
-
-      <div>
-        <button id="newUserButton" type="button" class="btn btn-dark btn-xs" style="padding-left: 5px; padding-right: 5px;
-      margin-left: 0; background-color: #019AE8; font-size: x-small;
-        color: white;">New Event</button>
-      </div>
-      
       <div id="zoomLevelContainer">
         <h6>Zoom Level</h6>
-        <input id="zoomSlider" type="range"min="1" max = "5" step="1" style="
-        width: 200px;
-        position: relative;
-        top: 120px;
-        left: -75px; 
-        overflow: hidden;">
-
+        <input id="zoomSlider" type="range"min="1" max = "5" step="1">
         <ul id="Zoomlevel">
           <li>
               <div>100</div>
@@ -77,9 +59,9 @@
 
     </div>
 
-    <div style="font-size: x-small; text-align: center;">You're at Top</div>
+    <div class="smallNote">You're at Top</div>
 
-    <div id="timelinepage" class="timeline">
+    <div id="timeline" class="timeline">
       
       <ul class="timelinedisplay">
 
@@ -87,11 +69,11 @@
           <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
             <i class="material-icons">add</i>
           </button>
-          <h5 style="display: inline">1700-1710</h5>
+          <h5 class="inlineDisplay">1700-1710</h5>
           <div class="desc">
             <ul>
-              <li style="font-size: small;">Event A</li>
-              <li style="font-size: small;">Event B</li>
+              <li class="smallFont">Event A</li>
+              <li class="smallFont">Event B</li>
             </ul>
             <hr class="lineBreak">
           </div>
@@ -101,11 +83,11 @@
           <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
             <i class="material-icons">add</i>
           </button>
-          <h5 style="display: inline">1700-1710</h5>
+          <h5 class="inlineDisplay">1700-1710</h5>
           <div class="desc">
             <ul>
-              <li style="font-size: small;">Event A</li>
-              <li style="font-size: small;">Event B</li>
+              <li class="smallFont">Event A</li>
+              <li class="smallFont">Event B</li>
             </ul>
             <hr class="lineBreak">
           </div>
@@ -115,11 +97,11 @@
           <button type="button" class="btn bmd-btn-fab bmd-btn-fab-sm">
             <i class="material-icons">add</i>
           </button>
-          <h5 style="display: inline">1700-1710</h5>  
+          <h5 class="inlineDisplay">1700-1710</h5>  
           <div class="desc">
             <ul>
-              <li style="font-size: small;">Event A</li>
-              <li style="font-size: small;">Event B</li>
+              <li class="smallFont">Event A</li>
+              <li class="smallFont">Event B</li>
             </ul>
             <hr class="lineBreak">
           </div>
@@ -129,7 +111,7 @@
           <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
             <i class="material-icons">add</i>
           </button>
-          <h5 style="display: inline">1700-1710</h5>
+          <h5 class="inlineDisplay">1700-1710</h5>
           <div class="desc">
             <hr class="lineBreak">
           </div>
@@ -139,7 +121,7 @@
           <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
             <i class="material-icons">add</i>
           </button>
-          <h5 style="display: inline">1700-1710</h5>
+          <h5 class="inlineDisplay">1700-1710</h5>
           <div class="desc">
             <hr class="lineBreak">
           </div>
@@ -149,7 +131,7 @@
           <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
             <i class="material-icons">add</i>
           </button>
-          <h5 style="display: inline">1700-1710</h5>
+          <h5 class="inlineDisplay">1700-1710</h5>
           <div class="desc">
             <hr class="lineBreak">
           </div>
@@ -159,7 +141,7 @@
           <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
             <i class="material-icons">add</i>
           </button>
-          <h5 style="display: inline">1700-1710</h5>
+          <h5 class="inlineDisplay">1700-1710</h5>
           <div class="desc">
             <hr class="lineBreak">
           </div>
@@ -169,7 +151,7 @@
           <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
             <i class="material-icons">add</i>
           </button>
-          <h5 style="display: inline">1700-1710</h5>
+          <h5 class="inlineDisplay">1700-1710</h5>
           <div class="desc">
             <hr class="lineBreak">
           </div>
@@ -178,16 +160,14 @@
         <hr class="lineBreak">
           
       </ul>
-      
-      <div style="font-size: xx-small; text-align: center;">You're at bottom</div>
+
+      <div class="smallNote">You're at bottom</div>
           
-      <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab" data-toggle="modal" data-target="#gobottom"
-      style="position: fixed;bottom: 10px; left: 10px;background-color: #2A56C6; color: white;">
+      <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab pageJumpButton" data-toggle="modal" data-target="#gobottom">
         <i class="material-icons">arrow_downward</i>
       </button>
 
-      <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab" data-toggle="modal" data-target="#goup"
-      style="position: fixed;bottom: 10px; left: 10px;background-color: #2A56C6; color: white;">
+      <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab pageJumpButton" data-toggle="modal" data-target="#goup">
         <i class="material-icons">arrow_upward</i>
       </button>
    </div>

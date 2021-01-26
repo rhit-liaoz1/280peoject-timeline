@@ -19,11 +19,11 @@
       </div>
     <a class="navbar-brand" href="#">TimeLine in</a>
 
-    <div id="searchbar" class="dropdown pull-xs-right">
+    <div id="searchbar" class="dropdown">
         <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="lr1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="material-icons">reorder</i>
         </button>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1" style="left: -128px;">
+        <div id="timelineMenuBar" class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1">
           <button class="dropdown-item" type="button" data-toggle="modal" data-target="#searchtimeline"> 
             <i class="material-icons">search</i>&nbsp;&nbsp;&nbsp;Search
           </button>
@@ -35,7 +35,7 @@
 
   </nav>
 
-  <div id="mainPage" class="container page-container">
+  <div id="mainTimelinePage" class="container page-container">
 
     <div class="timeline">
       <ul class="timelinedisplay">
@@ -45,7 +45,7 @@
           </button>
           <div class="desc">
             <h5>Medical TimeLine</h5>
-            <p style="font-size: small;">Template displaying messages. Medical History in the US from the 18th century</p>
+            <p class="descriptionFont">Template displaying messages. Medical History in the US from the 18th century</p>
             <hr class="lineBreak">
           </div>
         </li>
@@ -56,7 +56,7 @@
           </button>
           <div class="desc">
             <h5>American History</h5>
-            <p></p>
+            <p class="descriptionFont"></p>
             <hr class="lineBreak">
           </div>
         </li>
@@ -67,7 +67,7 @@
           </button>
           <div class="desc">
             <h5>History TimeLine</h5>
-            <p></p>
+            <p class="descriptionFont"></p>
             <hr class="lineBreak">
           </div>
         </li>
@@ -78,7 +78,7 @@
           </button>
           <div class="desc">
             <h5>Something TimeLine</h5>
-            <p></p>
+            <p class="descriptionFont"></p>
             <hr class="lineBreak">
           </div>
         </li>
@@ -86,7 +86,7 @@
         <hr class="lineBreak">
               
       </ul>
-    <div style="font-size: x-small; text-align: center;">You're at the bottom</div>
+    <div class="smallNote">You're at the bottom</div>
     </div>
 
   </div>
