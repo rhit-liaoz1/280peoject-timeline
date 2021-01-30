@@ -2,11 +2,18 @@
 var rhit = rhit || {};
 
 rhit.loginPageModel = null;
+rhit.timelineListModel = null;
 
 rhit.TimelineListController = class {
 
 	constructor(){
 
+    document.querySelector("#signOutButton").addEventListener("click", () => {
+
+      rhit.loginPageModel.signOut();
+    });
+
+    rhit.timelineListModel.beginListening(this.updateView.bind(this));
 	}
 
 	updateView(){
@@ -27,7 +34,7 @@ rhit.TimelineListModel = class {
 		this._unsubscribe;
 	}
 
-	beginListenting(changeListener){
+	beginListening(changeListener){
 
 	}
 
@@ -204,7 +211,7 @@ rhit.ProfilePageController = class {
 	}
 }
 
-rhit.LoginPageModel = class {
+rhit.ProfilePageModel = class {
 
 	constructor(){
 
@@ -342,7 +349,7 @@ rhit.LoginPageModel = class {
     });
 	}
 
-	isSignedIn(){
+	get isSignedIn(){
 
     return !!this._user;
 	}
@@ -370,6 +377,12 @@ rhit.initializePage = function(){
   if (document.querySelector("#loginPage")){
 
     new rhit.LoginPageController();
+  }
+
+  else if (document.querySelector("#mainTimelinePage")){
+
+    rhit.timelineListModel = new rhit.TimelineListModel();
+    new rhit.TimelineListController()
   }
 }
 
