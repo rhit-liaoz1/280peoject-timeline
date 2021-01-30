@@ -281,6 +281,11 @@ rhit.LoginPageController = class {
 
       rhit.loginPageModel.createUserWithEmailAndPassword(inputEmail.value, inputPassword.value);
     });
+
+    document.querySelector("#guestButton").addEventListener("click", () => {
+
+      rhit.loginPageModel.signInAsGuest();
+    });
 	}
 
 	updateView(){
@@ -292,7 +297,7 @@ rhit.LoginPageModel = class {
 
 	constructor(){
 
-		this._user;
+    this._user;
 	}
 
 	createProfile(username, name, imageURL, age, location){
@@ -336,11 +341,23 @@ rhit.LoginPageModel = class {
     });
   }
 
+  signInAsGuest(){
+
+    console.log("Signed in as Guest");
+
+    firebase.auth().signInAnonymously()
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(`Anonymous Auth Error ${errorCode} ${errorMessage}`);
+    });
+  }
+
 	signOut(){
 
     firebase.auth().signOut()
     .then(() => {
-      
+
       console.log(`You are now signed out`);
     })
     .catch((error) => {
@@ -352,7 +369,12 @@ rhit.LoginPageModel = class {
 	get isSignedIn(){
 
     return !!this._user;
-	}
+  }
+  
+  get isGuest(){
+
+    return this._user.isAnonymous;
+  }
 
 	get uid(){
 
