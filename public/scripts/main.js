@@ -1,8 +1,16 @@
 
 var rhit = rhit || {};
 
+rhit.FB_COLLECTION_USERS = "Users";
+rhit.FB_KEY_UID = "UserID";
+rhit.FB_KEY_USERNAME = "Username";
+rhit.FB_KEY_IMAGEURL = "ImageURL";
+rhit.FB_KEY_LOCATION = "Location";
+rhit.FB_KEY_AGE = "Age";
+
 rhit.loginPageModel = null;
 rhit.timelineListModel = null;
+rhit.profilePageModel = null;
 
 rhit.TimelineListController = class {
 
@@ -203,7 +211,19 @@ rhit.ProfilePageController = class {
 
 	constructor(){
 
-		this.pageState;
+    this.pageState;
+    
+    document.querySelector("#finishEditingButton").addEventListener("click", () => {
+
+      let username = document.querySelector("#profileUsername").value;
+      let imageURL = document.querySelector("#profileImageURL").value.trim();
+      let location = document.querySelector("#profileLocation").value;
+      let age = document.querySelector("#profileAge").value.trim();
+
+      rhit.profilePageModel.updateProfile(username, imageURL, age, location);
+    });
+
+    rhit.loginPageModel.beginListening(this.updateView.bind(this));
 	}
 
 	updateView(){
@@ -213,15 +233,28 @@ rhit.ProfilePageController = class {
 
 rhit.ProfilePageModel = class {
 
-	constructor(){
+	constructor(userID){
 
-		this._documentSnapshot;
-		this._ref;
-		this._unsubscribe;
+    this._documentSnapshot;
+    console.log(userID);
+		this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_USERS).doc(userID);
+		this._unsubscribe = null;
 	}
 
 	beginListenting(changeListener){
 
+    this._unsubscribe = this._ref.onSnapshot((doc) => {
+
+      if (doc.exists){
+
+        this._documentSnapshot = doc;
+      }
+
+      else {
+
+        console.log("No Profile Document Found");
+      }
+    });
 	}
 
 	stopListening(){
@@ -230,10 +263,29 @@ rhit.ProfilePageModel = class {
 
 	delete(){
 
-	}
+  }
 
-	updateProfile(username, name, imageURL, age, location, favoriteEvents, createdEvents){
+	updateProfile(username, imageURL, age, location){
 
+    console.log(username);
+
+    this._ref.update({
+
+      [rhit.FB_KEY_UID]: rhit.loginPageModel.uid,
+      [rhit.FB_KEY_LOCATION]: location,
+      [rhit.FB_KEY_AGE]: age,
+      [rhit.FB_KEY_IMAGEURL]: imageURL,
+      [rhit.FB_KEY_USERNAME]: username,
+    })
+    .then(() => {
+
+      console.log("Profile document successfully updated");
+      window.location.href = "/profile.html";
+    })
+    .catch((error) => {
+
+      console.log("Error updating profile document: ", error);
+    });
 	}
 
 	get username(){
@@ -260,7 +312,6 @@ rhit.ProfilePageModel = class {
 
 	}
 }
-
 
 rhit.LoginPageController = class {
 
@@ -298,10 +349,7 @@ rhit.LoginPageModel = class {
 	constructor(){
 
     this._user;
-	}
-
-	createProfile(username, name, imageURL, age, location){
-
+    this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_USERS);
 	}
 
 	beginListening(changeListener){
@@ -309,12 +357,32 @@ rhit.LoginPageModel = class {
     firebase.auth().onAuthStateChanged((user) => {
 
       this._user = user;
+      this._createProfile();
       changeListener();
     });
 	}
 
-	stopListening(){
+	_createProfile(){
 
+    if (this.isSignedIn && this.isNewUser){
+
+      this._ref.doc(this.uid).set({
+
+        [rhit.FB_KEY_UID]: this.uid,
+        [rhit.FB_KEY_LOCATION]: "",
+        [rhit.FB_KEY_AGE]: -1,
+        [rhit.FB_KEY_IMAGEURL]: "",
+        [rhit.FB_KEY_USERNAME]: "",
+      })
+      .then(() => {
+
+        console.log("Profile document written successfully");
+      })
+      .catch((error) => {
+
+        console.log("Error adding profile document: ", error);
+      });
+    }
   }
 
   createUserWithEmailAndPassword(email, password){
@@ -322,6 +390,10 @@ rhit.LoginPageModel = class {
     console.log(`Create account for email: ${email} password: ${password}`);
   
     firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(() => {
+
+      console.log("Account creation successful");
+    })
     .catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -376,8 +448,14 @@ rhit.LoginPageModel = class {
     return this._user.isAnonymous;
   }
 
+  get isNewUser(){
+
+    return !this._user.displayName;
+  }
+
 	get uid(){
 
+    return this._user.uid;
 	}
 }
 
@@ -385,7 +463,8 @@ rhit.checkForRedirects = function(){
 
   if (document.querySelector("#loginPage") && rhit.loginPageModel.isSignedIn){
   
-    window.location.href = "/maintimeline.html";
+    if (rhit.loginPageModel.isNewUser) window.location.href = `/editingProfile.html?uid=${rhit.loginPageModel.uid}`;
+    else window.location.href = "/maintimeline.html";
   }
 
   if (!document.querySelector("#loginPage") && !rhit.loginPageModel.isSignedIn){
@@ -405,6 +484,16 @@ rhit.initializePage = function(){
 
     rhit.timelineListModel = new rhit.TimelineListModel();
     new rhit.TimelineListController()
+  }
+
+  else if (document.querySelector("#editingProfilePage")){
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const userID = urlParams.get("uid");
+
+    rhit.profilePageModel = new rhit.ProfilePageModel(userID);
+    new rhit.ProfilePageController();
   }
 }
 

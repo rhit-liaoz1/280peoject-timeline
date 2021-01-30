@@ -171,13 +171,6 @@ html{
     position: relative;
 }
 
-#profilePage #profileName{
-    position: absolute;
-    bottom: 10%;
-    left: 10%;
-    color: white;
-}
-
 #profilePage #profileUsername{
     position: absolute;
     bottom: 0%;
