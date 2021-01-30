@@ -1,6 +1,8 @@
 
 var rhit = rhit || {};
 
+rhit.loginPageModel = null;
+
 rhit.TimelineListController = class {
 
 	constructor(){
@@ -257,6 +259,21 @@ rhit.LoginPageController = class {
 
 	constructor(){
 
+    document.querySelector("#logInButton").addEventListener("click", () => {
+
+      const inputEmail = document.querySelector("#inputEmail");
+      const inputPassword = document.querySelector("#inputPassword");
+
+      rhit.loginPageModel.signInWithEmailAndPassword(inputEmail.value, inputPassword.value);
+    });
+
+    document.querySelector("#createAccountButton").addEventListener("click", () => {
+
+      const inputEmail = document.querySelector("#inputEmail");
+      const inputPassword = document.querySelector("#inputPassword");
+
+      rhit.loginPageModel.createUserWithEmailAndPassword(inputEmail.value, inputPassword.value);
+    });
 	}
 
 	updateView(){
@@ -275,24 +292,59 @@ rhit.LoginPageModel = class {
 
 	}
 
-	beginListenting(changeListener){
+	beginListening(changeListener){
 
+    firebase.auth().onAuthStateChanged((user) => {
+
+      this._user = user;
+      changeListener();
+    });
 	}
 
 	stopListening(){
 
-	}
+  }
 
-	signIn(){
+  createUserWithEmailAndPassword(email, password){
 
-	}
+    console.log(`Create account for email: ${email} password: ${password}`);
+  
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(`Create Account Error ${errorCode} ${errorMessage}`);
+    });
+  }
+  
+  signInWithEmailAndPassword(email, password){
+
+    console.log(`Log in for email: ${email} password: ${password}`);
+  
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(`Existing Account Log In Error ${errorCode} ${errorMessage}`);
+    });
+  }
 
 	signOut(){
 
+    firebase.auth().signOut()
+    .then(() => {
+      
+      console.log(`You are now signed out`);
+    })
+    .catch((error) => {
+      
+      console.log(`Signed out error`);
+    });
 	}
 
 	isSignedIn(){
 
+    return !!this._user;
 	}
 
 	get uid(){
@@ -300,8 +352,35 @@ rhit.LoginPageModel = class {
 	}
 }
 
+rhit.checkForRedirects = function(){
+
+  if (document.querySelector("#loginPage") && rhit.loginPageModel.isSignedIn){
+  
+    window.location.href = "/maintimeline.html";
+  }
+
+  if (!document.querySelector("#loginPage") && !rhit.loginPageModel.isSignedIn){
+  
+    window.location.href = "/";
+  }
+}
+
+rhit.initializePage = function(){
+
+  if (document.querySelector("#loginPage")){
+
+    new rhit.LoginPageController();
+  }
+}
+
 rhit.main = function(){
 
+  rhit.loginPageModel = new rhit.LoginPageModel();
+  rhit.loginPageModel.beginListening(() => {
+    
+    rhit.checkForRedirects();
+    rhit.initializePage();
+  });
 }
 
 rhit.main();
