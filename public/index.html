@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+  <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
+  <link rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.7.1/firebase-ui-auth.css" />
+  <link rel="stylesheet" href="styles/main.css">
+  <title>Timeline in</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark fixed-top">
+    <a class="navbar-brand" href="#">Timeline in</a>
+  </nav>
+  <div id="loginPage" class="container page-container">
+
+    <div class="form-group">
+      <label for="inputEmail" class="bmd-label-floating">Email</label>
+      <input type="email" class="form-control" id="inputEmail">
+    </div>
+    <div class="form-group">
+      <label for="inputPassword" class="bmd-label-floating">Password</label>
+      <input type="password" class="form-control" id="inputPassword">
+    </div>  
+
+    <div class="buttonContainer">
+      <button id="logInButton" type="button" class="btn btn-primary btn-outline">Log In</button>
+      <button id="guestButton" type="button" class="btn btn-primary btn-outline">Continue as Guest</button>
+    </div>
+    <hr class="lineBreak">
+    <div class="buttonContainer">
+      <button id="createAccountButton" type="button" class="btn btn-primary btn-outline flexRow">Create New Account</button>
+    </div>
+    <hr class="lineBreak">
+
+  </div>
+  <script src="scripts/jquery.min.js"></script>
+  <script src="scripts/popper.js"></script>
+  <script src="scripts/bootstrap-material-design.js"></script>
+  <script>$("body").bootstrapMaterialDesign();</script>
+  <script src="/__/firebase/7.18.0/firebase-app.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-analytics.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-auth.js"></script>
+  <script src="/__/firebase/7.18.0/firebase-firestore.js"></script>
+  <script src="/__/firebase/init.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/4.7.1/firebase-ui-auth.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+
+</html>

@@ -308,3 +308,17 @@ html{
   font-size: x-small;
   color: white;
 }
+
+/* loginPage */
+#loginPage .buttonContainer{
+  display: flex;
+  justify-content: center;
+}
+
+#loginPage .buttonContainer button{
+  flex: 0 0 auto;
+}
+
+#loginPage button {
+  color: var(--main-blue); 
+}
