@@ -1,13 +1,15 @@
 
 var rhit = rhit || {};
 
+// User Keys
 rhit.FB_COLLECTION_USERS = "Users";
 rhit.FB_KEY_UID = "UserID";
 rhit.FB_KEY_USERNAME = "Username";
-rhit.FB_KEY_IMAGEURL = "ImageURL";
+rhit.FB_KEY_IMAGE_URL = "ImageURL";
 rhit.FB_KEY_LOCATION = "Location";
 rhit.FB_KEY_AGE = "Age";
 
+// Single Timeline Keys
 rhit.FB_COLLECTION_TIMELINE_LIST = "TimelineList";
 rhit.FB_KEY_TITLE = "Title";
 rhit.FB_KEY_DESCRIPTION = "Description";
@@ -15,10 +17,20 @@ rhit.FB_KEY_PRIVATE_EDIT = "Private Edit";
 rhit.FB_KEY_PRIVATE_VIEW = "Private View";
 rhit.FB_KEY_AUTHOR = "Author";
 
+// Event Keys
+rhit.FB_COLLECTION_EVENT_LIST = "EventList";
+rhit.FB_KEY_TITLE = "Title";
+rhit.FB_KEY_START_DATE = "StartDate";
+rhit.FB_KEY_END_DATE = "EndDate";
+rhit.FB_KEY_DESCRIPTION = "Description";
+rhit.FB_KEY_IMAGE_URL = "ImageURL";
+
+// Singletons
 rhit.loginPageModel = null;
 rhit.timelineListModel = null;
 rhit.profilePageModel = null;
 rhit.singleTimelineModel = null;
+
 
 function htmlToElement(html){
 
@@ -106,7 +118,8 @@ rhit.TimelineListController = class {
                                       <hr class="lineBreak">
                                     </div>
                                   </li>`);
-      
+    
+    section.querySelector(".desc").prepend(title);
     section.prepend(button);
 
     return section;
@@ -182,40 +195,155 @@ rhit.SingleTimelineController = class {
 
 	constructor(){
 
+    document.querySelector("#submitAddEvent").addEventListener("click", () => {
+
+      const startDate = document.querySelector("#inputStartDate").value;
+      const endDate = document.querySelector("#inputEndDate").value;
+      const title = document.querySelector("#inputTitle").value;
+      const imageURL = document.querySelector("#inputImageURL").value;
+      const description = document.querySelector("#inputDescription").value;
+
+      rhit.singleTimelineModel.createEvent(startDate, endDate, title, imageURL, description);
+    });
+
+    $("#addNewEvent").on("show.bs.modal", (event) => {
+
+      document.querySelector("#inputStartDate").value = "";
+      document.querySelector("#inputEndDate").value = "";
+      document.querySelector("#inputTitle").value = "";
+      document.querySelector("#inputImageURL").value = "";
+      document.querySelector("#inputDescription").value = "";   
+    });
+
+    $("#addNewEvent").on("shown.bs.modal", (event) => {
+
+      document.querySelector("#inputStartDate").focus();
+    });
+
+    rhit.singleTimelineModel.beginListening(this.updateView.bind(this));
 	}
 
 	updateView(){
 
-	}
+    rhit.singleTimelineModel.getMaxDate()
+    .then((maxDate) => {
 
-	filterByYear(yearRange){
+      rhit.singleTimelineModel.getMinDate()
+      .then((minDate) => {
 
-	}
+        const zoom = 10;
 
-	setZoomLevel(level){
+        const start = minDate - minDate % zoom;
+        const end = maxDate - maxDate % zoom + zoom;
 
-	}
+        let groupIndex = start + zoom;
+        let currentGroup = this._createEventGroup(groupIndex - zoom, groupIndex);
 
-	toggleEventTitles(){
+        const newEventList = htmlToElement(`<ul id="eventListContainer" class="timelinedisplay"></ul>`);
+        newEventList.appendChild(currentGroup);
 
-	}
+        for (let i = 0; i < rhit.singleTimelineModel.length; i++){
+    
+          const event = rhit.singleTimelineModel.getEventAtIndex(i);     
+          const item = this._createEventItem(event);
+
+          if (event.startDate > groupIndex){
+
+            groupIndex += zoom;
+            currentGroup = this._createEventGroup(groupIndex - zoom, groupIndex);
+            newEventList.appendChild(currentGroup);
+          }
+
+          currentGroup.querySelector(`#containerForRange${groupIndex - zoom}-${groupIndex}`).appendChild(item);
+        }
+    
+        const oldEventList = document.querySelector("#eventListContainer");
+        oldEventList.removeAttribute("id");
+        oldEventList.hidden = true;
+        oldEventList.parentElement.appendChild(newEventList);
+      });
+    });
+  }
+
+  _createEventGroup(startYear, endYear){
+
+    const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
+                                    <i class="material-icons">add</i>
+                                  </button>`);
+
+    const group = htmlToElement(`<li>
+                                  <h5 class="inlineDisplay">${startYear}-${endYear}</h5>
+                                  <div class="desc">
+                                    <ul id="containerForRange${startYear}-${endYear}" hidden>
+                                    </ul>
+                                    <hr class="lineBreak">
+                                  </div>
+                                </li>`);
+
+    button.addEventListener("click", () => {
+
+      const item = group.querySelector(`#containerForRange${startYear}-${endYear}`);
+      item.hidden = ! item.hidden;
+    });
+
+    group.prepend(button);
+
+    return group;
+  }
+  
+  _createEventItem(event){
+
+    const title = htmlToElement(`<li class="smallFont">${event.title}</li>`);
+
+    title.addEventListener("click", () => {
+
+    window.location.href = `/detail.html?id=${event.id}`;
+    });
+
+    return title;
+  }
 }
 
 rhit.SingleTimelineModel = class {
 
-	constructor(){
+	constructor(timelineID){
 
-		this._documentSnapshots;
-		this._ref;
-		this._unsubscribe;
+		this._documentSnapshot = null;
+    this._timelineRef = firebase.firestore().collection(rhit.FB_COLLECTION_TIMELINE_LIST).doc(timelineID);
+    this._timelineUnsubscribe = null;
+
+    this._documentSnapshots = [];
+		this._eventListRef = this._timelineRef.collection(rhit.FB_COLLECTION_EVENT_LIST);
+    this._eventListUnsubscribe = null;
 	}
 
-	beginListenting(changeListener){
+	beginListening(changeListener){
 
+    this._timelineUnsubcribe = this._timelineRef.onSnapshot((doc) => {
+
+      if (doc.exists){
+
+        this._documentSnapshot = doc;
+        changeListener();
+      }
+
+      else {
+
+        console.log("No timeline document Found.");
+      }
+    });
+
+    this._eventListUnsubscribe = this._eventListRef.orderBy(rhit.FB_KEY_START_DATE).onSnapshot((query) => {
+
+      this._documentSnapshots = query.docs;
+      changeListener();
+    });
 	}
 
 	stopListening(){
 
+    this._timelineUnsubcribe();
+    this._eventListUnsubscribe();
 	}
 
 	deleteTimeline(){
@@ -226,24 +354,63 @@ rhit.SingleTimelineModel = class {
 
 	}
 
-	createEvent(year, title, imageURL, description){
+	createEvent(startDate, endDate, title, imageURL, description){
 
-	}
+    this._eventListRef.add({
+
+      [rhit.FB_KEY_START_DATE]: startDate,
+      [rhit.FB_KEY_END_DATE]: endDate,
+      [rhit.FB_KEY_TITLE]: title,
+      [rhit.FB_KEY_IMAGE_URL]: imageURL,
+      [rhit.FB_KEY_DESCRIPTION]: description,
+    })
+    .then((docRef) => {
+
+      console.log("Event document Written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+
+      console.log("Error adding event document: ", error);
+    });
+  }
+  
+  getMinDate(){
+
+    return this._eventListRef.orderBy(rhit.FB_KEY_START_DATE).limit(1).get()
+    .then((querySnapshot) => {
+
+      return querySnapshot.docs[0].get(rhit.FB_KEY_START_DATE);
+    });
+  }
+
+  getMaxDate(){
+
+    return this._eventListRef.orderBy(rhit.FB_KEY_START_DATE, "desc").limit(1).get()
+    .then((querySnapshot) => {
+
+      return querySnapshot.docs[0].get(rhit.FB_KEY_START_DATE);
+    });
+  }
 
 	getEventAtIndex(index){
 
+    const ds = this._documentSnapshots[index];
+    return new rhit.Event(ds.id, ds.get(rhit.FB_KEY_START_DATE), ds.get(rhit.FB_KEY_END_DATE), ds.get(rhit.FB_KEY_TITLE));
 	}
 
 	get length(){
 
+    return this._documentSnapshots.length;
 	}
 }
 
 rhit.Event = class {
 
-	constructor(year, title){
+	constructor(id, startDate, endDate, title){
 
-		this.year = year;
+    this.id = id;
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.title = title;
 	}
 }
