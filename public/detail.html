@@ -11,11 +11,31 @@
 </head>
 
 <body>
+
   <nav class="navbar navbar-dark fixed-top">
+
     <div id="profilePictureContainer">
       <img id="profilePicture" src = "https://i.stack.imgur.com/l60Hf.png"/>
     </div>
     <a class="navbar-brand" href="#">Timeline in</a>
+
+    <div id="searchbar" class="dropdown">
+      <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="lr1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="material-icons">reorder</i>
+      </button>
+      <div id="menuBar" class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1">
+        <button id="deleteEventButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#deleteEvent">
+          <i class="material-icons">delete</i>&nbsp;&nbsp;&nbsp;Delete Event
+        </button>
+        <button id="editEventButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#editEvent">
+          <i class="material-icons">edit</i>&nbsp;&nbsp;&nbsp;Edit Event
+        </button>
+        <button id="signOutButton" class="dropdown-item" type="button">
+          <i class="material-icons">login</i>&nbsp;&nbsp;&nbsp;Sign Out
+        </button>
+      </div>
+    </div>
+
   </nav>
 
   <div id="detailPage" class="container page-container">

@@ -229,6 +229,8 @@ rhit.SingleTimelineController = class {
 
 	updateView(){
 
+    document.querySelector("#currentTimeline").textContent = rhit.singleTimelineModel.title;
+
     rhit.singleTimelineModel.getMinDate()
     .then((minDate) => {
 
@@ -388,7 +390,12 @@ rhit.SingleTimelineModel = class {
 
     const ds = this._documentSnapshots[index];
     return new rhit.Event(ds.id, ds.get(rhit.FB_KEY_START_DATE), ds.get(rhit.FB_KEY_END_DATE), ds.get(rhit.FB_KEY_TITLE));
-	}
+  }
+  
+  get title(){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_TITLE);
+  }
 
 	get length(){
 
