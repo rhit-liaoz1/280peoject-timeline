@@ -8,9 +8,25 @@ rhit.FB_KEY_IMAGEURL = "ImageURL";
 rhit.FB_KEY_LOCATION = "Location";
 rhit.FB_KEY_AGE = "Age";
 
+rhit.FB_COLLECTION_TIMELINE_LIST = "TimelineList";
+rhit.FB_KEY_TITLE = "Title";
+rhit.FB_KEY_DESCRIPTION = "Description";
+rhit.FB_KEY_PRIVATE_EDIT = "Private Edit";
+rhit.FB_KEY_PRIVATE_VIEW = "Private View";
+rhit.FB_KEY_AUTHOR = "Author";
+
 rhit.loginPageModel = null;
 rhit.timelineListModel = null;
 rhit.profilePageModel = null;
+rhit.singleTimelineModel = null;
+
+function htmlToElement(html){
+
+  var template = document.createElement('template');
+  html = html.trim();
+  template.innerHTML = html;
+  return template.content.firstChild;
+}
 
 rhit.TimelineListController = class {
 
@@ -21,52 +37,142 @@ rhit.TimelineListController = class {
       rhit.loginPageModel.signOut();
     });
 
+    document.querySelector("#submitAddTimeline").addEventListener("click", () => {
+
+      const title = document.querySelector("#inputTitle").value;
+      const description = document.querySelector("#inputDescription").value;
+      const privateEdit = document.querySelector("#privateEditPermission").checked;
+      const privateView = document.querySelector("#privateViewPermission").checked;
+
+      rhit.timelineListModel.createTimeline(title, description, privateView, privateEdit, rhit.loginPageModel.uid);
+    });
+
+    $("#addNewTimeline").on("show.bs.modal", (event) => {
+
+      document.querySelector("#inputTitle").value = "";
+      document.querySelector("#inputDescription").value = "";  
+      document.querySelector("#privateEditPermission").checked = true;
+      document.querySelector("#privateViewPermission").checked = true;    
+    });
+
+    $("#addNewTimeline").on("shown.bs.modal", (event) => {
+
+      document.querySelector("#inputTitle").focus();
+    });
+
     rhit.timelineListModel.beginListening(this.updateView.bind(this));
 	}
 
 	updateView(){
 
-	}
+    const newTimelineList = htmlToElement(`<ul id="timelineListContainer" class="timelinedisplay"></ul>`);
 
-	toggleDescription(){
+    for (let i = 0; i < rhit.timelineListModel.length; i++){
 
-	}
+      const timeline = rhit.timelineListModel.getTimelineAtIndex(i);     
+      const newSection = this._createTimelineSection(timeline, i);
+
+      newTimelineList.appendChild(newSection);
+    }
+
+    const oldTimelineList = document.querySelector("#timelineListContainer");
+    oldTimelineList.removeAttribute("id");
+    oldTimelineList.hidden = true;
+    oldTimelineList.parentElement.appendChild(newTimelineList);
+  }
+  
+  _createTimelineSection(timeline, index){
+
+    const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
+                                    <i class="material-icons">add</i>
+                                  </button>`);
+
+    button.addEventListener("click", () => {
+
+      const item = document.querySelector(`#descriptionOfItem${index}`);
+      item.hidden = ! item.hidden;
+    });
+
+    const title = htmlToElement(`<h5>${timeline.title}</h5>`);
+
+    title.addEventListener("click", () => {
+
+      window.location.href = `/timeline.html?id=${timeline.id}`;
+    });
+                            
+    const section = htmlToElement(`<li>
+                                    <div class="desc">
+                                      <p id="descriptionOfItem${index}" class="descriptionFont" hidden>${timeline.description}</p>
+                                      <hr class="lineBreak">
+                                    </div>
+                                  </li>`);
+      
+    section.prepend(button);
+
+    return section;
+  }
 }
 
 rhit.TimelineListModel = class {
 
 	constructor(){
 
-		this._documentSnapshots;
-		this._ref;
-		this._unsubscribe;
+		this._documentSnapshots = [];
+		this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_TIMELINE_LIST);
+		this._unsubscribe = null;
 	}
 
 	beginListening(changeListener){
 
+    this._unsubscribe = this._ref.onSnapshot((query) => {
+
+        this._documentSnapshots = query.docs;
+        changeListener();
+    });
 	}
 
 	stopListening(){
 
+    this._unsubscribe();
 	}
 
-	createTimeline(title, description, viewPermission, editPermission){
+	createTimeline(title, description, viewPermission, editPermission, author){
 
+    this._ref.add({
+
+      [rhit.FB_KEY_TITLE]: title,
+      [rhit.FB_KEY_DESCRIPTION]: description,
+      [rhit.FB_KEY_PRIVATE_VIEW]: viewPermission,
+      [rhit.FB_KEY_PRIVATE_EDIT]: editPermission,
+      [rhit.FB_KEY_AUTHOR]: author,
+    })
+    .then((docRef) => {
+
+      console.log("Timeline document Written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+
+      console.log("Error adding timeline document: ", error);
+    });
 	}
 
 	get length(){
 
+    return this._documentSnapshots.length;
 	}
 
 	getTimelineAtIndex(index){
 
+    let ds = this._documentSnapshots[index];
+    return new rhit.Timeline(ds.id, ds.get(rhit.FB_KEY_TITLE), ds.get(rhit.FB_KEY_DESCRIPTION));
 	}
 }
 
 rhit.Timeline = class {
 
-	constructor(title, description){
+	constructor(id, title, description){
 
+    this.id = id;
 		this.title = title;
 		this.description = description;
 	}
@@ -237,7 +343,7 @@ rhit.ProfilePageModel = class {
 
     this._documentSnapshot;
     console.log(userID);
-		this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_USERS).doc(userID);
+		this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_USERS).doc(rhit.loginPageModel.uid);
 		this._unsubscribe = null;
 	}
 
@@ -357,33 +463,32 @@ rhit.LoginPageModel = class {
     firebase.auth().onAuthStateChanged((user) => {
 
       this._user = user;
-      this._createProfile();
       changeListener();
     });
 	}
 
-	_createProfile(){
+	// _createProfile(){
 
-    if (this.isSignedIn && this.isNewUser){
+  //   if (this.isSignedIn && this.isNewUser){
 
-      this._ref.doc(this.uid).set({
+  //     this._ref.doc(this.uid).set({
 
-        [rhit.FB_KEY_UID]: this.uid,
-        [rhit.FB_KEY_LOCATION]: "",
-        [rhit.FB_KEY_AGE]: -1,
-        [rhit.FB_KEY_IMAGEURL]: "",
-        [rhit.FB_KEY_USERNAME]: "",
-      })
-      .then(() => {
+  //       [rhit.FB_KEY_UID]: this.uid,
+  //       [rhit.FB_KEY_LOCATION]: "",
+  //       [rhit.FB_KEY_AGE]: -1,
+  //       [rhit.FB_KEY_IMAGEURL]: "",
+  //       [rhit.FB_KEY_USERNAME]: "",
+  //     })
+  //     .then(() => {
 
-        console.log("Profile document written successfully");
-      })
-      .catch((error) => {
+  //       console.log("Profile document written successfully");
+  //     })
+  //     .catch((error) => {
 
-        console.log("Error adding profile document: ", error);
-      });
-    }
-  }
+  //       console.log("Error adding profile document: ", error);
+  //     });
+  //   }
+  // }
 
   createUserWithEmailAndPassword(email, password){
 
@@ -463,8 +568,7 @@ rhit.checkForRedirects = function(){
 
   if (document.querySelector("#loginPage") && rhit.loginPageModel.isSignedIn){
   
-    if (rhit.loginPageModel.isNewUser) window.location.href = `/editingProfile.html?uid=${rhit.loginPageModel.uid}`;
-    else window.location.href = "/maintimeline.html";
+    window.location.href = "/maintimeline.html";
   }
 
   if (!document.querySelector("#loginPage") && !rhit.loginPageModel.isSignedIn){
@@ -486,13 +590,19 @@ rhit.initializePage = function(){
     new rhit.TimelineListController()
   }
 
-  else if (document.querySelector("#editingProfilePage")){
+  else if (document.querySelector("#timelinePage")){
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const userID = urlParams.get("uid");
+    const timelineID = urlParams.get("id");
 
-    rhit.profilePageModel = new rhit.ProfilePageModel(userID);
+    rhit.singleTimelineModel = new rhit.SingleTimelineModel(timelineID);
+    new rhit.SingleTimelineController()
+  }
+
+  else if (document.querySelector("#editingProfilePage")){
+
+    rhit.profilePageModel = new rhit.ProfilePageModel();
     new rhit.ProfilePageController();
   }
 }
