@@ -1,35 +1,29 @@
 
 var rhit = rhit || {};
 
-// User Keys
+// Firebase Keys
 rhit.FB_COLLECTION_USERS = "Users";
 rhit.FB_KEY_UID = "UserID";
 rhit.FB_KEY_USERNAME = "Username";
 rhit.FB_KEY_IMAGE_URL = "ImageURL";
 rhit.FB_KEY_LOCATION = "Location";
 rhit.FB_KEY_AGE = "Age";
-
-// Single Timeline Keys
 rhit.FB_COLLECTION_TIMELINE_LIST = "TimelineList";
 rhit.FB_KEY_TITLE = "Title";
 rhit.FB_KEY_DESCRIPTION = "Description";
 rhit.FB_KEY_PRIVATE_EDIT = "Private Edit";
 rhit.FB_KEY_PRIVATE_VIEW = "Private View";
 rhit.FB_KEY_AUTHOR = "Author";
-
-// Event Keys
 rhit.FB_COLLECTION_EVENT_LIST = "EventList";
-rhit.FB_KEY_TITLE = "Title";
 rhit.FB_KEY_START_DATE = "StartDate";
 rhit.FB_KEY_END_DATE = "EndDate";
-rhit.FB_KEY_DESCRIPTION = "Description";
-rhit.FB_KEY_IMAGE_URL = "ImageURL";
 
 // Singletons
 rhit.loginPageModel = null;
 rhit.timelineListModel = null;
 rhit.profilePageModel = null;
 rhit.singleTimelineModel = null;
+rhit.eventPageModel = null;
 
 
 function htmlToElement(html){
@@ -89,8 +83,8 @@ rhit.TimelineListController = class {
 
     const oldTimelineList = document.querySelector("#timelineListContainer");
     oldTimelineList.removeAttribute("id");
-    oldTimelineList.hidden = true;
     oldTimelineList.parentElement.appendChild(newTimelineList);
+    oldTimelineList.parentElement.removeChild(oldTimelineList);
   }
   
   _createTimelineSection(timeline, index){
@@ -109,7 +103,7 @@ rhit.TimelineListController = class {
 
     title.addEventListener("click", () => {
 
-      window.location.href = `/timeline.html?id=${timeline.id}`;
+      window.location.href = `/timeline.html?timelineID=${timeline.id}`;
     });
                             
     const section = htmlToElement(`<li>
@@ -195,6 +189,11 @@ rhit.SingleTimelineController = class {
 
 	constructor(){
 
+    document.querySelector("#backButton").addEventListener("click", () => {
+
+      window.location.href = `/maintimeline.html`;
+    });
+
     document.querySelector("#submitAddEvent").addEventListener("click", () => {
 
       const startDate = document.querySelector("#inputStartDate").value;
@@ -225,43 +224,38 @@ rhit.SingleTimelineController = class {
 
 	updateView(){
 
-    rhit.singleTimelineModel.getMaxDate()
-    .then((maxDate) => {
+    rhit.singleTimelineModel.getMinDate()
+    .then((minDate) => {
 
-      rhit.singleTimelineModel.getMinDate()
-      .then((minDate) => {
+      const zoom = 10;
 
-        const zoom = 10;
+      const start = minDate - minDate % zoom;
 
-        const start = minDate - minDate % zoom;
-        const end = maxDate - maxDate % zoom + zoom;
+      let groupIndex = start + zoom;
+      let currentGroup = this._createEventGroup(groupIndex - zoom, groupIndex);
 
-        let groupIndex = start + zoom;
-        let currentGroup = this._createEventGroup(groupIndex - zoom, groupIndex);
+      const newEventList = htmlToElement(`<ul id="eventListContainer" class="timelinedisplay"></ul>`);
+      newEventList.appendChild(currentGroup);
 
-        const newEventList = htmlToElement(`<ul id="eventListContainer" class="timelinedisplay"></ul>`);
-        newEventList.appendChild(currentGroup);
+      for (let i = 0; i < rhit.singleTimelineModel.length; i++){
+  
+        const event = rhit.singleTimelineModel.getEventAtIndex(i);     
+        const item = this._createEventItem(event);
 
-        for (let i = 0; i < rhit.singleTimelineModel.length; i++){
-    
-          const event = rhit.singleTimelineModel.getEventAtIndex(i);     
-          const item = this._createEventItem(event);
+        while (event.startDate > groupIndex){
 
-          if (event.startDate > groupIndex){
-
-            groupIndex += zoom;
-            currentGroup = this._createEventGroup(groupIndex - zoom, groupIndex);
-            newEventList.appendChild(currentGroup);
-          }
-
-          currentGroup.querySelector(`#containerForRange${groupIndex - zoom}-${groupIndex}`).appendChild(item);
+          groupIndex += zoom;
+          currentGroup = this._createEventGroup(groupIndex - zoom, groupIndex);
+          newEventList.appendChild(currentGroup);
         }
-    
-        const oldEventList = document.querySelector("#eventListContainer");
-        oldEventList.removeAttribute("id");
-        oldEventList.hidden = true;
-        oldEventList.parentElement.appendChild(newEventList);
-      });
+
+        currentGroup.querySelector(`#containerForRange${groupIndex - zoom}-${groupIndex}`).appendChild(item);
+      }
+  
+      const oldEventList = document.querySelector("#eventListContainer");
+      oldEventList.removeAttribute("id");
+      oldEventList.parentElement.appendChild(newEventList);
+      oldEventList.parentElement.removeChild(oldEventList);
     });
   }
 
@@ -297,7 +291,7 @@ rhit.SingleTimelineController = class {
 
     title.addEventListener("click", () => {
 
-    window.location.href = `/detail.html?id=${event.id}`;
+      window.location.href = `/detail.html?timelineID=${rhit.singleTimelineModel.id}&eventID=${event.id}`;
     });
 
     return title;
@@ -308,7 +302,8 @@ rhit.SingleTimelineModel = class {
 
 	constructor(timelineID){
 
-		this._documentSnapshot = null;
+    this._documentSnapshot = null;
+    this._timelineID = timelineID;
     this._timelineRef = firebase.firestore().collection(rhit.FB_COLLECTION_TIMELINE_LIST).doc(timelineID);
     this._timelineUnsubscribe = null;
 
@@ -336,6 +331,7 @@ rhit.SingleTimelineModel = class {
     this._eventListUnsubscribe = this._eventListRef.orderBy(rhit.FB_KEY_START_DATE).onSnapshot((query) => {
 
       this._documentSnapshots = query.docs;
+
       changeListener();
     });
 	}
@@ -367,6 +363,7 @@ rhit.SingleTimelineModel = class {
     .then((docRef) => {
 
       console.log("Event document Written with ID: ", docRef.id);
+      window.location.href = `/detail.html?timelineID=${this.id}&eventID=${docRef.id}`;
     })
     .catch((error) => {
 
@@ -383,15 +380,6 @@ rhit.SingleTimelineModel = class {
     });
   }
 
-  getMaxDate(){
-
-    return this._eventListRef.orderBy(rhit.FB_KEY_START_DATE, "desc").limit(1).get()
-    .then((querySnapshot) => {
-
-      return querySnapshot.docs[0].get(rhit.FB_KEY_START_DATE);
-    });
-  }
-
 	getEventAtIndex(index){
 
     const ds = this._documentSnapshots[index];
@@ -401,7 +389,12 @@ rhit.SingleTimelineModel = class {
 	get length(){
 
     return this._documentSnapshots.length;
-	}
+  }
+  
+  get id(){
+
+    return this._timelineID;
+  }
 }
 
 rhit.Event = class {
@@ -419,28 +412,54 @@ rhit.EventPageController = class {
 
 	constructor(){
 
+    document.querySelector("#backButton").addEventListener("click", () => {
+
+      window.location.href = `/timeline.html?timelineID=${rhit.eventPageModel.timelineID}`;
+    });
+
+    rhit.eventPageModel.beginListening(this.updateView.bind(this));
 	}
 
 	updateView(){
 
-	}
+    document.querySelector("#eventDate").textContent = `${rhit.eventPageModel.startDate}-${rhit.eventPageModel.endDate}`;
+    document.querySelector("#eventName").textContent = rhit.eventPageModel.title;
+    document.querySelector("#eventImage").src = rhit.eventPageModel.imageURL;
+    document.querySelector("#textDescription").textContent = rhit.eventPageModel.description;
+  }
 }
 
 rhit.EventPageModel = class {
 
-	constructor(){
+	constructor(timelineID, eventID){
 
-		this._documentSnapshot;
-		this._ref;
-		this._unsubscribe;
+    this._timelineID = timelineID;
+
+		this._documentSnapshot = null;
+		this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_TIMELINE_LIST).doc(timelineID).collection(rhit.FB_COLLECTION_EVENT_LIST).doc(eventID);
+		this._unsubscribe = null;
 	}
 
-	beginListenting(changeListener){
+	beginListening(changeListener){
 
+    this._timelineUnsubcribe = this._ref.onSnapshot((doc) => {
+
+      if (doc.exists){
+
+        this._documentSnapshot = doc;
+        changeListener();
+      }
+
+      else {
+
+        console.log("No event document Found.");
+      }
+    });
 	}
 
 	stopListening(){
 
+    this._unsubscribe();
 	}
 
 	deleteEvent(){
@@ -453,30 +472,36 @@ rhit.EventPageModel = class {
 
 	toggleFavorite(){
 
+  }
+  
+  get timelineID(){
+
+    return this._timelineID;
+  }
+
+	get startDate(){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_START_DATE);
 	}
 
-	get year(){
+	get endDate(){
 
+    return this._documentSnapshot.get(rhit.FB_KEY_END_DATE);
 	}
 
 	get title(){
 
+    return this._documentSnapshot.get(rhit.FB_KEY_TITLE);
 	}
 
 	get imageURL(){
 
+    return this._documentSnapshot.get(rhit.FB_KEY_IMAGE_URL);
 	}
 
 	get description(){
 
-	}
-
-	get favoriteCount(){
-
-	}
-
-	get pageContributors(){
-
+    return this._documentSnapshot.get(rhit.FB_KEY_DESCRIPTION);
 	}
 }
 
@@ -761,10 +786,21 @@ rhit.initializePage = function(){
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const timelineID = urlParams.get("id");
+    const timelineID = urlParams.get("timelineID");
 
     rhit.singleTimelineModel = new rhit.SingleTimelineModel(timelineID);
     new rhit.SingleTimelineController()
+  }
+
+  else if (document.querySelector("#detailPage")){
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const eventID = urlParams.get("eventID");
+    const timelineID = urlParams.get("timelineID");
+
+    rhit.eventPageModel = new rhit.EventPageModel(timelineID, eventID);
+    new rhit.EventPageController()
   }
 
   else if (document.querySelector("#editingProfilePage")){
