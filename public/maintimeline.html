@@ -21,21 +21,21 @@
     <a class="navbar-brand" href="#">TimeLine in</a>
 
     <div id="searchbar" class="dropdown">
-        <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="lr1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="material-icons">reorder</i>
+      <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="lr1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="material-icons">reorder</i>
+      </button>
+      <div id="timelineMenuBar" class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1">
+        <button class="dropdown-item" type="button" data-toggle="modal" data-target="#searchtimeline"> 
+          <i class="material-icons">search</i>&nbsp;&nbsp;&nbsp;Search
         </button>
-        <div id="timelineMenuBar" class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1">
-          <button class="dropdown-item" type="button" data-toggle="modal" data-target="#searchtimeline"> 
-            <i class="material-icons">search</i>&nbsp;&nbsp;&nbsp;Search
-          </button>
-          <button class="dropdown-item" type="button">
-            <i class="material-icons">edit</i>&nbsp;&nbsp;&nbsp;Add New
-          </button>
-          <button id="signOutButton" class="dropdown-item" type="button">
-            <i class="material-icons">login</i>&nbsp;&nbsp;&nbsp;Sign Out
-          </button>
-        </div>
+        <button id="addNewTimelineButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#addNewTimeline">
+          <i class="material-icons">add</i>&nbsp;&nbsp;&nbsp;Add New Timeline
+        </button>
+        <button id="signOutButton" class="dropdown-item" type="button">
+          <i class="material-icons">login</i>&nbsp;&nbsp;&nbsp;Sign Out
+        </button>
       </div>
+    </div>
 
   </nav>
 
@@ -55,25 +55,18 @@
           </div>
         </li>
 
-        <li>
-          <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
-            <i class="material-icons">add</i>
-          </button>
-          <div class="desc">
-            <h5>American History</h5>
-            <p class="descriptionFont"></p>
-            <hr class="lineBreak">
-          </div>
-        </li>
+  </div>
 
-        <li>
-          <button type="button" class="btn bmd-btn-fab bmd-btn-fab-sm">
-            <i class="material-icons">add</i>
-          </button>
-          <div class="desc">
-            <h5>History TimeLine</h5>
-            <p class="descriptionFont"></p>
-            <hr class="lineBreak">
+  <div class="modal fade" id="addNewTimeline" tabindex="-1" role="dialog" aria-labelledby="Add New Timeline dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add a New Timeline</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group bmd-form-group"> 
+            <label for="inputTitle" class="bmd-label-floating">Title</label>
+            <input type="text" class="form-control" id="inputTitle" placeholder="">
           </div>
         </li>
 
@@ -86,15 +79,30 @@
             <p class="descriptionFont">Something</p>
             <hr class="lineBreak">
           </div>
-        </li>
-              
-        <hr class="lineBreak">
-              
-      </ul>
-    <div class="smallNote">You're at the bottom</div>
+          <div>
+            <label>View Permission</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="viewRadios" id="privateViewPermission" value="true" checked>
+                Private (only you can view)
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="viewRadios" id="publicViewPermission" value="true">
+                Public (anyone can view)
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button id="submitAddTimeline" type="button" class="btn btn-primary" data-dismiss="modal">CREATE</button>
+        </div>
+      </div>
     </div>
-
   </div>
+
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/popper.js"></script>
   <script src="scripts/bootstrap-material-design.js"></script>

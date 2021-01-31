@@ -23,13 +23,34 @@
 
     <div id="searchbar" class="dropdown">
       <button class="btn bmd-btn-icon dropdown-toggle" type="button" id="lr1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="material-icons">search</i>
+        <i class="material-icons">reorder</i>
       </button>
+      <div id="timelineMenuBar" class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1">
+        <button class="dropdown-item" type="button" data-toggle="modal" data-target="#searchtimeline"> 
+          <i class="material-icons">search</i>&nbsp;&nbsp;&nbsp;Search
+        </button>
+        <button id="addNewEventButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#addNewEvent">
+          <i class="material-icons">add</i>&nbsp;&nbsp;&nbsp;Add New Event
+        </button>
+        <button id="deleteTimelineButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#deleteTimeline">
+          <i class="material-icons">delete</i>&nbsp;&nbsp;&nbsp;Delete Timeline
+        </button>
+        <button id="editTimelineButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#editTimeline">
+          <i class="material-icons">edit</i>&nbsp;&nbsp;&nbsp;Edit Timeline
+        </button>
+        <button id="signOutButton" class="dropdown-item" type="button">
+          <i class="material-icons">login</i>&nbsp;&nbsp;&nbsp;Sign Out
+        </button>
+      </div>
     </div>
 
   </nav>
 
   <div id="timelinePage" class="container page-container">
+
+    <button id="backButton" type="button" class="btn bmd-btn-fab" data-toggle="modal" data-target="#addPhotoDialog">
+      <i class="material-icons">keyboard_backspace</i>
+    </button>
 
     <div class="buttonrow">
       
@@ -159,21 +180,48 @@
           </div>
         </li>
 
-        <hr class="lineBreak">
-          
-      </ul>
+      <hr class="lineBreak">
 
       <div class="smallNote">You're at bottom</div>
           
-      <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab pageJumpButton" data-toggle="modal" data-target="#gobottom">
-        <i class="material-icons">arrow_downward</i>
-      </button>
-
-      <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab pageJumpButton" data-toggle="modal" data-target="#goup">
-        <i class="material-icons">arrow_upward</i>
-      </button>
    </div>
 
+  </div>
+
+  <div class="modal fade" id="addNewEvent" tabindex="-1" role="dialog" aria-labelledby="Add New Event dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add a New Event</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group bmd-form-group"> 
+            <label for="inputStartDate" class="bmd-label-floating">Start Date</label>
+            <input type="text" class="form-control" id="inputStartDate" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="inputEndDate" class="bmd-label-floating">End Date</label>
+            <input type="text" class="form-control" id="inputEndDate" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="inputTitle" class="bmd-label-floating">Title</label>
+            <input type="text" class="form-control" id="inputTitle" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="inputImageURL" class="bmd-label-floating">Image URL</label>
+            <input type="text" class="form-control" id="inputImageURL" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="inputDescription" class="bmd-label-floating">Description</label>
+            <textarea class="form-control" id="inputDescription" rows="15"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button id="submitAddEvent" type="button" class="btn btn-primary" data-dismiss="modal">CREATE</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="scripts/jquery.min.js"></script>
