@@ -542,9 +542,10 @@ rhit.ProfilePageController = class {
 
 rhit.ProfilePageModel = class {
 
-	constructor(){
+	constructor(userID){
 
     this._documentSnapshot;
+    console.log(userID);
 		this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_USERS).doc(rhit.loginPageModel.uid);
 		this._unsubscribe = null;
 	}
@@ -575,6 +576,8 @@ rhit.ProfilePageModel = class {
 
 	updateProfile(username, imageURL, age, location){
 
+    console.log(username);
+
     this._ref.update({
 
       [rhit.FB_KEY_UID]: rhit.loginPageModel.uid,
@@ -592,7 +595,7 @@ rhit.ProfilePageModel = class {
 
       console.log("Error updating profile document: ", error);
     });
-  }
+	}
 
 	get username(){
 
@@ -665,37 +668,39 @@ rhit.LoginPageModel = class {
       this._user = user;
       changeListener();
     });
-  }
+	}
 
-  createProfile(uid){
+	// _createProfile(){
 
-    firebase.firestore().collection(rhit.FB_COLLECTION_USERS).doc(uid).set({
+  //   if (this.isSignedIn && this.isNewUser){
 
-      [rhit.FB_KEY_UID]: uid,
-      [rhit.FB_KEY_LOCATION]: "",
-      [rhit.FB_KEY_AGE]: -1,
-      [rhit.FB_KEY_IMAGEURL]: "",
-      [rhit.FB_KEY_USERNAME]: "",
-    })
-    .then(() => {
+  //     this._ref.doc(this.uid).set({
 
-      console.log("Profile document written successfully");
-    })
-    .catch((error) => {
+  //       [rhit.FB_KEY_UID]: this.uid,
+  //       [rhit.FB_KEY_LOCATION]: "",
+  //       [rhit.FB_KEY_AGE]: -1,
+  //       [rhit.FB_KEY_IMAGEURL]: "",
+  //       [rhit.FB_KEY_USERNAME]: "",
+  //     })
+  //     .then(() => {
 
-      console.log("Error adding profile document: ", error);
-    });
-  }
+  //       console.log("Profile document written successfully");
+  //     })
+  //     .catch((error) => {
+
+  //       console.log("Error adding profile document: ", error);
+  //     });
+  //   }
+  // }
 
   createUserWithEmailAndPassword(email, password){
 
     console.log(`Create account for email: ${email} password: ${password}`);
   
     firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then((userRecord) => {
+    .then(() => {
 
-      console.log("Creation: ", userRecord.user.uid);
-      createProfile(userRecord.user.uid);
+      console.log("Account creation successful");
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -721,10 +726,10 @@ rhit.LoginPageModel = class {
     console.log("Signed in as Guest");
 
     firebase.auth().signInAnonymously()
-    .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      console.log(`Anonymous Auth Error ${errorCode} ${errorMessage}`);
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(`Anonymous Auth Error ${errorCode} ${errorMessage}`);
     });
   }
 
@@ -749,6 +754,11 @@ rhit.LoginPageModel = class {
   get isGuest(){
 
     return this._user.isAnonymous;
+  }
+
+  get isNewUser(){
+
+    return !this._user.displayName;
   }
 
 	get uid(){
@@ -784,6 +794,27 @@ rhit.initializePage = function(){
   }
 
   else if (document.querySelector("#timelinePage")){
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const timelineID = urlParams.get("timelineID");
+
+    rhit.singleTimelineModel = new rhit.SingleTimelineModel(timelineID);
+    new rhit.SingleTimelineController()
+  }
+
+  else if (document.querySelector("#detailPage")){
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const eventID = urlParams.get("eventID");
+    const timelineID = urlParams.get("timelineID");
+
+    rhit.eventPageModel = new rhit.EventPageModel(timelineID, eventID);
+    new rhit.EventPageController()
+  }
+
+  else if (document.querySelector("#editingProfilePage")){
 
     rhit.profilePageModel = new rhit.ProfilePageModel();
     new rhit.ProfilePageController();

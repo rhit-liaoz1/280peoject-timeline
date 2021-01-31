@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
   <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
   <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/horizon.css">
   <title>TimeLine in</title>
 </head>
 
@@ -48,7 +47,6 @@
       <div class="smallNote">You're at the bottom</div>
     </div>
 
-
   </div>
 
   <div class="modal fade" id="addNewTimeline" tabindex="-1" role="dialog" aria-labelledby="Add New Timeline dialog" aria-hidden="true">
@@ -62,16 +60,24 @@
             <label for="inputTitle" class="bmd-label-floating">Title</label>
             <input type="text" class="form-control" id="inputTitle" placeholder="">
           </div>
-        </li>
-
-        <li>
-          <button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
-            <i class="material-icons">add</i>
-          </button>
-          <div class="desc">
-            <h5>Something TimeLine</h5>
-            <p class="descriptionFont">Something</p>
-            <hr class="lineBreak">
+          <div class="form-group bmd-form-group"> 
+            <label for="inputDescription" class="bmd-label-floating">Description</label>
+            <input type="text" class="form-control" id="inputDescription" placeholder="">
+          </div>
+          <div>
+            <label>Edit Permission</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="editRadios" id="privateEditPermission" value="true" checked>
+                Private (only you can edit)
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="editRadios" id="publicEditPermission" value="true">
+                Public (anyone can edit)
+              </label>
+            </div>
           </div>
           <div>
             <label>View Permission</label>
