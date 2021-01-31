@@ -189,6 +189,11 @@ rhit.SingleTimelineController = class {
 
 	constructor(){
 
+    document.querySelector("#signOutButton").addEventListener("click", () => {
+
+      rhit.loginPageModel.signOut();
+    });
+
     document.querySelector("#backButton").addEventListener("click", () => {
 
       window.location.href = `/maintimeline.html`;
@@ -265,12 +270,11 @@ rhit.SingleTimelineController = class {
                                     <i class="material-icons">add</i>
                                   </button>`);
 
-    const group = htmlToElement(`<li>
+    const group = htmlToElement(`<li class="blueBottom">
                                   <h5 class="inlineDisplay">${startYear}-${endYear}</h5>
                                   <div class="desc">
                                     <ul id="containerForRange${startYear}-${endYear}" hidden>
                                     </ul>
-                                    <hr class="lineBreak">
                                   </div>
                                 </li>`);
 

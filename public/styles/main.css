@@ -26,6 +26,11 @@ html{
 
 /* General */
 
+#searchbar{
+  position: fixed;
+  right: 5%;
+}
+
 #backButton{
   position: fixed;
   left: 5%;
@@ -49,8 +54,13 @@ html{
     font-size: 20px;
 }
 
+.blueBottom{
+  border-bottom: 1px solid var(--main-blue);
+}
+
 .lineBreak {
-    background: lightsteelblue
+    background: lightsteelblue;
+    max-width: 50vw;
 }
 
 .buttonContainer {
@@ -108,31 +118,31 @@ html{
   left: -128px;
 }
 
-#mainTimelinePage .timeline .timelinedisplay{
+.timeline .timelinedisplay{
     padding: 1em 0 0 2em;
     margin: 0;
     list-style: none;
     position: relative;
 }
 
-#mainTimelinePage .timeline .timelinedisplay::before {
-    content: ' ';
-    height: 100%;
-    width: 2.2px;
-    background-color: lightskyblue;
-    position: absolute;
-    top: 0;
-    left: 2.4em;
-    z-index: -1;
-  }
+.timeline .timelinedisplay::before {
+  content: ' ';
+  height: 100%;
+  width: 2.2px;
+  background-color: lightskyblue;
+  position: absolute;
+  top: 0;
+  left: 2.4em;
+  z-index: -1;
+}
 
-#mainTimelinePage .timeline li div{
+.timeline li div{
     display: inline-block;
     margin: 1em 0;
     vertical-align: top;
   }
   
-#mainTimelinePage .timeline .bullet{
+.timeline .bullet{
     width: 15px;
     height: 1em;
     box-sizing: border-box;
@@ -142,7 +152,7 @@ html{
     margin-right: 1em;
     border: 2px solid #1E90FF;
   }
-#mainTimelinePage .timeline li .btn{
+.timeline li .btn{
     background-color: #2A56C6;
     color: white;
     left: -13px;
@@ -252,11 +262,6 @@ html{
   
 #timelinePage #timeline{
     margin-left: 23vw;
-}
-
-#timelinePage #searchbar{
-    position: fixed;
-    right: 20px;
 }
 
 #timelinePage #timeline .timeline .timelinedisplay{
