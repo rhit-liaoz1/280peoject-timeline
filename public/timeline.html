@@ -89,6 +89,7 @@
 
   </div>
 
+  <!-- Event Create Modal -->
   <div class="modal fade" id="addNewEvent" tabindex="-1" role="dialog" aria-labelledby="Add New Event dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -105,21 +106,76 @@
             <input type="text" class="form-control" id="inputEndDate" placeholder="">
           </div>
           <div class="form-group bmd-form-group"> 
-            <label for="inputTitle" class="bmd-label-floating">Title</label>
-            <input type="text" class="form-control" id="inputTitle" placeholder="">
+            <label for="inputEventTitle" class="bmd-label-floating">Title</label>
+            <input type="text" class="form-control" id="inputEventTitle" placeholder="">
           </div>
           <div class="form-group bmd-form-group"> 
             <label for="inputImageURL" class="bmd-label-floating">Image URL</label>
             <input type="text" class="form-control" id="inputImageURL" placeholder="">
           </div>
           <div class="form-group">
-            <label for="inputDescription" class="bmd-label-floating">Description</label>
-            <textarea class="form-control" id="inputDescription" rows="15"></textarea>
+            <label for="inputEventDescription" class="bmd-label-floating">Description</label>
+            <textarea class="form-control" id="inputEventDescription" rows="15"></textarea>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
           <button id="submitAddEvent" type="button" class="btn btn-primary" data-dismiss="modal">CREATE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline Update Modal -->
+  <div class="modal fade" id="editTimeline" tabindex="-1" role="dialog" aria-labelledby="Edit Timeline dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Timeline</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group bmd-form-group"> 
+            <label for="inputTimelineTitle">Title</label>
+            <input type="text" class="form-control" id="inputTimelineTitle" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="inputTimelineDescription">Description</label>
+            <input type="text" class="form-control" id="inputTimelineDescription" placeholder="">
+          </div>
+          <div>
+            <label>Edit Permission</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="editRadios" id="privateEditPermission" value="true" checked>
+                Private (only you can edit)
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="editRadios" id="publicEditPermission" value="true">
+                Public (anyone can edit)
+              </label>
+            </div>
+          </div>
+          <div>
+            <label>View Permission</label>
+            <div class="radio">
+              <label>
+                <input type="radio" name="viewRadios" id="privateViewPermission" value="true" checked>
+                Private (only you can view)
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="viewRadios" id="publicViewPermission" value="true">
+                Public (anyone can view)
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button id="submitUpdateTimeline" type="button" class="btn btn-primary" data-dismiss="modal">UPDATE</button>
         </div>
       </div>
     </div>

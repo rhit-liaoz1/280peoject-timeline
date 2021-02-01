@@ -34,6 +34,10 @@ function htmlToElement(html){
   return template.content.firstChild;
 }
 
+// --------------------------------------------------------------------------------------------------------------------------------------
+// Timeline List ------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
+
 rhit.TimelineListController = class {
 
 	constructor(){
@@ -45,8 +49,8 @@ rhit.TimelineListController = class {
 
     document.querySelector("#submitAddTimeline").addEventListener("click", () => {
 
-      const title = document.querySelector("#inputTitle").value;
-      const description = document.querySelector("#inputDescription").value;
+      const title = document.querySelector("#inputTimelineTitle").value;
+      const description = document.querySelector("#inputTimelineDescription").value;
       const privateEdit = document.querySelector("#privateEditPermission").checked;
       const privateView = document.querySelector("#privateViewPermission").checked;
 
@@ -55,15 +59,10 @@ rhit.TimelineListController = class {
 
     $("#addNewTimeline").on("show.bs.modal", (event) => {
 
-      document.querySelector("#inputTitle").value = "";
-      document.querySelector("#inputDescription").value = "";  
+      document.querySelector("#inputTimelineTitle").value = "";
+      document.querySelector("#inputTimelineDescription").value = "";  
       document.querySelector("#privateEditPermission").checked = true;
       document.querySelector("#privateViewPermission").checked = true;    
-    });
-
-    $("#addNewTimeline").on("shown.bs.modal", (event) => {
-
-      document.querySelector("#inputTitle").focus();
     });
 
     rhit.timelineListModel.beginListening(this.updateView.bind(this));
@@ -172,7 +171,7 @@ rhit.TimelineListModel = class {
 
     let ds = this._documentSnapshots[index];
     return new rhit.Timeline(ds.id, ds.get(rhit.FB_KEY_TITLE), ds.get(rhit.FB_KEY_DESCRIPTION));
-	}
+  }
 }
 
 rhit.Timeline = class {
@@ -184,6 +183,10 @@ rhit.Timeline = class {
 		this.description = description;
 	}
 }
+
+// --------------------------------------------------------------------------------------------------------------------------------------
+// Single Timeline ----------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
 
 rhit.SingleTimelineController = class {
 
@@ -201,33 +204,64 @@ rhit.SingleTimelineController = class {
 
     document.querySelector("#deleteTimelineButton").addEventListener("click", () => {
 
-      rhit.singleTimelineModel.deleteTimeline();
-      window.location.href = "/maintimeline.html";
+      rhit.singleTimelineModel.deleteTimeline()
+      .then(() => {
+
+        console.log("Timeline successfully deleted");
+        window.location.href = "/maintimeline.html";
+      })
+      .catch((error) => {
+
+        console.log("Error deleting timeline");
+      });
     });
 
     document.querySelector("#submitAddEvent").addEventListener("click", () => {
 
       const startDate = document.querySelector("#inputStartDate").value;
       const endDate = document.querySelector("#inputEndDate").value;
-      const title = document.querySelector("#inputTitle").value;
+      const title = document.querySelector("#inputEventTitle").value;
       const imageURL = document.querySelector("#inputImageURL").value;
-      const description = document.querySelector("#inputDescription").value;
+      const description = document.querySelector("#inputEventDescription").value;
 
       rhit.singleTimelineModel.createEvent(startDate, endDate, title, imageURL, description);
     });
 
+    document.querySelector("#submitUpdateTimeline").addEventListener("click", () => {
+
+      const title = document.querySelector("#inputTimelineTitle").value;
+      const description = document.querySelector("#inputTimelineDescription").value;
+      const privateEdit = document.querySelector("#privateEditPermission").checked;
+      const privateView = document.querySelector("#privateViewPermission").checked;
+
+      rhit.singleTimelineModel.updateTimeline(title, description, privateView, privateEdit);
+    });
+    
     $("#addNewEvent").on("show.bs.modal", (event) => {
 
       document.querySelector("#inputStartDate").value = "";
       document.querySelector("#inputEndDate").value = "";
-      document.querySelector("#inputTitle").value = "";
+      document.querySelector("#inputEventTitle").value = "";
       document.querySelector("#inputImageURL").value = "";
-      document.querySelector("#inputDescription").value = "";   
+      document.querySelector("#inputTimelineDescription").value = "";   
     });
 
     $("#addNewEvent").on("shown.bs.modal", (event) => {
 
       document.querySelector("#inputStartDate").focus();
+    });    
+
+    $("#editTimeline").on("shown.bs.modal", (event) => {
+
+      document.querySelector("#inputTimelineTitle").value = rhit.singleTimelineModel.title;
+      document.querySelector("#inputTimelineDescription").value = rhit.singleTimelineModel.description;
+      document.querySelector("#privateEditPermission").value = rhit.singleTimelineModel.editPermission;
+      document.querySelector("#privateViewPermission").value = rhit.singleTimelineModel.viewPermission;
+    });
+    
+    $("#editTimeline").on("shown.bs.modal", (event) => {
+
+      document.querySelector("#inputTimelineTitle").focus();
     });
 
     rhit.singleTimelineModel.beginListening(this.updateView.bind(this));
@@ -356,11 +390,26 @@ rhit.SingleTimelineModel = class {
 
 	deleteTimeline(){
 
-    this._timelineRef.delete();
+    return this._timelineRef.delete();
 	}
 
 	updateTimeline(title, description, viewPermission, editPermission){
 
+    this._timelineRef.update({
+
+      [rhit.FB_KEY_TITLE]: title,
+      [rhit.FB_KEY_DESCRIPTION]: description,
+      [rhit.FB_KEY_PRIVATE_VIEW]: viewPermission,
+      [rhit.FB_KEY_PRIVATE_EDIT]: editPermission,
+    })
+    .then((docRef) => {
+
+      console.log("Timeline successfully updated");
+    })
+    .catch((error) => {
+
+      console.log("Error updating timeline document: ", error);
+    });
 	}
 
 	createEvent(startDate, endDate, title, imageURL, description){
@@ -405,6 +454,21 @@ rhit.SingleTimelineModel = class {
     return this._documentSnapshot.get(rhit.FB_KEY_TITLE);
   }
 
+  get description(){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_DESCRIPTION);
+  }
+
+  get editPermission(){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_PRIVATE_EDIT);
+  }
+
+  get viewPermission(){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_PRIVATE_VIEW);
+  }
+
 	get length(){
 
     return this._documentSnapshots.length;
@@ -427,6 +491,10 @@ rhit.Event = class {
 	}
 }
 
+// --------------------------------------------------------------------------------------------------------------------------------------
+// Event --------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
+
 rhit.EventPageController = class {
 
 	constructor(){
@@ -434,6 +502,31 @@ rhit.EventPageController = class {
     document.querySelector("#backButton").addEventListener("click", () => {
 
       window.location.href = `/timeline.html?timelineID=${rhit.eventPageModel.timelineID}`;
+    });
+
+    document.querySelector("#updateEvent").addEventListener("click", () => {
+
+      const startDate = document.querySelector("#inputStartDate").value;
+      const endDate = document.querySelector("#inputEndDate").value;
+      const title = document.querySelector("#inputEventTitle").value;
+      const imageURL = document.querySelector("#inputImageURL").value;
+      const description = document.querySelector("#inputEventDescription").value;
+
+      rhit.eventPageModel.updateEvent(startDate, endDate, title, imageURL, description);
+    });
+
+    $("#updateEvent").on("shown.bs.modal", (event) => {
+
+      document.querySelector("#inputStartDate").value = rhit.eventPageModel.startDate;
+      document.querySelector("#inputStartDate").value = rhit.eventPageModel.endDate;
+      document.querySelector("#inputEventTitle").value = rhit.eventPageModel.title;
+      document.querySelector("#inputImageURL").value = rhit.eventPageModel.imageURL;
+      document.querySelector("#inputEventDescription").value = rhit.eventPageModel.description;
+    });
+    
+    $("#updateEvent").on("shown.bs.modal", (event) => {
+
+      document.querySelector("#inputStartDate").focus();
     });
 
     rhit.eventPageModel.beginListening(this.updateView.bind(this));
@@ -485,13 +578,25 @@ rhit.EventPageModel = class {
 
 	}
 
-	updateEvent(year, title, imageURL, description, favoriteCount, pageContributors){
+	updateEvent(startDate, endDate, title, imageURL, description){
 
+    this._ref.update({
+
+      [rhit.FB_KEY_START_DATE]: startDate,
+      [rhit.FB_KEY_END_DATE]: endDate,
+      [rhit.FB_KEY_TITLE]: title,
+      [rhit.FB_KEY_IMAGE_URL]: imageURL,
+      [rhit.FB_KEY_DESCRIPTION]: description,
+    })
+    .then((docRef) => {
+
+      console.log("event updated successfully");
+    })
+    .catch((error) => {
+
+      console.log("Error updating event document: ", error);
+    });
 	}
-
-	toggleFavorite(){
-
-  }
   
   get timelineID(){
 
@@ -523,6 +628,10 @@ rhit.EventPageModel = class {
     return this._documentSnapshot.get(rhit.FB_KEY_DESCRIPTION);
 	}
 }
+
+// --------------------------------------------------------------------------------------------------------------------------------------
+// Profile ------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
 
 rhit.ProfilePageController = class {
 
@@ -629,6 +738,10 @@ rhit.ProfilePageModel = class {
 
 	}
 }
+
+// --------------------------------------------------------------------------------------------------------------------------------------
+// Login --------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
 
 rhit.LoginPageController = class {
 
@@ -775,6 +888,10 @@ rhit.LoginPageModel = class {
 	}
 }
 
+// --------------------------------------------------------------------------------------------------------------------------------------
+// Page Switching Helpers ---------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
+
 rhit.checkForRedirects = function(){
 
   if (document.querySelector("#loginPage") && rhit.loginPageModel.isSignedIn){
@@ -790,8 +907,6 @@ rhit.checkForRedirects = function(){
 
 rhit.initializePage = function(){
 
-
-  
   if (document.querySelector("#loginPage")){
 
     new rhit.LoginPageController();
@@ -830,6 +945,10 @@ rhit.initializePage = function(){
     new rhit.ProfilePageController();
   }
 }
+
+// --------------------------------------------------------------------------------------------------------------------------------------
+// Main ---------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
 
 rhit.main = function(){
 

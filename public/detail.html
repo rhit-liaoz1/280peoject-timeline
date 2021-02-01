@@ -27,7 +27,7 @@
         <button id="deleteEventButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#deleteEvent">
           <i class="material-icons">delete</i>&nbsp;&nbsp;&nbsp;Delete Event
         </button>
-        <button id="editEventButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#editEvent">
+        <button id="updateEventButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#updateEvent">
           <i class="material-icons">edit</i>&nbsp;&nbsp;&nbsp;Edit Event
         </button>
         <button id="signOutButton" class="dropdown-item" type="button">
@@ -69,6 +69,43 @@
 
     <button type="button" class="btn btn-raised btn-secondary footerButton">Main Page</button>
 
+  </div>
+
+  <!-- Event Update Modal -->
+  <div class="modal fade" id="updateEvent" tabindex="-1" role="dialog" aria-labelledby="Update Event dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update Event</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group bmd-form-group"> 
+            <label for="inputStartDate">Start Date</label>
+            <input type="text" class="form-control" id="inputStartDate" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="inputEndDate">End Date</label>
+            <input type="text" class="form-control" id="inputEndDate" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="inputEventTitle">Title</label>
+            <input type="text" class="form-control" id="inputEventTitle" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="inputImageURL">Image URL</label>
+            <input type="text" class="form-control" id="inputImageURL" placeholder="">
+          </div>
+          <div class="form-group">
+            <label for="inputEventDescription">Description</label>
+            <textarea class="form-control" id="inputEventDescription" rows="15"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button id="submitUpdateEvent" type="button" class="btn btn-primary" data-dismiss="modal">UPDATE</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="scripts/jquery.min.js"></script>
