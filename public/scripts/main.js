@@ -504,6 +504,20 @@ rhit.EventPageController = class {
       window.location.href = `/timeline.html?timelineID=${rhit.eventPageModel.timelineID}`;
     });
 
+    document.querySelector("#deleteEventButton").addEventListener("click", () => {
+
+      rhit.eventPageModel.deleteEvent()
+      .then(() => {
+
+        console.log("Event deleted successfully");
+        window.location.href = `timeline.html?timelineID=${rhit.eventPageModel.timelineID}`;
+      })
+      .catch((error) => {
+
+        console.log("Error deleting event");
+      });
+    });
+    
     document.querySelector("#updateEvent").addEventListener("click", () => {
 
       const startDate = document.querySelector("#inputStartDate").value;
@@ -576,6 +590,7 @@ rhit.EventPageModel = class {
 
 	deleteEvent(){
 
+    return this._ref.delete();
 	}
 
 	updateEvent(startDate, endDate, title, imageURL, description){
