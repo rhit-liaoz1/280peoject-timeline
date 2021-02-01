@@ -99,7 +99,7 @@ rhit.TimelineListController = class {
       item.hidden = ! item.hidden;
     });
 
-    const title = htmlToElement(`<h5>${timeline.title}</h5>`);
+    const title = htmlToElement(`<h5 class="inlineDisplay">${timeline.title}</h5>`);
 
     title.addEventListener("click", () => {
 
@@ -107,13 +107,13 @@ rhit.TimelineListController = class {
     });
                             
     const section = htmlToElement(`<li>
-                                    <div class="desc">
-                                      <p id="descriptionOfItem${index}" class="descriptionFont" hidden>${timeline.description}</p>
+                                    <div class="bulletedListContainer">
+                                      <p id="descriptionOfItem${index}" class="descriptionFont blueBottom" hidden>${timeline.description}</p>
                                       <hr class="lineBreak">
                                     </div>
                                   </li>`);
     
-    section.querySelector(".desc").prepend(title);
+    section.prepend(title);
     section.prepend(button);
 
     return section;
@@ -199,6 +199,12 @@ rhit.SingleTimelineController = class {
       window.location.href = `/maintimeline.html`;
     });
 
+    document.querySelector("#deleteTimelineButton").addEventListener("click", () => {
+
+      rhit.singleTimelineModel.deleteTimeline();
+      window.location.href = "/maintimeline.html";
+    });
+
     document.querySelector("#submitAddEvent").addEventListener("click", () => {
 
       const startDate = document.querySelector("#inputStartDate").value;
@@ -272,9 +278,9 @@ rhit.SingleTimelineController = class {
                                     <i class="material-icons">add</i>
                                   </button>`);
 
-    const group = htmlToElement(`<li class="blueBottom">
+    const group = htmlToElement(`<li>
                                   <h5 class="inlineDisplay">${startYear}-${endYear}</h5>
-                                  <div class="desc" hidden>
+                                  <div class="bulletedListContainer blueBottom" hidden>
                                     <ul id="containerForRange${startYear}-${endYear}">
                                     </ul>
                                   </div>
@@ -350,6 +356,7 @@ rhit.SingleTimelineModel = class {
 
 	deleteTimeline(){
 
+    this._timelineRef.delete();
 	}
 
 	updateTimeline(title, description, viewPermission, editPermission){
@@ -377,6 +384,7 @@ rhit.SingleTimelineModel = class {
     });
   }
   
+  // TODO: check if return value is null when calling
   getMinDate(){
 
     return this._eventListRef.orderBy(rhit.FB_KEY_START_DATE).limit(1).get()

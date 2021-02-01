@@ -35,9 +35,7 @@ html{
 }
 
 .lineBreak {
-    display: none;
     background: lightsteelblue;
-    width: 50%;
 }
 
 .buttonContainer {

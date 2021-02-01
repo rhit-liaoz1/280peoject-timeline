@@ -25,6 +25,15 @@ html{
 }
 
 /* General */
+
+.blueBottom{
+  border-bottom: 1px solid var(--main-blue);
+}
+
+.bulletedListContainer{
+  margin: 10px;
+}
+
 #menuBar{
   left: -175px;
   width: 200px;
@@ -64,7 +73,6 @@ html{
 
 .lineBreak {
     background: lightsteelblue;
-    max-width: 50vw;
 }
 
 .buttonContainer {
@@ -116,6 +124,7 @@ html{
 @media (max-width: 450px) { 
 #mainTimelinePage .descriptionFont{
   font-size: small;
+  margin-left: 10px;
 }
 
 .timeline .timelinedisplay{
@@ -135,12 +144,6 @@ html{
   left: 2.4em;
   z-index: -1;
 }
-
-.timeline li div{
-    display: inline-block;
-    margin: 1em 0;
-    vertical-align: top;
-  }
   
 .timeline .bullet{
     width: 15px;
@@ -286,7 +289,7 @@ html{
 }
 
 #timelinePage .timeline li div{
-  display: inline-block;
+  /* display: inline-block; */
   /* margin: 1em 0; */
   vertical-align: top;
 }
@@ -305,10 +308,6 @@ html{
   background-color: #2A56C6;
   color: white;
   left: -13px;
-}
-#timelinePage .timeline .desc{
-    width: 60vw;
-    margin-left: 25px;
 }
 
 #timelinePage .userButton{
