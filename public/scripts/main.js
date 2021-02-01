@@ -274,15 +274,15 @@ rhit.SingleTimelineController = class {
 
     const group = htmlToElement(`<li class="blueBottom">
                                   <h5 class="inlineDisplay">${startYear}-${endYear}</h5>
-                                  <div class="desc">
-                                    <ul id="containerForRange${startYear}-${endYear}" hidden>
+                                  <div class="desc" hidden>
+                                    <ul id="containerForRange${startYear}-${endYear}">
                                     </ul>
                                   </div>
                                 </li>`);
 
     button.addEventListener("click", () => {
 
-      const item = group.querySelector(`#containerForRange${startYear}-${endYear}`);
+      const item = group.querySelector(`#containerForRange${startYear}-${endYear}`).parentElement;
       item.hidden = ! item.hidden;
     });
 
@@ -782,6 +782,8 @@ rhit.checkForRedirects = function(){
 
 rhit.initializePage = function(){
 
+
+  
   if (document.querySelector("#loginPage")){
 
     new rhit.LoginPageController();
