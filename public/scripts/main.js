@@ -108,7 +108,6 @@ rhit.TimelineListController = class {
     const section = htmlToElement(`<li>
                                     <div class="bulletedListContainer">
                                       <p id="descriptionOfItem${index}" class="descriptionFont blueBottom" hidden>${timeline.description}</p>
-                                      <hr class="lineBreak">
                                     </div>
                                   </li>`);
     
@@ -273,6 +272,8 @@ rhit.SingleTimelineController = class {
 
     rhit.singleTimelineModel.getMinDate()
     .then((minDate) => {
+
+      if (! minDate) return;
 
       const zoom = 10;
 
@@ -439,6 +440,7 @@ rhit.SingleTimelineModel = class {
     return this._eventListRef.orderBy(rhit.FB_KEY_START_DATE).limit(1).get()
     .then((querySnapshot) => {
 
+      if (querySnapshot.size == 0) return null;
       return querySnapshot.docs[0].get(rhit.FB_KEY_START_DATE);
     });
   }
@@ -518,7 +520,7 @@ rhit.EventPageController = class {
       });
     });
     
-    document.querySelector("#updateEvent").addEventListener("click", () => {
+    document.querySelector("#submitUpdateEvent").addEventListener("click", () => {
 
       const startDate = document.querySelector("#inputStartDate").value;
       const endDate = document.querySelector("#inputEndDate").value;
@@ -532,7 +534,7 @@ rhit.EventPageController = class {
     $("#updateEvent").on("shown.bs.modal", (event) => {
 
       document.querySelector("#inputStartDate").value = rhit.eventPageModel.startDate;
-      document.querySelector("#inputStartDate").value = rhit.eventPageModel.endDate;
+      document.querySelector("#inputEndDate").value = rhit.eventPageModel.endDate;
       document.querySelector("#inputEventTitle").value = rhit.eventPageModel.title;
       document.querySelector("#inputImageURL").value = rhit.eventPageModel.imageURL;
       document.querySelector("#inputEventDescription").value = rhit.eventPageModel.description;
