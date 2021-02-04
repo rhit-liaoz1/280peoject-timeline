@@ -96,13 +96,6 @@ html{
   left: -128px;
 }
 
-#mainTimelinePage .timeline .timelinedisplay{
-    padding: 1em 0 0 2em;
-    margin: 0 auto;
-    list-style: none;
-    position: relative;
-}
-
 #mainTimelinePage .timeline .timelinedisplay::before {
     display: none;
     content: ' ';
@@ -228,19 +221,7 @@ html{
 
 /* timeline */
 @media (min-width: 450px) { 
-#timelinePage .timeline li {
-    margin: 20px;
-    width: 200px;
-    /* text-align: center; */
-    z-index: -1;
-}
- 
-#timelinePage .timeline ul {
-    /* margin: 20px;
-    width: 200px; */
-    /* text-align: center; */
-    z-index: -1;
-}
+
 .hori{
     width: 100vw;
     height: 2.2px;
@@ -253,63 +234,10 @@ html{
     position: fixed;
     top: 15%;
 }
-#timelinePage #zoomSlider {
-  transform: rotate(-90deg);
-  width: 200px;
-  position: relative;
-  top: 120px;
-  left: -75px; 
-  overflow: hidden;
-}
-
-#timelinePage .buttonrow{
-    margin-top: 20px;
-    margin-left: 0;
-    padding-left: 0;
-    width: 10vw;
-    float: left;
-    position: fixed;
-    background-color: white;
-}
-
-#timelinePage #Zoomlevel{
-    /* padding: 1em 0 0 2em;
-    margin: 0; */
-    list-style: none;
-    position: relative;
-    left: 3vw;
-}
-#timelinePage #Zoomlevel li div{
-
-    font-size: medium;
-    /* display: inline-block; */
-    vertical-align: top;
-    list-style-type: none;
-  }
-  
-#timelinePage .timeline{
-    margin-left: 23vw;
-}
 
 #timelinePage #searchbar{
     position: fixed;
     right: 20px;
-}
-
-#timelinePage .timeline .timelinedisplay{
-    padding: 1em 0 0 2em;
-    margin: 0;
-    list-style: none;
-    position: relative;
-    display: flex;
-}
-
-
-#timelinePage .timeline li div{
-    /* float: left;
-    width: 20%; */
-    margin: 1em 0;
-    vertical-align: top;
 }
 
 #timelinePage .timeline .inlineDisplay{

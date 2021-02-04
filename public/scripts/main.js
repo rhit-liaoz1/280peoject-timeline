@@ -282,7 +282,7 @@ rhit.SingleTimelineController = class {
       let groupIndex = start + zoom;
       let currentGroup = this._createEventGroup(groupIndex - zoom, groupIndex);
 
-      const newEventList = htmlToElement(`<ul id="eventListContainer" class="timelinedisplay"></ul>`);
+      const newEventList = htmlToElement(`<div id="eventListContainer"></div>`);
       newEventList.appendChild(currentGroup);
 
       for (let i = 0; i < rhit.singleTimelineModel.length; i++){
@@ -309,17 +309,17 @@ rhit.SingleTimelineController = class {
 
   _createEventGroup(startYear, endYear){
 
-    const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
+    const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab timelineItemButton">
                                     <i class="material-icons">add</i>
                                   </button>`);
 
-    const group = htmlToElement(`<li>
-                                  <h5 class="inlineDisplay">${startYear}-${endYear}</h5>
-                                  <div class="bulletedListContainer blueBottom" hidden>
+    const group = htmlToElement(`<div class="timelineItem">
+                                  <h5>${startYear}-${endYear}</h5>
+                                  <div class="bulletContainer" hidden>
                                     <ul id="containerForRange${startYear}-${endYear}">
                                     </ul>
                                   </div>
-                                </li>`);
+                                </div>`);
 
     button.addEventListener("click", () => {
 

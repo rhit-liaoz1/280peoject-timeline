@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
   <link rel="stylesheet" href="styles/bootstrap-material-design.min.css">
   <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/horizon.css">
+  <!-- <link rel="stylesheet" href="styles/horizon.css"> -->
   <title>Timeline in</title>
 </head>
 
@@ -46,46 +46,21 @@
 
   </nav>
 
-  <div id="timelinePage" class="container page-container">
+  <div id="timelinePage" class="page-container">
 
     <button id="backButton" type="button" class="btn bmd-btn-fab" data-toggle="modal" data-target="#addPhotoDialog">
       <i class="material-icons">keyboard_backspace</i>
     </button>
 
-    <div class="buttonrow">
-      
+
+    <div id="timelineToolbar">    
       <button id="loginButton" type="button" class="btn btn-dark btn-xs userButton">Log in</button>
       <button id="newUserButton" type="button" class="btn btn-dark btn-xs userButton">New User</button>
-
-      <div id="zoomLevelContainer">
-        <h6>Zoom Level</h6>
-        <input id="zoomSlider" type="range"min="1" max = "5" step="1">
-        <ul id="Zoomlevel">
-          <li>
-              <div>100</div>
-              <br>
-              <br id="bb">
-              <div>50</div>
-              <br>
-              <br id="bb">
-              <div>20</div>
-              <br>
-              <br id="bb">
-              <div>10</div>
-              <br><br id="bb">
-              <div>5</div>
-            </li>
-        </ul>
-      </div>
-
+      <h6>Zoom Level</h6>
+      <input id="zoomSlider" type="range"min="1" max = "5" step="1">
     </div>
 
-    <div class="smallNote">You're at Top</div>
-
-    <div id="timeline" class="timeline">
-      <hr class="hori">
-      <ul id="eventListContainer" class="timelinedisplay"></ul>
-   </div>
+    <div id="eventListContainer"></div>
 
   </div>
 
