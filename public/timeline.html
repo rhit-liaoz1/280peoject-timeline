@@ -53,10 +53,18 @@
 
 
     <div id="timelineToolbar">    
-      <button id="loginButton" type="button" class="btn btn-dark btn-xs userButton">Log in</button>
-      <button id="newUserButton" type="button" class="btn btn-dark btn-xs userButton">New User</button>
-      <h6>Zoom Level</h6>
-      <input id="zoomSlider" type="range"min="1" max = "5" step="1">
+      <button type="button" class="btn btn-dark btn-xs">Log in</button>
+      <div id="zoomContainer">
+        <h6>Zoom Level</h6>
+        <input id="zoomSlider" type="range" min="1" max ="5" step="1">
+        <ul id="zoomLevels">
+          <li>100</li>
+          <li>50</li>
+          <li>20</li>
+          <li>10</li>
+          <li>5</li>
+        </ul>
+      </div>
     </div>
 
     <div class="horizontalLine"></div>

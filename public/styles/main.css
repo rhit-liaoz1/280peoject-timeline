@@ -206,6 +206,12 @@ html{
 
 /* timeline */
 
+#zoomContainer{
+  margin-top: 100px;
+  height: 100%;
+  padding: 0 20px;
+}
+
 #timelinePage #newEventButton {
   padding: 5px 5px;
   margin-left: 0; 
@@ -219,7 +225,7 @@ html{
 }
 
 #eventListContainer{
-  margin-left: 35vw;
+  margin-left: 30vw;
 }
 
 .timelineItemButton:active{
@@ -240,12 +246,15 @@ html{
   position: fixed;
   background-color: white;
   z-index: 1;
-  width: 30vw;
-  height: 100vh;
+  max-width: 25vw;
+  padding-top: 20px;
+  margin-left: 10px;
+  border: solid 1px var(--main-blue);
+  border-radius: 5px;
 }
 
 .timelineItem{
-  min-width: 150px;
+  min-width: 16vw;
 }
 
 .bulletContainer{
@@ -255,12 +264,27 @@ html{
 }
 
 #zoomSlider{
-  transform: rotate(-90deg) translate(-50%);
-  width: 30vw;
+  transform-origin: 300px 0px;
+  transform: rotate(-90deg) translate(0, -310px);
+  position: absolute;
+  left: 10%;
+  width: 300px;
+}
+
+#zoomLevels{
+  list-style-type: none;
+}
+
+#zoomLevels li{ 
+  margin-bottom: 46px;
 }
 
 /* Vertical Timeline */
 @media (max-width: 700px){
+
+  #timelineToolbar{
+    height: 89vh;
+  }
 
   #eventListContainer{
     display: block;
@@ -292,6 +316,10 @@ html{
 
 /* Horizontal Timeline */
 @media (min-width: 700px) { 
+
+  #timelineToolbar{
+    height: 87vh;
+  }
 
   #eventListContainer{
     display: flex;
