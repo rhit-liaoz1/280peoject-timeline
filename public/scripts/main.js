@@ -17,7 +17,7 @@ rhit.FB_KEY_AUTHOR = "Author";
 rhit.FB_COLLECTION_EVENT_LIST = "EventList";
 rhit.FB_KEY_START_DATE = "StartDate";
 rhit.FB_KEY_END_DATE = "EndDate";
-rhit.FB_KEY_LANGUAGE = "en";
+rhit.FB_KEY_LANGUAGE = 'fr';
 
 // Singletons
 rhit.loginPageModel = null;
@@ -987,6 +987,7 @@ rhit.initializePage = function(){
 
 rhit.main = function(){
 
+  
   rhit.loginPageModel = new rhit.LoginPageModel();
   rhit.loginPageModel.beginListening(() => {
     
