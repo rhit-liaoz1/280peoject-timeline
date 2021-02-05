@@ -70,7 +70,7 @@ rhit.TimelineListController = class {
 
 	updateView(){
 
-    const newTimelineList = htmlToElement(`<ul id="timelineListContainer" class="timelinedisplay"></ul>`);
+    const newTimelineList = htmlToElement(`<div id="timelineListContainer"></div>`);
 
     for (let i = 0; i < rhit.timelineListModel.length; i++){
 
@@ -88,28 +88,28 @@ rhit.TimelineListController = class {
   
   _createTimelineSection(timeline, index){
 
-    const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab">
+    const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab timelineItemButton">
                                     <i class="material-icons">add</i>
                                   </button>`);
 
     button.addEventListener("click", () => {
 
-      const item = document.querySelector(`#descriptionOfItem${index}`);
+      const item = document.querySelector(`#descriptionOfItem${index}`).parentElement;
       item.hidden = ! item.hidden;
     });
 
-    const title = htmlToElement(`<h5 class="inlineDisplay">${timeline.title}</h5>`);
+    const title = htmlToElement(`<h5 class="mainTimelineItemTitle">${timeline.title}</h5>`);
 
     title.addEventListener("click", () => {
 
       window.location.href = `/timeline.html?timelineID=${timeline.id}`;
     });
                             
-    const section = htmlToElement(`<li>
-                                    <div class="bulletedListContainer">
-                                      <p id="descriptionOfItem${index}" class="descriptionFont blueBottom" hidden>${timeline.description}</p>
+    const section = htmlToElement(`<div class="mainTimelineItem">
+                                    <div class="bulletContainer" hidden>
+                                      <p id="descriptionOfItem${index}">${timeline.description}</p>
                                     </div>
-                                  </li>`);
+                                  </div>`);
     
     section.prepend(title);
     section.prepend(button);
