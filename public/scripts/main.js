@@ -17,6 +17,7 @@ rhit.FB_KEY_AUTHOR = "Author";
 rhit.FB_COLLECTION_EVENT_LIST = "EventList";
 rhit.FB_KEY_START_DATE = "StartDate";
 rhit.FB_KEY_END_DATE = "EndDate";
+rhit.FB_KEY_LANGUAGE = "en";
 
 // Singletons
 rhit.loginPageModel = null;
@@ -25,6 +26,19 @@ rhit.profilePageModel = null;
 rhit.singleTimelineModel = null;
 rhit.eventPageModel = null;
 
+
+//google translate, from https://gist.github.com/carolineschnapp/806456
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+  pageLanguage: 'en',
+  includedLanguages:rhit.FB_KEY_LANGUAGE 
+}, 'google_translate_element');
+setTimeout(function(){
+var select = document.querySelector('select.goog-te-combo');
+select.value  = rhit.FB_KEY_LANGUAGE ; 
+select.dispatchEvent(new Event('change'));
+},1000)
+}
 
 function htmlToElement(html){
 
@@ -76,7 +90,7 @@ rhit.TimelineListController = class {
 
       const timeline = rhit.timelineListModel.getTimelineAtIndex(i);     
       const newSection = this._createTimelineSection(timeline, i);
-
+      
       newTimelineList.appendChild(newSection);
     }
 
@@ -190,7 +204,7 @@ rhit.Timeline = class {
 rhit.SingleTimelineController = class {
 
 	constructor(){
-
+    googleTranslateElementInit();
     document.querySelector("#signOutButton").addEventListener("click", () => {
 
       rhit.loginPageModel.signOut();
@@ -305,6 +319,7 @@ rhit.SingleTimelineController = class {
       oldEventList.parentElement.appendChild(newEventList);
       oldEventList.parentElement.removeChild(oldEventList);
     });
+    googleTranslateElementInit();
   }
 
   _createEventGroup(startYear, endYear){
@@ -554,6 +569,7 @@ rhit.EventPageController = class {
     document.querySelector("#eventName").textContent = rhit.eventPageModel.title;
     document.querySelector("#eventImage").src = rhit.eventPageModel.imageURL;
     document.querySelector("#textDescription").textContent = rhit.eventPageModel.description;
+    googleTranslateElementInit();
   }
 }
 
@@ -670,7 +686,7 @@ rhit.ProfilePageController = class {
 	}
 
 	updateView(){
-
+    googleTranslateElementInit
 	}
 }
 
@@ -718,6 +734,7 @@ rhit.ProfilePageModel = class {
       [rhit.FB_KEY_LOCATION]: location,
       [rhit.FB_KEY_AGE]: age,
       [rhit.FB_KEY_IMAGEURL]: imageURL,
+      [rhit.FB_KEY_LANGUAGE]: language,
       [rhit.FB_KEY_USERNAME]: username,
     })
     .then(() => {
@@ -770,6 +787,7 @@ rhit.LoginPageController = class {
       const inputPassword = document.querySelector("#inputPassword");
 
       rhit.loginPageModel.signInWithEmailAndPassword(inputEmail.value, inputPassword.value);
+      
     });
 
     document.querySelector("#createAccountButton").addEventListener("click", () => {
@@ -787,7 +805,7 @@ rhit.LoginPageController = class {
 	}
 
 	updateView(){
-
+    googleTranslateElementInit();
 	}
 }
 
@@ -932,17 +950,17 @@ rhit.initializePage = function(){
   else if (document.querySelector("#mainTimelinePage")){
 
     rhit.timelineListModel = new rhit.TimelineListModel();
-    new rhit.TimelineListController()
+    new rhit.TimelineListController();
   }
 
   else if (document.querySelector("#timelinePage")){
-
+    googleTranslateElementInit();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const timelineID = urlParams.get("timelineID");
 
     rhit.singleTimelineModel = new rhit.SingleTimelineModel(timelineID);
-    new rhit.SingleTimelineController()
+    new rhit.SingleTimelineController();
   }
 
   else if (document.querySelector("#detailPage")){
