@@ -106,7 +106,7 @@ rhit.TimelineListController = class {
     });
                             
     const section = htmlToElement(`<div class="mainTimelineItem">
-                                    <div class="bulletContainer" hidden>
+                                    <div class="timelineDescriptionContainer" hidden>
                                       <p id="descriptionOfItem${index}">${timeline.description}</p>
                                     </div>
                                   </div>`);

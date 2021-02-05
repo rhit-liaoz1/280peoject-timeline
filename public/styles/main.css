@@ -179,6 +179,12 @@ html{
 
 /* maintimeline */
 
+.timelineDescriptionContainer{
+  text-align: left;
+  border-bottom: 1px solid var(--main-blue);
+  margin-left: 40px;
+}
+
 #timelineListContainer{
   margin-left: 10vw;
 }
@@ -245,6 +251,7 @@ html{
 .bulletContainer{
   text-align: left;
   border-bottom: 1px solid var(--main-blue);
+  margin-left: 40px;
 }
 
 #zoomSlider{
@@ -277,6 +284,10 @@ html{
   .horizontalLine {
     display: none;
   }
+
+  .bulletContainer{
+    margin-left: 40px;
+  }
 }
 
 /* Horizontal Timeline */
@@ -299,6 +310,10 @@ html{
     position: fixed;
     margin-top: 20px;
     width: 100vw;
+  }
+
+  .bulletContainer{
+    margin-left: 0px;
   }
 }
 
