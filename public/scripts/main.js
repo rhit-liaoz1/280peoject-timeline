@@ -314,7 +314,7 @@ rhit.SingleTimelineController = class {
                                   </button>`);
 
     const group = htmlToElement(`<div class="timelineItem">
-                                  <h5>${startYear}-${endYear}</h5>
+                                  <h5 class="timelineItemTitle">${startYear}-${endYear}</h5>
                                   <div class="bulletContainer" hidden>
                                     <ul id="containerForRange${startYear}-${endYear}">
                                     </ul>
