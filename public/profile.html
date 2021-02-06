@@ -52,12 +52,57 @@
 
     <div class="buttonContainer">
       <button id="profilesetting" type="button" class="btn btn-raised btn-secondary">Settings</button>
-      <button id="profiledit" type="button" class="btn btn-raised btn-secondary">Edit Page</button>
+      <button id="profiledit" type="button" class="btn btn-raised btn-secondary" data-toggle="modal" data-target="#changeprofile">Edit Page</button>
     </div>
     <hr class="lineBreak">
 
     <button id="mainpagebutton" type="button" class="btn btn-raised btn-secondary footerButton" style="margin: 0;">Main Page</button>
   </div>
+
+
+   <!-- Timeline Create Modal -->
+   <div class="modal fade" id="changeprofile" tabindex="-1" role="dialog" aria-labelledby="change profile" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Change Profile</h5>
+        </div>
+        <div class="modal-body">
+          
+          <div class="form-group bmd-form-group"> 
+            <label for="profileUsername" class="bmd-label-floating">Name:</label>
+            <input type="text" class="form-control" id="profileUsername" placeholder="">
+          </div>
+
+          <div class="form-group bmd-form-group"> 
+            <label for="profileImageURL" class="bmd-label-floating">Photo</label>
+            <input type="text" class="form-control" id="profileImageURL" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="profileLocation" class="bmd-label-floating">Location</label>
+            <input type="text" class="form-control" id="profileLocation" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="profileAge" class="bmd-label-floating">Age</label>
+            <input type="text" class="form-control" id="profileAge" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="profilelanguage" class="bmd-label-floating">Language</label>
+            <input type="text" class="form-control" id="profilelanguage" placeholder="">
+          </div>
+
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button id="submitchanges" type="button" class="btn btn-primary" data-dismiss="modal">CREATE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/popper.js"></script>

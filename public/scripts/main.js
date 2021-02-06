@@ -66,8 +66,22 @@ rhit.profileControler = class{
       window.location.href = `/maintimeline.html`;
     });
     document.querySelector("#profiledit").addEventListener("click", () => {
-
-      window.location.href = `/editingProfile.html?userid=${rhit.loginPageModel.uid}`;
+      this.pageState;
+      document.querySelector("#submitchanges").addEventListener("click", () => {
+        let username = "li";
+        // document.querySelector("#profileUsername").value;
+        let imageURL = document.querySelector("#profileImageURL").value;
+        let location = document.querySelector("#profileLocation").value;
+        let age = document.querySelector("#profileAge").value;
+        let language = document.querySelector("#profilelanguage").value; 
+        console.log("name:", username, imageURL, age, location,language);
+      
+        
+        rhit.profilePageModel.updateProfile(username, imageURL, age, location,language);
+       
+      });
+      rhit.loginPageModel.beginListening(this.updateView.bind(this));
+      // window.location.href = `/editingProfile.html?userid=${rhit.loginPageModel.uid}`;
     });
     document.querySelector("#profilesetting").addEventListener("click", () => {
 
@@ -808,14 +822,14 @@ rhit.ProfilePageController = class {
 
     this.pageState;
     
-    document.querySelector("#finishEditingButton").addEventListener("click", () => {
+    document.querySelector("#submitchanges").addEventListener("click", () => {
 
       let username = document.querySelector("#profileUsername").value;
       let imageURL = document.querySelector("#profileImageURL").value.trim();
       let location = document.querySelector("#profileLocation").value;
       let age = document.querySelector("#profileAge").value.trim();
-
-      rhit.profilePageModel.updateProfile(username, imageURL, age, location);
+      let language = document.querySelector("#profilelanguage");
+      rhit.profilePageModel.updateProfile(username, imageURL, age, location,language);
     });
 
     rhit.loginPageModel.beginListening(this.updateView.bind(this));
@@ -860,7 +874,7 @@ rhit.ProfilePageModel = class {
 
   }
 
-	updateProfile(username, imageURL, age, location){
+	updateProfile(username, imageURL, age, location,language){
 
     console.log(username);
 
@@ -870,7 +884,7 @@ rhit.ProfilePageModel = class {
       [rhit.FB_KEY_LOCATION]: location,
       [rhit.FB_KEY_AGE]: age,
       [rhit.FB_KEY_IMAGEURL]: imageURL,
-      // [rhit.FB_KEY_LANGUAGE]: language,
+      [rhit.FB_KEY_LANGUAGE]: language,
       [rhit.FB_KEY_USERNAME]: username,
     })
     .then(() => {
@@ -1111,14 +1125,14 @@ rhit.initializePage = function(){
     new rhit.EventPageController()
   }
 
-  else if (document.querySelector("#editingProfilePage")){
+  // else if (document.querySelector("#editingProfilePage")){
 
-    rhit.profilePageModel = new rhit.ProfilePageModel();
-    new rhit.ProfilePageController();
-  }
+  //   rhit.profilePageModel = new rhit.ProfilePageModel();
+  //   new rhit.ProfilePageController();
+  // }
   else if (document.querySelector("#profilesetting")){
 
-    // rhit.profilePageModel = new rhit.ProfilePageModel();
+    rhit.profilePageModel = new rhit.ProfilePageModel();
     new rhit.profileControler()
   }
 }
