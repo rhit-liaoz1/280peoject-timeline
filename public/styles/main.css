@@ -193,10 +193,21 @@ html{
 
 #profilePage #profileUsername{
     position: absolute;
-    bottom: 0%;
+    bottom: 17%;
     left: 10%;
     color: white;
 }
+
+@media (min-width: 450px) { 
+  #profilePage #profileUsername{
+    position: absolute;
+    bottom: 17%;
+    left: 10%;
+    color: white;
+    font-size: xx-large;
+}
+}
+
 
 #profilePage #profileSignOutButton{
     position: absolute;
