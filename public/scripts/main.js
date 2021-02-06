@@ -70,14 +70,19 @@ rhit.TimelineListController = class {
 
 	updateView(){
 
+    if (! rhit.loginPageModel.isGuest) document.querySelector("#addNewTimelineButton").hidden = false;
+
     const newTimelineList = htmlToElement(`<div id="timelineListContainer"></div>`);
 
     for (let i = 0; i < rhit.timelineListModel.length; i++){
 
-      const timeline = rhit.timelineListModel.getTimelineAtIndex(i);     
-      const newSection = this._createTimelineSection(timeline, i);
-
-      newTimelineList.appendChild(newSection);
+      const timeline = rhit.timelineListModel.getTimelineAtIndex(i);
+      
+      if (! timeline.privateView || rhit.loginPageModel.uid == timeline.author){
+      
+        const newSection = this._createTimelineSection(timeline, i);
+        newTimelineList.appendChild(newSection);
+      }
     }
 
     const oldTimelineList = document.querySelector("#timelineListContainer");
@@ -141,14 +146,14 @@ rhit.TimelineListModel = class {
     this._unsubscribe();
 	}
 
-	createTimeline(title, description, viewPermission, editPermission, author){
+	createTimeline(title, description, privateView, privateEdit, author){
 
     this._ref.add({
 
       [rhit.FB_KEY_TITLE]: title,
       [rhit.FB_KEY_DESCRIPTION]: description,
-      [rhit.FB_KEY_PRIVATE_VIEW]: viewPermission,
-      [rhit.FB_KEY_PRIVATE_EDIT]: editPermission,
+      [rhit.FB_KEY_PRIVATE_VIEW]: privateView,
+      [rhit.FB_KEY_PRIVATE_EDIT]: privateEdit,
       [rhit.FB_KEY_AUTHOR]: author,
     })
     .then((docRef) => {
@@ -169,17 +174,23 @@ rhit.TimelineListModel = class {
 	getTimelineAtIndex(index){
 
     let ds = this._documentSnapshots[index];
-    return new rhit.Timeline(ds.id, ds.get(rhit.FB_KEY_TITLE), ds.get(rhit.FB_KEY_DESCRIPTION));
+    return new rhit.Timeline(ds.id, 
+                             ds.get(rhit.FB_KEY_TITLE), 
+                             ds.get(rhit.FB_KEY_DESCRIPTION),
+                             ds.get(rhit.FB_KEY_AUTHOR), 
+                             ds.get(rhit.FB_KEY_PRIVATE_VIEW));
   }
 }
 
 rhit.Timeline = class {
 
-	constructor(id, title, description){
+	constructor(id, title, description, author, privateView){
 
     this.id = id;
 		this.title = title;
 		this.description = description;
+    this.author = author;
+    this.privateView = privateView;
 	}
 }
 
@@ -254,8 +265,16 @@ rhit.SingleTimelineController = class {
 
       document.querySelector("#inputTimelineTitle").value = rhit.singleTimelineModel.title;
       document.querySelector("#inputTimelineDescription").value = rhit.singleTimelineModel.description;
-      document.querySelector("#privateEditPermission").value = rhit.singleTimelineModel.editPermission;
-      document.querySelector("#privateViewPermission").value = rhit.singleTimelineModel.viewPermission;
+
+      let privateEdit = rhit.singleTimelineModel.privateEdit;
+      document.querySelector("#privateEditPermission").value = privateEdit;
+      document.querySelector("#privateEditPermission").checked = privateEdit;
+      document.querySelector("#publicEditPermission").checked = ! privateEdit;
+
+      let privateView = rhit.singleTimelineModel.privateView;
+      document.querySelector("#privateViewPermission").value = privateView;
+      document.querySelector("#privateViewPermission").checked = privateView;
+      document.querySelector("#publicViewPermission").checked = ! privateView;
     });
     
     $("#editTimeline").on("shown.bs.modal", (event) => {
@@ -267,6 +286,18 @@ rhit.SingleTimelineController = class {
 	}
 
 	updateView(){
+
+    if (rhit.singleTimelineModel.author == rhit.loginPageModel.uid){
+
+      document.querySelector("#deleteTimelineButton").hidden = false;
+      document.querySelector("#editTimelineButton").hidden = false;
+      document.querySelector("#addNewEventButton").hidden = false;
+    }
+
+    if (! rhit.singleTimelineModel.privateEdit && ! rhit.loginPageModel.isGuest){
+
+      document.querySelector("#addNewEventButton").hidden = false;
+    }
 
     document.querySelector("#currentTimeline").textContent = rhit.singleTimelineModel.title;
 
@@ -338,7 +369,7 @@ rhit.SingleTimelineController = class {
 
     title.addEventListener("click", () => {
 
-      window.location.href = `/detail.html?timelineID=${rhit.singleTimelineModel.id}&eventID=${event.id}`;
+      window.location.href = `/detail.html?timelineID=${rhit.singleTimelineModel.id}&eventID=${event.id}&privateEdit=${rhit.singleTimelineModel.privateEdit}`;
     });
 
     return title;
@@ -361,7 +392,7 @@ rhit.SingleTimelineModel = class {
 
 	beginListening(changeListener){
 
-    this._timelineUnsubcribe = this._timelineRef.onSnapshot((doc) => {
+    this._timelineUnsubscribe = this._timelineRef.onSnapshot((doc) => {
 
       if (doc.exists){
 
@@ -385,7 +416,7 @@ rhit.SingleTimelineModel = class {
 
 	stopListening(){
 
-    this._timelineUnsubcribe();
+    this._timelineUnsubscribe();
     this._eventListUnsubscribe();
 	}
 
@@ -394,14 +425,14 @@ rhit.SingleTimelineModel = class {
     return this._timelineRef.delete();
 	}
 
-	updateTimeline(title, description, viewPermission, editPermission){
+	updateTimeline(title, description, privateView, privateEdit){
 
     this._timelineRef.update({
 
       [rhit.FB_KEY_TITLE]: title,
       [rhit.FB_KEY_DESCRIPTION]: description,
-      [rhit.FB_KEY_PRIVATE_VIEW]: viewPermission,
-      [rhit.FB_KEY_PRIVATE_EDIT]: editPermission,
+      [rhit.FB_KEY_PRIVATE_VIEW]: privateView,
+      [rhit.FB_KEY_PRIVATE_EDIT]: privateEdit,
     })
     .then((docRef) => {
 
@@ -417,6 +448,7 @@ rhit.SingleTimelineModel = class {
 
     this._eventListRef.add({
 
+      [rhit.FB_KEY_AUTHOR]: rhit.loginPageModel.uid,
       [rhit.FB_KEY_START_DATE]: startDate,
       [rhit.FB_KEY_END_DATE]: endDate,
       [rhit.FB_KEY_TITLE]: title,
@@ -461,12 +493,12 @@ rhit.SingleTimelineModel = class {
     return this._documentSnapshot.get(rhit.FB_KEY_DESCRIPTION);
   }
 
-  get editPermission(){
+  get privateEdit(){
 
     return this._documentSnapshot.get(rhit.FB_KEY_PRIVATE_EDIT);
   }
 
-  get viewPermission(){
+  get privateView(){
 
     return this._documentSnapshot.get(rhit.FB_KEY_PRIVATE_VIEW);
   }
@@ -479,6 +511,11 @@ rhit.SingleTimelineModel = class {
   get id(){
 
     return this._timelineID;
+  }
+
+  get author(){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_AUTHOR);
   }
 }
 
@@ -500,6 +537,11 @@ rhit.Event = class {
 rhit.EventPageController = class {
 
 	constructor(){
+
+    document.querySelector("#signOutButton").addEventListener("click", () => {
+
+      rhit.loginPageModel.signOut();
+    });
 
     document.querySelector("#backButton").addEventListener("click", () => {
 
@@ -550,6 +592,17 @@ rhit.EventPageController = class {
 
 	updateView(){
 
+    if (rhit.eventPageModel.author == rhit.loginPageModel.uid){
+
+      document.querySelector("#deleteEventButton").hidden = false;
+      document.querySelector("#updateEventButton").hidden = false;
+    }
+
+    if (! rhit.eventPageModel.privateEdit){
+
+      document.querySelector("#updateEventButton").hidden = false;
+    }
+
     document.querySelector("#eventDate").textContent = `${rhit.eventPageModel.startDate}-${rhit.eventPageModel.endDate}`;
     document.querySelector("#eventName").textContent = rhit.eventPageModel.title;
     document.querySelector("#eventImage").src = rhit.eventPageModel.imageURL;
@@ -559,9 +612,10 @@ rhit.EventPageController = class {
 
 rhit.EventPageModel = class {
 
-	constructor(timelineID, eventID){
+	constructor(timelineID, eventID, privateEdit){
 
     this._timelineID = timelineID;
+    this._privateEdit = privateEdit == "true";
 
 		this._documentSnapshot = null;
 		this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_TIMELINE_LIST).doc(timelineID).collection(rhit.FB_COLLECTION_EVENT_LIST).doc(eventID);
@@ -570,7 +624,7 @@ rhit.EventPageModel = class {
 
 	beginListening(changeListener){
 
-    this._timelineUnsubcribe = this._ref.onSnapshot((doc) => {
+    this._unsubcribe = this._ref.onSnapshot((doc) => {
 
       if (doc.exists){
 
@@ -599,6 +653,7 @@ rhit.EventPageModel = class {
 
     this._ref.update({
 
+      [rhit.FB_KEY_AUTHOR]: rhit.loginPageModel.uid,
       [rhit.FB_KEY_START_DATE]: startDate,
       [rhit.FB_KEY_END_DATE]: endDate,
       [rhit.FB_KEY_TITLE]: title,
@@ -644,6 +699,16 @@ rhit.EventPageModel = class {
 
     return this._documentSnapshot.get(rhit.FB_KEY_DESCRIPTION);
 	}
+
+	get author(){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_AUTHOR);
+	}
+
+  get privateEdit(){
+
+    return this._privateEdit;
+  }
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------
@@ -951,8 +1016,9 @@ rhit.initializePage = function(){
     const urlParams = new URLSearchParams(queryString);
     const eventID = urlParams.get("eventID");
     const timelineID = urlParams.get("timelineID");
+    const privateEdit = urlParams.get("privateEdit");
 
-    rhit.eventPageModel = new rhit.EventPageModel(timelineID, eventID);
+    rhit.eventPageModel = new rhit.EventPageModel(timelineID, eventID, privateEdit);
     new rhit.EventPageController()
   }
 
