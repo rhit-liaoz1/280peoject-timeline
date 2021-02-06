@@ -68,7 +68,7 @@
     <div class="horizontalLine"></div>
 
     <div id="eventListContainer"></div>
-
+    <div id="google_translate_element" style="display: none;"></div>
   </div>
 
   <!-- Event Create Modal -->
@@ -173,6 +173,20 @@
   <script src="/__/firebase/7.18.0/firebase-firestore.js"></script>
   <script src="/__/firebase/init.js"></script>
   <script src="scripts/main.js"></script>
+  <!-- <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      includedLanguages:'fr'
+  }, 'google_translate_element');
+  setTimeout(function(){
+    var select = document.querySelector('select.goog-te-combo');
+    select.value  = "fr"; 
+    select.dispatchEvent(new Event('change'));
+  },1000)
+    }
+    </script> -->
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
 </html>

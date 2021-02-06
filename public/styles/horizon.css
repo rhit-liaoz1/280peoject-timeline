@@ -192,7 +192,7 @@ margin: 20px 0px;
 
 #profilePage #profileUsername{
   position: absolute;
-  bottom: 0%;
+  bottom: 17%;
   left: 10%;
   color: white;
 }
@@ -204,17 +204,16 @@ margin: 20px 0px;
 }
 
 #profilePage #profileImageContainer {
-  position: absolute;
-  top: 25%;
-  left: 10%;
+  position: fixed;
+  left: 5px;
   border-radius: 50%;
   overflow: hidden;
-  height: 17vw;
-  width: 17vw;
+  height: 7vh;
+  width: 7vh;
 }
 
 #profilePage #profileImage {
-  height: 17vw;
+  height: 15vw;
   width: auto;   
   margin-left: -25%;
 }
