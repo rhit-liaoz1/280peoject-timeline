@@ -365,7 +365,7 @@ rhit.SingleTimelineController = class {
   
   _createEventItem(event){
 
-    const title = htmlToElement(`<li class="smallFont">${event.title}</li>`);
+    const title = htmlToElement(`<li class="timelineEventItemTitle">${event.title}</li>`);
 
     title.addEventListener("click", () => {
 
