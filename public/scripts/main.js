@@ -869,7 +869,7 @@ rhit.ProfilePageModel = class {
 	get memberSince(){
 
     let date = this._documentSnapshot.get(rhit.FB_KEY_MEMBER_SINCE).toDate();
-    return `${date.getMonth() + 1}/${date.getDay()}/${date.getYear() + 1900}`;
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() + 1900}`;
 	}
 
 	get favoriteEvents(){
