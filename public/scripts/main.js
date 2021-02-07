@@ -8,6 +8,7 @@ rhit.FB_KEY_USERNAME = "Username";
 rhit.FB_KEY_IMAGE_URL = "ImageURL";
 rhit.FB_KEY_LOCATION = "Location";
 rhit.FB_KEY_AGE = "Age";
+rhit.FB_KEY_MEMBER_SINCE = "Member Since";
 rhit.FB_COLLECTION_TIMELINE_LIST = "TimelineList";
 rhit.FB_KEY_TITLE = "Title";
 rhit.FB_KEY_DESCRIPTION = "Description";
@@ -59,6 +60,11 @@ function htmlToElement(html){
 rhit.TimelineListController = class {
 
 	constructor(){
+
+    document.querySelector("#profilePicture").addEventListener("click", () => {
+
+      window.location.href = `/profile.html`;
+    });
 
     document.querySelector("#signOutButton").addEventListener("click", () => {
 
@@ -219,6 +225,11 @@ rhit.Timeline = class {
 rhit.SingleTimelineController = class {
 
 	constructor(){
+
+    document.querySelector("#profilePicture").addEventListener("click", () => {
+
+      window.location.href = `/profile.html`;
+    });
 
     document.querySelector("#signOutButton").addEventListener("click", () => {
 
@@ -556,6 +567,11 @@ rhit.EventPageController = class {
 
 	constructor(){
 
+    document.querySelector("#profilePicture").addEventListener("click", () => {
+
+      window.location.href = `/profile.html`;
+    });
+
     document.querySelector("#signOutButton").addEventListener("click", () => {
 
       rhit.loginPageModel.signOut();
@@ -737,43 +753,64 @@ rhit.ProfilePageController = class {
 
 	constructor(){
 
-    this.pageState;
-    
-    document.querySelector("#submitchanges").addEventListener("click", () => {
+    document.querySelector("#backButton").addEventListener("click", () => {
 
-      let username = document.querySelector("#profileUsername").value;
-      let imageURL = document.querySelector("#profileImageURL").value.trim();
-      let location = document.querySelector("#profileLocation").value;
-      let age = document.querySelector("#profileAge").value.trim();
-      let language = document.querySelector("#profileLanguage");
-      rhit.profilePageModel.updateProfile(username, imageURL, age, location, language);
+      window.location.href = `/maintimeline.html`;
+    });
+    
+    document.querySelector("#submitUpdateProfile").addEventListener("click", () => {
+
+      let username = document.querySelector("#modalUsername").value;
+      let imageURL = document.querySelector("#modalImageURL").value.trim();
+      let location = document.querySelector("#modalLocation").value;
+      let age = document.querySelector("#modalAge").value.trim();
+
+      rhit.profilePageModel.updateProfile(username, imageURL, age, location);
     });
 
-    rhit.loginPageModel.beginListening(this.updateView.bind(this));
+    $("#updateProfile").on("shown.bs.modal", (event) => {
+
+      document.querySelector("#modalUsername").value = rhit.profilePageModel.username;
+      document.querySelector("#modalImageURL").value = rhit.profilePageModel.imageURL;
+      document.querySelector("#modalLocation").value = rhit.profilePageModel.location;
+      document.querySelector("#modalAge").value = rhit.profilePageModel.age;
+    });
+    
+    $("#updateProfile").on("shown.bs.modal", (event) => {
+
+      document.querySelector("#profileUsername").focus();
+    });
+
+    rhit.profilePageModel.beginListening(this.updateView.bind(this));
 	}
 
 	updateView(){
 
+    document.querySelector("#location").textContent = `Location: ${rhit.profilePageModel.location}`;
+    document.querySelector("#age").textContent = `Age: ${rhit.profilePageModel.age}`;
+    document.querySelector("#member").textContent = `Member Since: ${rhit.profilePageModel.memberSince}`;
+    document.querySelector("#profileUsername").textContent = `Username: ${rhit.profilePageModel.username}`;
+    document.querySelector("#profileImage").src = rhit.profilePageModel.imageURL;
 	}
-}
+} 
 
 rhit.ProfilePageModel = class {
 
-	constructor(userID){
+	constructor(){
 
-    this._documentSnapshot;
-    console.log(userID);
+    this._documentSnapshot = null;
 		this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_USERS).doc(rhit.loginPageModel.uid);
 		this._unsubscribe = null;
 	}
 
-	beginListenting(changeListener){
+	beginListening(changeListener){
 
     this._unsubscribe = this._ref.onSnapshot((doc) => {
 
       if (doc.exists){
 
         this._documentSnapshot = doc;
+        changeListener();
       }
 
       else {
@@ -785,23 +822,23 @@ rhit.ProfilePageModel = class {
 
 	stopListening(){
 
+    this._unsubcribe();
 	}
 
 	delete(){
 
+    this._ref.delete();
   }
 
-	updateProfile(username, imageURL, age, location,language){
+	updateProfile(username, imageURL, age, location){
 
     console.log(username);
 
     this._ref.update({
 
-      [rhit.FB_KEY_UID]: rhit.loginPageModel.uid,
       [rhit.FB_KEY_LOCATION]: location,
       [rhit.FB_KEY_AGE]: age,
-      [rhit.FB_KEY_IMAGEURL]: imageURL,
-      [rhit.FB_KEY_LANGUAGE]: language,
+      [rhit.FB_KEY_IMAGE_URL]: imageURL,
       [rhit.FB_KEY_USERNAME]: username,
     })
     .then(() => {
@@ -817,18 +854,28 @@ rhit.ProfilePageModel = class {
 
 	get username(){
 
+    return this._documentSnapshot.get(rhit.FB_KEY_USERNAME);
 	}
 
 	get imageURL(){
 
+    return this._documentSnapshot.get(rhit.FB_KEY_IMAGE_URL);
 	}
 
 	get age(){
 
+    return this._documentSnapshot.get(rhit.FB_KEY_AGE);
 	}
 
 	get location(){
 
+    return this._documentSnapshot.get(rhit.FB_KEY_LOCATION);
+	}
+
+	get memberSince(){
+
+    let date = this._documentSnapshot.get(rhit.FB_KEY_MEMBER_SINCE).toDate();
+    return `${date.getMonth() + 1}/${date.getDay()}/${date.getYear() + 1900}`;
 	}
 
 	get favoriteEvents(){
@@ -848,20 +895,24 @@ rhit.LoginPageController = class {
 
 	constructor(){
 
+    document.querySelector("#submitCreateProfile").addEventListener("click", () => {
+
+      const username = document.querySelector("#profileUsername").value.trim();
+      const imageURL = document.querySelector("#profileImageURL").value.trim();
+      const location = document.querySelector("#profileLocation").value.trim();
+      const age = document.querySelector("#profileAge").value.trim();
+      const inputEmail = document.querySelector("#inputEmail");
+      const inputPassword = document.querySelector("#inputPassword");
+
+      rhit.loginPageModel.createUserWithEmailAndPassword(inputEmail.value, inputPassword.value, username, imageURL, location, age);
+    });
+
     document.querySelector("#logInButton").addEventListener("click", () => {
 
       const inputEmail = document.querySelector("#inputEmail");
       const inputPassword = document.querySelector("#inputPassword");
 
       rhit.loginPageModel.signInWithEmailAndPassword(inputEmail.value, inputPassword.value);
-    });
-
-    document.querySelector("#createAccountButton").addEventListener("click", () => {
-
-      const inputEmail = document.querySelector("#inputEmail");
-      const inputPassword = document.querySelector("#inputPassword");
-
-      rhit.loginPageModel.createUserWithEmailAndPassword(inputEmail.value, inputPassword.value);
     });
 
     document.querySelector("#guestButton").addEventListener("click", () => {
@@ -879,8 +930,8 @@ rhit.LoginPageModel = class {
 
 	constructor(){
 
-    this._isNewUser = false;
-    this._user;
+    this._profileObject = null;
+    this._user = null;
     this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_USERS);
 	}
 
@@ -890,9 +941,9 @@ rhit.LoginPageModel = class {
 
       this._user = user;
 
-      if (this._isNewUser){
+      if (this._profileObject){
 
-        this._createEmptyProfile()
+        this._createProfile()
         .then(() => {
 
           changeListener();
@@ -903,19 +954,22 @@ rhit.LoginPageModel = class {
     });
 	}
 
-	_createEmptyProfile(){
+	_createProfile(){
+    
+    if (this.uid && this._profileObject){
 
-    return this._ref.doc(this.uid).set({
+      return this._ref.doc(this.uid).set(this._profileObject);
+    }
 
-      [rhit.FB_KEY_UID]: this.uid,
-      [rhit.FB_KEY_LOCATION]: "",
-      [rhit.FB_KEY_AGE]: -1,
-      [rhit.FB_KEY_IMAGEURL]: "",
-      [rhit.FB_KEY_USERNAME]: "",
-    });
+    else {
+
+      console.log("ERROR creating profile");
+    }
+
+    return null;
   }
 
-  createUserWithEmailAndPassword(email, password){
+  createUserWithEmailAndPassword(email, password, username, imageURL, location, age){
 
     console.log(`Create account for email: ${email} password: ${password}`);
   
@@ -923,7 +977,14 @@ rhit.LoginPageModel = class {
     .then(() => {
 
       console.log("Account creation successful");
-      this._isNewUser = true;
+      this._profileObject = {
+
+        [rhit.FB_KEY_LOCATION]: location,
+        [rhit.FB_KEY_AGE]: age,
+        [rhit.FB_KEY_IMAGE_URL]: imageURL || "https://i.stack.imgur.com/l60Hf.png",
+        [rhit.FB_KEY_USERNAME]: username,
+        [rhit.FB_KEY_MEMBER_SINCE]: firebase.firestore.Timestamp.now(),
+      };
     })
     .catch((error) => {
       var errorCode = error.code;

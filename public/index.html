@@ -32,11 +32,49 @@
     </div>
     <hr class="lineBreak">
     <div class="buttonContainer">
-      <button id="createAccountButton" type="button" class="btn btn-primary btn-outline flexRow">Create New Account</button>
+      <button id="createProfileButton" type="button" class="btn btn-primary btn-outline flexRow" data-toggle="modal" data-target="#createProfile">Create New Account</button>
     </div>
     <hr class="lineBreak">
 
   </div>
+
+   <!-- Profile Create Modal -->
+   <div class="modal fade" id="createProfile" tabindex="-1" role="dialog" aria-labelledby="create profile" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create Profile</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group bmd-form-group"> 
+            <label for="profileUsername" class="bmd-label-floating">Username</label>
+            <input type="text" class="form-control" id="profileUsername" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="profileImageURL" class="bmd-label-floating">Image URL</label>
+            <input type="text" class="form-control" id="profileImageURL" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="profileLocation" class="bmd-label-floating">Location</label>
+            <input type="text" class="form-control" id="profileLocation" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="profileAge" class="bmd-label-floating">Age</label>
+            <input type="text" class="form-control" id="profileAge" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="profileLanguage" class="bmd-label-floating">Language</label>
+            <input type="text" class="form-control" id="profileLanguage" placeholder="">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button id="submitCreateProfile" type="button" class="btn btn-primary" data-dismiss="modal">CREATE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/popper.js"></script>
   <script src="scripts/bootstrap-material-design.js"></script>

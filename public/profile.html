@@ -18,25 +18,26 @@
 
   <div id="profilePage" class="container page-container">
 
+    <button id="backButton" type="button" class="btn bmd-btn-fab">
+      <i class="material-icons">keyboard_backspace</i>
+    </button>
+
     <div id="imageContainer">
       <img class="img-fluid" src="https://wallpaperaccess.com/full/846241.jpg">
       <div id="profileImageContainer">
-        <img id="profileImage" src = "https://i.stack.imgur.com/l60Hf.png"/>
+        <img id="profileImage" src = ""/>
       </div>
-      <h6 id="profileName">Name: Kelsey Smith</h6>
-      <h6 id="profileUsername">Username: smithka</h6>
+      <h6 id="profileUsername"></h6>
       <button id="profileSignOutButton" type="button" class="btn btn-raised btn-secondary">Log Out</button>
     </div>
    
     <hr class="lineBreak">
-    <h6 id="location">Location: Terre Haute</h6>
+    <h6 id="location"></h6>
     <hr class="lineBreak">
-    <h6 id="age">Age: 22</h6>
+    <h6 id="age"></h6>
     <hr class="lineBreak">
-    <h6 id="member">Member Since: 12/24/2020</h6>
+    <h6 id="member"></h6>
     <hr class="lineBreak">
-    <div id="displaylanguage">Language:</div>
-    <div id="google_translate_element"></div>
     <hr class="lineBreak">
     <div class="buttonContainer">
       <button type="button" class="btn btn-raised btn-secondary">
@@ -51,57 +52,48 @@
 
     <div class="buttonContainer">
       <button id="profilesetting" type="button" class="btn btn-raised btn-secondary">Settings</button>
-      <button id="profiledit" type="button" class="btn btn-raised btn-secondary" data-toggle="modal" data-target="#changeprofile">Edit Page</button>
+      <button id="editProfileButton" type="button" class="btn btn-raised btn-secondary" data-toggle="modal" data-target="#updateProfile">Edit Page</button>
     </div>
     <hr class="lineBreak">
-
-    <button id="mainpagebutton" type="button" class="btn btn-raised btn-secondary footerButton" style="margin: 0;">Main Page</button>
   </div>
 
 
-   <!-- Timeline Create Modal -->
-   <div class="modal fade" id="changeprofile" tabindex="-1" role="dialog" aria-labelledby="change profile" aria-hidden="true">
+   <!-- Profile Update Modal -->
+   <div class="modal fade" id="updateProfile" tabindex="-1" role="dialog" aria-labelledby="update profile" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Change Profile</h5>
+          <h5 class="modal-title">Edit Profile</h5>
         </div>
         <div class="modal-body">
-          
           <div class="form-group bmd-form-group"> 
-            <label for="profileUsername" class="bmd-label-floating">Name:</label>
-            <input type="text" class="form-control" id="profileUsername" placeholder="">
-          </div>
-
-          <div class="form-group bmd-form-group"> 
-            <label for="profileImageURL" class="bmd-label-floating">Photo</label>
-            <input type="text" class="form-control" id="profileImageURL" placeholder="">
+            <label for="modalUsername">Username</label>
+            <input type="text" class="form-control" id="modalUsername" placeholder="">
           </div>
           <div class="form-group bmd-form-group"> 
-            <label for="profileLocation" class="bmd-label-floating">Location</label>
-            <input type="text" class="form-control" id="profileLocation" placeholder="">
+            <label for="modalImageURL">Image URL</label>
+            <input type="text" class="form-control" id="modalImageURL" placeholder="">
           </div>
           <div class="form-group bmd-form-group"> 
-            <label for="profileAge" class="bmd-label-floating">Age</label>
-            <input type="text" class="form-control" id="profileAge" placeholder="">
+            <label for="modalLocation">Location</label>
+            <input type="text" class="form-control" id="modalLocation" placeholder="">
           </div>
           <div class="form-group bmd-form-group"> 
-            <label for="profilelanguage" class="bmd-label-floating">Language</label>
-            <input type="text" class="form-control" id="profilelanguage" placeholder="">
+            <label for="modalAge">Age</label>
+            <input type="text" class="form-control" id="modalAge" placeholder="">
           </div>
-
-
-
-
+          <div class="form-group bmd-form-group"> 
+            <label for="modalLanguage">Language</label>
+            <input type="text" class="form-control" id="modalLanguage" placeholder="">
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
-          <button id="submitchanges" type="button" class="btn btn-primary" data-dismiss="modal">CREATE</button>
+          <button id="submitUpdateProfile" type="button" class="btn btn-primary" data-dismiss="modal">UPDATE</button>
         </div>
       </div>
     </div>
   </div>
-
 
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/popper.js"></script>
