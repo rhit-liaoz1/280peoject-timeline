@@ -28,26 +28,16 @@ rhit.singleTimelineModel = null;
 rhit.eventPageModel = null;
 
 
-//google translate, from https://gist.github.com/carolineschnapp/806456
-// function googleTranslateElementInit() {
 
-//   new google.translate.TranslateElement({
+// https://stackoverflow.com/questions/12243818/adding-google-translate-to-a-web-site/12243949
+function googleTranslateElementInit() {
 
-//     pageLanguage: "en",
-//     includedLanguages:rhit.FB_KEY_LANGUAGE 
-//   }, "google_translate_element");
-
-//   setTimeout(function(){
-
-//     let select = document.querySelector("select.goog-te-combo");
-//     select.value = rhit.FB_KEY_LANGUAGE; 
-//     select.dispatchEvent(new Event('change'));
-//     }, 1000);
-// }
+  new google.translate.TranslateElement({pageLanguage: "en"}, "google_translate_element");
+}
 
 function htmlToElement(html){
 
-  var template = document.createElement('template');
+  var template = document.createElement("template");
   html = html.trim();
   template.innerHTML = html;
   return template.content.firstChild;
@@ -1120,6 +1110,7 @@ rhit.main = function(){
     
     rhit.checkForRedirects();
     rhit.initializePage();
+    googleTranslateElementInit();
   });
 }
 

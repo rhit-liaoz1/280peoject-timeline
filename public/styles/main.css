@@ -26,6 +26,15 @@ html{
 
 /* General */
 
+/* remove google translate banner from top of nav bar */
+/* https://stackoverflow.com/questions/11248673/hiding-google-translate-bar */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+  } 
+body {
+  top: 0px !important; 
+  }
+
 #menuBar{
   left: -175px;
   width: 250px;
