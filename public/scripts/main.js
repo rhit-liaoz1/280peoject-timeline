@@ -7,7 +7,7 @@ rhit.FB_KEY_UID = "UserID";
 rhit.FB_KEY_USERNAME = "Username";
 rhit.FB_KEY_IMAGE_URL = "ImageURL";
 rhit.FB_KEY_LOCATION = "Location";
-rhit.FB_KEY_AGE = 21;
+rhit.FB_KEY_AGE = "Age";
 rhit.FB_COLLECTION_TIMELINE_LIST = "TimelineList";
 rhit.FB_KEY_TITLE = "Title";
 rhit.FB_KEY_DESCRIPTION = "Description";
@@ -17,7 +17,7 @@ rhit.FB_KEY_AUTHOR = "Author";
 rhit.FB_COLLECTION_EVENT_LIST = "EventList";
 rhit.FB_KEY_START_DATE = "StartDate";
 rhit.FB_KEY_END_DATE = "EndDate";
-rhit.FB_KEY_LANGUAGE = 'fr';
+rhit.FB_KEY_LANGUAGE = "fb";
 
 // Singletons
 rhit.loginPageModel = null;
@@ -28,17 +28,21 @@ rhit.eventPageModel = null;
 
 
 //google translate, from https://gist.github.com/carolineschnapp/806456
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-  pageLanguage: 'en',
-  includedLanguages:rhit.FB_KEY_LANGUAGE 
-}, 'google_translate_element');
-setTimeout(function(){
-var select = document.querySelector('select.goog-te-combo');
-select.value  = rhit.FB_KEY_LANGUAGE ; 
-select.dispatchEvent(new Event('change'));
-},1000)
-}
+// function googleTranslateElementInit() {
+
+//   new google.translate.TranslateElement({
+
+//     pageLanguage: "en",
+//     includedLanguages:rhit.FB_KEY_LANGUAGE 
+//   }, "google_translate_element");
+
+//   setTimeout(function(){
+
+//     let select = document.querySelector("select.goog-te-combo");
+//     select.value = rhit.FB_KEY_LANGUAGE; 
+//     select.dispatchEvent(new Event('change'));
+//     }, 1000);
+// }
 
 function htmlToElement(html){
 
@@ -47,72 +51,6 @@ function htmlToElement(html){
   template.innerHTML = html;
   return template.content.firstChild;
 }
-
-// --------------------------------------------------------------------------------------------------------------------------------------
-// Profile Main --------------------------------------------------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------------------------------------------------------
-
-
-rhit.profileControler = class{
-
-  constructor(){
-    this.pageState;
-    document.querySelector("#profileSignOutButton").addEventListener("click", () => {
-
-      rhit.loginPageModel.signOut();
-    });
-
-    document.querySelector("#mainpagebutton").addEventListener("click", () => {
-      window.location.href = `/maintimeline.html`;
-    });
-    document.querySelector("#profiledit").addEventListener("click", () => {
-      this.pageState;
-      document.querySelector("#submitchanges").addEventListener("click", () => {
-        let username = "li";
-        // document.querySelector("#profileUsername").value;
-        let imageURL = document.querySelector("#profileImageURL").value;
-        let location = document.querySelector("#profileLocation").value;
-        let age = document.querySelector("#profileAge").value;
-        let language = document.querySelector("#profilelanguage").value; 
-        console.log("name:", username, imageURL, age, location,language);
-      
-        
-        rhit.profilePageModel.updateProfile(username, imageURL, age, location,language);
-       
-      });
-      rhit.loginPageModel.beginListening(this.updateView.bind(this));
-      // window.location.href = `/editingProfile.html?userid=${rhit.loginPageModel.uid}`;
-    });
-    document.querySelector("#profilesetting").addEventListener("click", () => {
-
-      window.location.href = `/profileSettings.html?userid=${rhit.loginPageModel.uid}`;
-    });
-    // document.querySelector("#finishEditingButton").addEventListener("click", () => {
-
-    //   let username = document.querySelector("#profileUsername").value;
-    //   let imageURL = document.querySelector("#profileImageURL").value.trim();
-    //   let location = document.querySelector("#profileLocation").value;
-    //   let age = document.querySelector("#profileAge").value.trim();
-
-    //   rhit.profilePageModel.updateProfile(username, imageURL, age, location);
-    // });
-
-    rhit.loginPageModel.beginListening(this.updateView.bind(this));
-    this.updateView();
-  }
-
-  updateView(){
-    document.querySelector("#profileName").innerHTML = "Name: "+ rhit.FB_KEY_USERNAME;
-    document.querySelector("#profileUsername").innerHTML ="UserName: "+ rhit.FB_KEY_USERNAME;
-    document.querySelector("#location").innerHTML ="Location: "+ rhit.FB_KEY_LOCATION;
-    document.querySelector("#age").innerHTML = "Age: "+ rhit.FB_KEY_AGEE;
-    document.querySelector("#displaylanguage").innerHTML = "Language :"+rhit.FB_KEY_LANGUAGE;
-    // document.querySelector("#profileName").innerHTML = rhit.FB_KEY_USERNAME;
-  }
-}
-  
-
-
 
 // --------------------------------------------------------------------------------------------------------------------------------------
 // Timeline List ------------------------------------------------------------------------------------------------------------------------
@@ -125,13 +63,6 @@ rhit.TimelineListController = class {
     document.querySelector("#signOutButton").addEventListener("click", () => {
 
       rhit.loginPageModel.signOut();
-    });
-
-    document.querySelector("#profilePictureContainer").addEventListener("click", () => {
-      if(rhit.loginPageModel.isSignedIn && !rhit.loginPageModel.isGuest){
-        window.location.href = `/profile.html?userid=${rhit.loginPageModel.uid}`;
-      //   window.location.href = `/profile.html?timelineID=${timeline.id}`;
-      }
     });
 
     document.querySelector("#submitAddTimeline").addEventListener("click", () => {
@@ -288,16 +219,10 @@ rhit.Timeline = class {
 rhit.SingleTimelineController = class {
 
 	constructor(){
-    googleTranslateElementInit();
+
     document.querySelector("#signOutButton").addEventListener("click", () => {
 
       rhit.loginPageModel.signOut();
-    });
-    document.querySelector("#profilePictureContainer").addEventListener("click", () => {
-      if(rhit.loginPageModel.isSignedIn && !rhit.loginPageModel.isGuest){
-        window.location.href = `/profile.html?userid=${rhit.loginPageModel.uid}`;
-      //   window.location.href = `/profile.html?timelineID=${timeline.id}`;
-      }
     });
 
     document.querySelector("#backButton").addEventListener("click", () => {
@@ -429,7 +354,6 @@ rhit.SingleTimelineController = class {
       oldEventList.parentElement.appendChild(newEventList);
       oldEventList.parentElement.removeChild(oldEventList);
     });
-    googleTranslateElementInit();
   }
 
   _createEventGroup(startYear, endYear){
@@ -636,12 +560,6 @@ rhit.EventPageController = class {
 
       rhit.loginPageModel.signOut();
     });
-    document.querySelector("#profilePictureContainer").addEventListener("click", () => {
-      if(rhit.loginPageModel.isSignedIn && !rhit.loginPageModel.isGuest){
-        window.location.href = `/profile.html?userid=${rhit.loginPageModel.uid}`;
-      //   window.location.href = `/profile.html?timelineID=${timeline.id}`;
-      }
-    });
 
     document.querySelector("#backButton").addEventListener("click", () => {
 
@@ -707,7 +625,6 @@ rhit.EventPageController = class {
     document.querySelector("#eventName").textContent = rhit.eventPageModel.title;
     document.querySelector("#eventImage").src = rhit.eventPageModel.imageURL;
     document.querySelector("#textDescription").textContent = rhit.eventPageModel.description;
-    googleTranslateElementInit();
   }
 }
 
@@ -828,15 +745,15 @@ rhit.ProfilePageController = class {
       let imageURL = document.querySelector("#profileImageURL").value.trim();
       let location = document.querySelector("#profileLocation").value;
       let age = document.querySelector("#profileAge").value.trim();
-      let language = document.querySelector("#profilelanguage");
-      rhit.profilePageModel.updateProfile(username, imageURL, age, location,language);
+      let language = document.querySelector("#profileLanguage");
+      rhit.profilePageModel.updateProfile(username, imageURL, age, location, language);
     });
 
     rhit.loginPageModel.beginListening(this.updateView.bind(this));
 	}
 
 	updateView(){
-    googleTranslateElementInit
+
 	}
 }
 
@@ -937,7 +854,6 @@ rhit.LoginPageController = class {
       const inputPassword = document.querySelector("#inputPassword");
 
       rhit.loginPageModel.signInWithEmailAndPassword(inputEmail.value, inputPassword.value);
-      
     });
 
     document.querySelector("#createAccountButton").addEventListener("click", () => {
@@ -955,7 +871,7 @@ rhit.LoginPageController = class {
 	}
 
 	updateView(){
-    googleTranslateElementInit();
+
 	}
 }
 
@@ -963,6 +879,7 @@ rhit.LoginPageModel = class {
 
 	constructor(){
 
+    this._isNewUser = false;
     this._user;
     this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_USERS);
 	}
@@ -972,32 +889,31 @@ rhit.LoginPageModel = class {
     firebase.auth().onAuthStateChanged((user) => {
 
       this._user = user;
-      changeListener();
+
+      if (this._isNewUser){
+
+        this._createEmptyProfile()
+        .then(() => {
+
+          changeListener();
+        });
+      }
+
+      else changeListener();
     });
 	}
 
-	// _createProfile(){
+	_createEmptyProfile(){
 
-  //   if (this.isSignedIn && this.isNewUser){
+    return this._ref.doc(this.uid).set({
 
-  //     this._ref.doc(this.uid).set({
-
-  //       [rhit.FB_KEY_UID]: this.uid,
-  //       [rhit.FB_KEY_LOCATION]: "",
-  //       [rhit.FB_KEY_AGE]: -1,
-  //       [rhit.FB_KEY_IMAGEURL]: "",
-  //       [rhit.FB_KEY_USERNAME]: "",
-  //     })
-  //     .then(() => {
-
-  //       console.log("Profile document written successfully");
-  //     })
-  //     .catch((error) => {
-
-  //       console.log("Error adding profile document: ", error);
-  //     });
-  //   }
-  // }
+      [rhit.FB_KEY_UID]: this.uid,
+      [rhit.FB_KEY_LOCATION]: "",
+      [rhit.FB_KEY_AGE]: -1,
+      [rhit.FB_KEY_IMAGEURL]: "",
+      [rhit.FB_KEY_USERNAME]: "",
+    });
+  }
 
   createUserWithEmailAndPassword(email, password){
 
@@ -1007,6 +923,7 @@ rhit.LoginPageModel = class {
     .then(() => {
 
       console.log("Account creation successful");
+      this._isNewUser = true;
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -1062,11 +979,6 @@ rhit.LoginPageModel = class {
     return this._user.isAnonymous;
   }
 
-  get isNewUser(){
-
-    return !this._user.displayName;
-  }
-
 	get uid(){
 
     return this._user.uid;
@@ -1090,6 +1002,10 @@ rhit.checkForRedirects = function(){
   }
 }
 
+// --------------------------------------------------------------------------------------------------------------------------------------
+// Page Initialization ------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
+
 rhit.initializePage = function(){
 
   if (document.querySelector("#loginPage")){
@@ -1104,7 +1020,7 @@ rhit.initializePage = function(){
   }
 
   else if (document.querySelector("#timelinePage")){
-    googleTranslateElementInit();
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const timelineID = urlParams.get("timelineID");
@@ -1125,15 +1041,10 @@ rhit.initializePage = function(){
     new rhit.EventPageController()
   }
 
-  // else if (document.querySelector("#editingProfilePage")){
-
-  //   rhit.profilePageModel = new rhit.ProfilePageModel();
-  //   new rhit.ProfilePageController();
-  // }
-  else if (document.querySelector("#profilesetting")){
+  else if (document.querySelector("#profilePage")){
 
     rhit.profilePageModel = new rhit.ProfilePageModel();
-    new rhit.profileControler()
+    new rhit.ProfilePageController();
   }
 }
 
@@ -1143,7 +1054,6 @@ rhit.initializePage = function(){
 
 rhit.main = function(){
 
-  
   rhit.loginPageModel = new rhit.LoginPageModel();
   rhit.loginPageModel.beginListening(() => {
     

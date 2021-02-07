@@ -133,11 +133,6 @@ html{
     text-indent: 10vw;
 }
 
-/* editing detail Page */
-#editingdetailPage #eventImage {
-  margin: 20px 0px;
-}
-
 /* Profile Page */
 
 #profilePage {
@@ -202,10 +197,10 @@ html{
 
 #timelineListContainer:before {
   content: ' ';
-  height: 100%;
+  height: 100vh;
   width: 2px;
   background-color: var(--main-blue);
-  position: absolute;
+  position: fixed;
   top: 10%;
   margin-left: 1.25rem;
   z-index: -1;
@@ -319,10 +314,10 @@ html{
 
   #eventListContainer:before {
     content: " ";
-    height: 100%;
+    height: 100vh;
     width: 2px;
     background-color: var(--main-blue);
-    position: absolute;
+    position: fixed;
     top: 10%;
     margin-left: 1.25rem;
     z-index: -1;
