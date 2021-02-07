@@ -26,8 +26,7 @@ rhit.timelineListModel = null;
 rhit.profilePageModel = null;
 rhit.singleTimelineModel = null;
 rhit.eventPageModel = null;
-
-
+rhit.settingsPageModel = null;
 
 // https://stackoverflow.com/questions/12243818/adding-google-translate-to-a-web-site/12243949
 function googleTranslateElementInit() {
@@ -53,7 +52,7 @@ rhit.TimelineListController = class {
 
     document.querySelector("#profilePicture").addEventListener("click", () => {
 
-      window.location.href = `/profile.html`;
+      if (! rhit.loginPageModel.isGuest) window.location.href = `/profile.html`;
     });
 
     document.querySelector("#signOutButton").addEventListener("click", () => {
@@ -218,7 +217,7 @@ rhit.SingleTimelineController = class {
 
     document.querySelector("#profilePicture").addEventListener("click", () => {
 
-      window.location.href = `/profile.html`;
+      if (! rhit.loginPageModel.isGuest) window.location.href = `/profile.html`;
     });
 
     document.querySelector("#signOutButton").addEventListener("click", () => {
@@ -559,7 +558,7 @@ rhit.EventPageController = class {
 
     document.querySelector("#profilePicture").addEventListener("click", () => {
 
-      window.location.href = `/profile.html`;
+      if (! rhit.loginPageModel.isGuest) window.location.href = `/profile.html`;
     });
 
     document.querySelector("#signOutButton").addEventListener("click", () => {
@@ -743,6 +742,16 @@ rhit.ProfilePageController = class {
 
 	constructor(){
 
+    document.querySelector("#profileSignOutButton").addEventListener("click", () => {
+
+      rhit.loginPageModel.signOut();
+    });
+
+    document.querySelector("#profileSettingsButton").addEventListener("click", () => {
+
+      window.location.href = `/profileSettings.html?imageURL=${rhit.profilePageModel.imageURL}&username=${rhit.profilePageModel.username}`;
+    });
+
     document.querySelector("#backButton").addEventListener("click", () => {
 
       window.location.href = `/maintimeline.html`;
@@ -815,11 +824,6 @@ rhit.ProfilePageModel = class {
     this._unsubcribe();
 	}
 
-	delete(){
-
-    this._ref.delete();
-  }
-
 	updateProfile(username, imageURL, age, location){
 
     console.log(username);
@@ -874,6 +878,98 @@ rhit.ProfilePageModel = class {
 
 	get createdEvents(){
 
+	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------------------------
+// Profile Settings Page ----------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
+
+rhit.SettingsPageController = class {
+
+  constructor(){
+
+    document.querySelector("#profileSignOutButton").addEventListener("click", () => {
+
+      rhit.loginPageModel.signOut();
+    });
+
+    document.querySelector("#deleteAccountButton").addEventListener("click", () => {
+
+      rhit.settingsPageModel.delete();
+    });
+
+    document.querySelector("#backButton").addEventListener("click", () => {
+
+      window.location.href = `/profile.html`;
+    });
+
+    rhit.settingsPageModel.beginListening(this.updateView.bind(this));
+  }
+
+  updateView(){
+
+    document.querySelector("#profileImage").src = rhit.settingsPageModel.imageURL;
+    document.querySelector("#profileUsername").textContent = `Username: ${rhit.settingsPageModel.username}`;
+  }
+}
+
+rhit.SettingsPageModel = class {
+  
+  constructor(){
+
+    this._documentSnapshot = null;
+    this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_USERS).doc(rhit.loginPageModel.uid);
+    this._unsubscribe = null;
+  }
+
+  beginListening(changeListener){
+
+    this._unsubscribe = this._ref.onSnapshot((doc) => {
+
+      if (doc.exists){
+
+        this._documentSnapshot = doc;
+        changeListener();
+      }
+
+      else {
+
+        console.log("No Profile Document Found");
+      }
+    });
+  }
+
+  stopListening(){
+
+    this._unsubcribe();
+  }
+
+  delete(){
+
+    this._ref.delete()
+    .then(() => {
+
+      return firebase.auth().currentUser.delete();
+    })
+    .then(() => {
+
+      console.log("Successfully deleted user");
+    })
+    .catch((error) => {
+
+      console.log("Error deleting user: ", error);
+    });
+  }
+
+	get imageURL(){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_IMAGE_URL);
+	}
+
+	get username(){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_USERNAME);
 	}
 }
 
@@ -1042,14 +1138,22 @@ rhit.LoginPageModel = class {
 
 rhit.checkForRedirects = function(){
 
+  console.log(document.querySelector("#loginPage"));
+  console.log(rhit.loginPageModel.isSignedIn);
+
   if (document.querySelector("#loginPage") && rhit.loginPageModel.isSignedIn){
   
     window.location.href = "/maintimeline.html";
   }
 
-  if (!document.querySelector("#loginPage") && !rhit.loginPageModel.isSignedIn){
+  else if (!document.querySelector("#loginPage") && !rhit.loginPageModel.isSignedIn){
   
     window.location.href = "/";
+  }
+
+  else if (document.querySelector("#profilePage") && rhit.loginPageModel.isGuest){
+
+    window.location.href = "/maintimeline.html";
   }
 }
 
@@ -1096,6 +1200,12 @@ rhit.initializePage = function(){
 
     rhit.profilePageModel = new rhit.ProfilePageModel();
     new rhit.ProfilePageController();
+  }
+
+  else if (document.querySelector("#profileSettingsPage")){
+
+    rhit.settingsPageModel = new rhit.SettingsPageModel();
+    new rhit.SettingsPageController();
   }
 }
 

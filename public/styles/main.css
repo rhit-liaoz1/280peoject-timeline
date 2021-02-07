@@ -148,35 +148,40 @@ body {
     text-align: center;
 }
 
-#profilePage #imageContainer{
+#profileSettingsPage {
+    text-align: center;
+}
+
+#imageContainer {
     position: relative;
 }
 
-#profilePage #profileUsername{
+#profileUsername {
     position: absolute;
     bottom: 17%;
     left: 10%;
     color: white;
 }
 
-@media (min-width: 450px) { 
-  #profilePage #profileUsername{
+@media (min-width: 450px) {
+
+  #profileUsername{
     position: absolute;
     bottom: 17%;
     left: 10%;
     color: white;
     font-size: xx-large;
-}
+  }
 }
 
 
-#profilePage #profileSignOutButton{
+#profileSignOutButton{
     position: absolute;
     bottom: 0%;
     right: 0%;
 }
 
-#profilePage #profileImageContainer {
+#profileImageContainer {
     position: absolute;
     top: 25%;
     left: 10%;
@@ -186,7 +191,7 @@ body {
     width: 17vw;
 }
 
-#profilePage #profileImage {
+#profileImage {
     height: 17vw;
     width: auto;   
     margin-left: -25%;
