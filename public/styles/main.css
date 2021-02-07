@@ -5,6 +5,7 @@
 body {
     /* background-color: white; */
     background-color: transparent;
+    min-height: 0px !important;
 }
 
 html{
@@ -30,10 +31,9 @@ html{
 /* https://stackoverflow.com/questions/11248673/hiding-google-translate-bar */
 .goog-te-banner-frame.skiptranslate {
   display: none !important;
-  } 
-body {
-  top: 0px !important; 
-  }
+  width: 0px;
+  height: 0px;
+} 
 
 #menuBar{
   left: -175px;
