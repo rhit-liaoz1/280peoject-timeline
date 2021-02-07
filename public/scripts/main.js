@@ -889,6 +889,12 @@ rhit.SettingsPageController = class {
 
   constructor(){
 
+    document.querySelector("#submitUpdatePassword").addEventListener("click", () => {
+    
+      const password = document.querySelector("#newPassword").value.trim();
+      rhit.settingsPageModel.setPassword(password);
+    });
+
     document.querySelector("#profileSignOutButton").addEventListener("click", () => {
 
       rhit.loginPageModel.signOut();
@@ -959,6 +965,19 @@ rhit.SettingsPageModel = class {
     .catch((error) => {
 
       console.log("Error deleting user: ", error);
+    });
+  }
+
+  setPassword(password){
+
+    firebase.auth().currentUser.updatePassword(password)
+    .then(() => {
+
+      console.log("Password successfully updated.");
+    })
+    .catch((error) => {
+
+      console.log("ERROR updating password: ", error);
     });
   }
 
@@ -1137,9 +1156,6 @@ rhit.LoginPageModel = class {
 // --------------------------------------------------------------------------------------------------------------------------------------
 
 rhit.checkForRedirects = function(){
-
-  console.log(document.querySelector("#loginPage"));
-  console.log(rhit.loginPageModel.isSignedIn);
 
   if (document.querySelector("#loginPage") && rhit.loginPageModel.isSignedIn){
   

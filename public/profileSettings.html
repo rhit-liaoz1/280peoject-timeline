@@ -34,17 +34,42 @@
     <hr class="lineBreak">
     <h4>Settings</h4>
     <hr class="lineBreak">
-    <button id="changePasswordButton" type="button" class="btn btn-raised btn-secondary">
+    <button id="changePasswordButton" type="button" class="btn btn-raised btn-secondary" data-toggle="modal" data-target="#updatePassword">
       <i class="material-icons buttonIcon">settings</i> Change Password
     </button>
     <hr class="lineBreak">
     <button id="deleteAccountButton" type="button" class="btn btn-raised btn-secondary">
       <i class="material-icons buttonIcon">report</i> Delete Account
-    </button>
+    </button> 
     <hr class="lineBreak">
     <div id="google_translate_element"></div>
     <hr class="lineBreak">
 
+  </div>
+
+  <!-- Update password modal -->
+  <div class="modal fade" id="updatePassword" tabindex="-1" role="dialog" aria-labelledby="update password" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Change Password</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group bmd-form-group"> 
+            <label for="oldPassword" class="bmd-label-floating">Old Password</label>
+            <input type="text" class="form-control" id="oldPassword" placeholder="">
+          </div>
+          <div class="form-group bmd-form-group"> 
+            <label for="newPassword" class="bmd-label-floating">New Password</label>
+            <input type="text" class="form-control" id="newPassword" placeholder="">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button id="submitUpdatePassword" type="button" class="btn btn-primary" data-dismiss="modal">UPDATE</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="scripts/jquery.min.js"></script>
