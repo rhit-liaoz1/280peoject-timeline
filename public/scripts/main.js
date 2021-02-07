@@ -891,8 +891,20 @@ rhit.SettingsPageController = class {
 
     document.querySelector("#submitUpdatePassword").addEventListener("click", () => {
     
-      const password = document.querySelector("#newPassword").value.trim();
+      const newPassword = document.querySelector("#newPassword").value.trim();
+      const oldPassword = document.querySelector("#oldPassword").value.trim();
       rhit.settingsPageModel.setPassword(password);
+    });
+
+    $("#updatePassword").on("show.bs.modal", (event) => {
+
+      document.querySelector("#newPassword").value = "";
+      document.querySelector("#oldPassword").value = "";
+    });
+
+    $("#updatePassword").on("shown.bs.modal", (event) => {
+
+      document.querySelector("#newPassword").focus();
     });
 
     document.querySelector("#profileSignOutButton").addEventListener("click", () => {
@@ -1002,14 +1014,27 @@ rhit.LoginPageController = class {
 
     document.querySelector("#submitCreateProfile").addEventListener("click", () => {
 
-      const username = document.querySelector("#profileUsername").value.trim();
-      const imageURL = document.querySelector("#profileImageURL").value.trim();
-      const location = document.querySelector("#profileLocation").value.trim();
-      const age = document.querySelector("#profileAge").value.trim();
+      const username = document.querySelector("#modalUsername").value.trim();
+      const imageURL = document.querySelector("#modalImageURL").value.trim();
+      const location = document.querySelector("#modalLocation").value.trim();
+      const age = document.querySelector("#modalAge").value.trim();
       const inputEmail = document.querySelector("#inputEmail");
       const inputPassword = document.querySelector("#inputPassword");
 
       rhit.loginPageModel.createUserWithEmailAndPassword(inputEmail.value, inputPassword.value, username, imageURL, location, age);
+    });
+    
+    $("#createProfile").on("show.bs.modal", (event) => {
+
+      document.querySelector("#modalUsername").value = "";
+      document.querySelector("#modalImageURL").value = "";
+      document.querySelector("#modalLocation").value = "";
+      document.querySelector("#modalAge").value = "";
+    });
+
+    $("#createProfile").on("shown.bs.modal", (event) => {
+
+      document.querySelector("#modalUsername").focus();
     });
 
     document.querySelector("#logInButton").addEventListener("click", () => {
