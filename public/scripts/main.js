@@ -108,7 +108,8 @@ rhit.TimelineListController = class {
 
     const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab timelineItemButton">
                                     <i class="material-icons">add</i>
-                                  </button>`);
+                                  </button>
+                                  `);
 
     button.addEventListener("click", () => {
 
@@ -360,7 +361,8 @@ rhit.SingleTimelineController = class {
 
     const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab timelineItemButton">
                                     <i class="material-icons">add</i>
-                                  </button>`);
+                                  </button>
+                                  <br>`);
 
     const group = htmlToElement(`<div class="timelineItem">
                                   <h5 class="timelineItemTitle">${startYear}-${endYear}</h5>
