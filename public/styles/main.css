@@ -77,7 +77,7 @@ html{
 }
 
 .buttonContainer {
-    display: flex;
+    /* display: flex; */
 } 
 
 .buttonContainer > button {
@@ -165,13 +165,8 @@ html{
 
 @media (min-width: 450px) {
 
-  #profileUsername{
-    position: absolute;
-    bottom: 17%;
-    left: 10%;
-    color: white;
-    font-size: xx-large;
-  }
+  /* 
+  } */
 }
 
 
@@ -313,6 +308,12 @@ html{
 
 /* Vertical Timeline */
 @media (max-width: 700px){
+  #profileUsername{
+    position: absolute;
+    bottom: 17%;
+    left: 10%;
+    color: white;
+  }
 
   #timelineToolbar{
     height: 89vh;
@@ -350,7 +351,24 @@ html{
 
 /* Horizontal Timeline */
 @media (min-width: 700px) { 
+  #profileUsername {
+    position: absolute;
+    bottom: 17%;
+    left: 35%;
+    color: white;
+    font-size: xx-large;
+}
+.buttonContainer {
+  display: flex;
+  /* justify-content: center; */
+}
 
+#profileSignOutButton {
+  position: absolute;
+  bottom: -10%;
+  font-size: x-large;
+  right: 0%;
+}
   #timelineToolbar{
     height: 87vh;
     /*  */
@@ -382,6 +400,29 @@ html{
   .bulletContainer{
     margin-left: 0px;
   }
+
+#profileImageContainer {
+    position: absolute;
+    top: 25%;
+    left:5%;
+    border-radius: 50%;
+    overflow: hidden;
+    height: 17vw;
+    width: 17vw;
+}
+.img-fluid, .img-thumbnail{
+  width: 100vw;
+  height: 30vh;
+}
+.lineBreak{
+  width: 50vw;
+}
+
+#profileImage {
+    /* height: 10vw; */
+    width: auto;   
+    margin-left: -25%;
+}
 }
 
 /* loginPage */
