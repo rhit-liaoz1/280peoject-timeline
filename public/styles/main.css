@@ -317,8 +317,6 @@ html{
 
   #timelineToolbar{
     height: 89vh;
-    /*  */
-    border-color: white; 
   }
 
   #eventListContainer{
@@ -371,11 +369,6 @@ html{
 }
   #timelineToolbar{
     height: 87vh;
-    /*  */
-    left: 0;
-    margin-left: 0;
-    padding-left: 50px;
-    border-color: white;
   }
 
   #eventListContainer{

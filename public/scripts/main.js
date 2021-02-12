@@ -216,6 +216,11 @@ rhit.SingleTimelineController = class {
 
 	constructor(){
 
+    document.querySelector("#zoomSlider").addEventListener("mouseup", () => {
+
+      this.updateView();
+    });
+
     document.querySelector("#profilePicture").addEventListener("click", () => {
 
       if (! rhit.loginPageModel.isGuest) window.location.href = `/profile.html`;
@@ -325,7 +330,7 @@ rhit.SingleTimelineController = class {
 
       if (! minDate) return;
 
-      const zoom = 10;
+      const zoom = this._getZoomLevel();
 
       const start = minDate - minDate % zoom;
 
@@ -393,6 +398,11 @@ rhit.SingleTimelineController = class {
     });
 
     return title;
+  }
+
+  _getZoomLevel(){
+
+    return 5 * Math.floor(20 / Math.pow(2, 5 - document.querySelector("#zoomSlider").value));
   }
 }
 
