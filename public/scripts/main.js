@@ -1,4 +1,5 @@
 // TODO profile image on maintimeline page and timeline page
+// TODO verify user action for critical operations (delete event/timeline/profile)
 
 var rhit = rhit || {};
 
