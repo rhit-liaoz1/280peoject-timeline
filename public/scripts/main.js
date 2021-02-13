@@ -62,10 +62,22 @@ rhit.TimelineListController = class {
 
     document.querySelector("#submitAddTimeline").addEventListener("click", () => {
 
-      const title = document.querySelector("#inputTimelineTitle").value;
-      const description = document.querySelector("#inputTimelineDescription").value;
+      const title = document.querySelector("#inputTimelineTitle").value.trim();
+      const description = document.querySelector("#inputTimelineDescription").value.trim();
       const privateEdit = document.querySelector("#privateEditPermission").checked;
       const privateView = document.querySelector("#privateViewPermission").checked;
+
+      if (title == ""){
+
+        alert("Invalid title");
+        return;
+      }
+
+      if (description == ""){
+
+        alert("Invalid description");
+        return;
+      }
 
       rhit.timelineListModel.createTimeline(title, description, privateView, privateEdit, rhit.loginPageModel.uid);
     });
@@ -252,21 +264,63 @@ rhit.SingleTimelineController = class {
 
     document.querySelector("#submitAddEvent").addEventListener("click", () => {
 
-      const startDate = document.querySelector("#inputStartDate").value;
-      const endDate = document.querySelector("#inputEndDate").value;
-      const title = document.querySelector("#inputEventTitle").value;
-      const imageURL = document.querySelector("#inputImageURL").value;
-      const description = document.querySelector("#inputEventDescription").value;
+      const startDate = document.querySelector("#inputStartDate").value.trim();
+      const endDate = document.querySelector("#inputEndDate").value.trim();
+      const title = document.querySelector("#inputEventTitle").value.trim();
+      const imageURL = document.querySelector("#inputImageURL").value.trim();
+      const description = document.querySelector("#inputEventDescription").value.trim();
+
+      if (startDate == "" || startDate <= 0 || isNaN(parseInt(startDate))){
+
+        alert("Invalid start date");
+        return;
+      }
+
+      if (endDate == "" || endDate <= 0 || isNaN(parseInt(endDate))){
+
+        alert("Invalid end date");
+        return;
+      }
+
+      if (endDate < startDate){
+
+        alert("Invalid date range");
+        return;
+      }
+
+      if (title == ""){
+
+        alert("Invalid title");
+        return;
+      }
+
+      if (description == ""){
+
+        alert("Invalid description");
+        return;
+      }
 
       rhit.singleTimelineModel.createEvent(startDate, endDate, title, imageURL, description);
     });
 
     document.querySelector("#submitUpdateTimeline").addEventListener("click", () => {
 
-      const title = document.querySelector("#inputTimelineTitle").value;
-      const description = document.querySelector("#inputTimelineDescription").value;
+      const title = document.querySelector("#inputTimelineTitle").value.trim();
+      const description = document.querySelector("#inputTimelineDescription").value.trim();
       const privateEdit = document.querySelector("#privateEditPermission").checked;
       const privateView = document.querySelector("#privateViewPermission").checked;
+
+      if (title == ""){
+
+        alert("Invalid title");
+        return;
+      }
+
+      if (description == ""){
+
+        alert("Invalid description");
+        return;
+      }
 
       rhit.singleTimelineModel.updateTimeline(title, description, privateView, privateEdit);
     });
@@ -599,11 +653,41 @@ rhit.EventPageController = class {
     
     document.querySelector("#submitUpdateEvent").addEventListener("click", () => {
 
-      const startDate = document.querySelector("#inputStartDate").value;
-      const endDate = document.querySelector("#inputEndDate").value;
-      const title = document.querySelector("#inputEventTitle").value;
-      const imageURL = document.querySelector("#inputImageURL").value;
-      const description = document.querySelector("#inputEventDescription").value;
+      const startDate = document.querySelector("#inputStartDate").value.trim();
+      const endDate = document.querySelector("#inputEndDate").value.trim();
+      const title = document.querySelector("#inputEventTitle").value.trim();
+      const imageURL = document.querySelector("#inputImageURL").value.trim();
+      const description = document.querySelector("#inputEventDescription").value.trim();
+
+      if (startDate == "" || startDate <= 0 || isNaN(parseInt(startDate))){
+
+        alert("Invalid start date");
+        return;
+      }
+
+      if (endDate == "" || endDate <= 0 || isNaN(parseInt(endDate))){
+
+        alert("Invalid end date");
+        return;
+      }
+
+      if (endDate < startDate){
+
+        alert("Invalid date range");
+        return;
+      }
+
+      if (title == ""){
+
+        alert("Invalid title");
+        return;
+      }
+
+      if (description == ""){
+
+        alert("Invalid description");
+        return;
+      }
 
       rhit.eventPageModel.updateEvent(startDate, endDate, title, imageURL, description);
     });
@@ -771,10 +855,22 @@ rhit.ProfilePageController = class {
     
     document.querySelector("#submitUpdateProfile").addEventListener("click", () => {
 
-      let username = document.querySelector("#modalUsername").value;
+      let username = document.querySelector("#modalUsername").value.trim();
       let imageURL = document.querySelector("#modalImageURL").value.trim();
       let location = document.querySelector("#modalLocation").value;
       let age = document.querySelector("#modalAge").value.trim();
+
+      if (username == "") {
+        
+        alert("Invalid Username");
+        return;
+      }
+
+      if (age <= 0 || age >= 130 || age == "" || isNaN(parseInt(age))){
+
+        alert("Invalid age");
+        return;
+      }
 
       rhit.profilePageModel.updateProfile(username, imageURL, age, location);
     });
@@ -1033,6 +1129,18 @@ rhit.LoginPageController = class {
       const inputEmail = document.querySelector("#inputEmail");
       const inputPassword = document.querySelector("#inputPassword");
 
+      if (username == "") {
+        
+        alert("Invalid Username");
+        return;
+      }
+
+      if (age <= 0 || age >= 130 || age == "" || isNaN(parseInt(age))){
+
+        alert("Invalid age");
+        return;
+      }
+
       rhit.loginPageModel.createUserWithEmailAndPassword(inputEmail.value, inputPassword.value, username, imageURL, location, age);
     });
     
@@ -1061,10 +1169,6 @@ rhit.LoginPageController = class {
 
       rhit.loginPageModel.signInAsGuest();
     });
-	}
-
-	updateView(){
-
 	}
 }
 

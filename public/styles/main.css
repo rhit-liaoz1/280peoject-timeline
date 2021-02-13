@@ -274,10 +274,9 @@ html{
   background-color: white;
   z-index: 1;
   max-width: 25vw;
-  padding-top: 20px;
-  padding-left: 20px;
-  /* margin-left: 10px;
-  border: solid 1px var(--main-blue); */
+  padding: 10px;
+  margin-left: 10px;
+  border: solid 1px var(--main-blue);
   border-radius: 5px;
 }
 
@@ -309,6 +308,7 @@ html{
 
 /* Vertical Timeline */
 @media (max-width: 700px){
+
   #profileUsername{
     position: absolute;
     bottom: 17%;
@@ -361,7 +361,7 @@ html{
 
   .buttonContainer {
     display: flex;
-    /* justify-content: center; */
+    justify-content: center;
   }
 
   #profileSignOutButton {
