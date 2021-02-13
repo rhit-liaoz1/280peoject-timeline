@@ -144,12 +144,12 @@ html{
 
 /* Profile Page */
 
-.favoriteEventItem{
+.eventBulletItem{
   border: none;
   background-color: white;
 }
 
-.favoriteEventItem:hover{
+.eventBulletItem:hover{
   background-color: var(--main-blue);
   color: white;
   border-radius: 8px;
