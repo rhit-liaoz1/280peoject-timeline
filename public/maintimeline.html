@@ -24,7 +24,7 @@
         <i class="material-icons">reorder</i>
       </button>
       <div id="menuBar" class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1">
-        <button class="dropdown-item" type="button" data-toggle="modal" data-target="#searchtimeline"> 
+        <button class="dropdown-item" type="button" data-toggle="modal" data-target="#searchTimeline"> 
           <i class="material-icons">search</i>&nbsp;&nbsp;&nbsp;Search
         </button>
         <button id="addNewTimelineButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#addNewTimeline" hidden>
@@ -38,30 +38,26 @@
 
   </nav>
 
+
   <div id="mainTimelinePage" class="container page-container">
-
     <div id="timelineListContainer"></div> 
-
   </div>
 
-
    <!-- Searching Modal -->
-   <div class="modal fade" id="searchtimeline" tabindex="-1" role="dialog" aria-labelledby="Search Timeline" aria-hidden="true">
+  <div class="modal fade" id="searchTimeline" tabindex="-1" role="dialog" aria-labelledby="Search Timeline" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Searching Timeline <div>(by Name)</div></h5>
-         
+          <h5 class="modal-title">Timeline Search<div>(by Name)</div></h5>
         </div>
         <div class="modal-body">
           <div class="form-group bmd-form-group"> 
-            <!-- <label for="inputTimelineTitle" class="bmd-label-floating">Title</label> -->
-            <input type="text" class="form-control" id="inputTimelineTitle" placeholder="">
+            <input type="text" class="form-control" id="inputSearchString" placeholder="">
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
-          <button id="submitAddTimeline" type="button" class="btn btn-primary" data-dismiss="modal">Search</button>
+          <button id="submitSearch" type="button" class="btn btn-primary" data-dismiss="modal">Search</button>
         </div>
       </div>
     </div>

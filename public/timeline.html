@@ -25,7 +25,7 @@
         <i class="material-icons">reorder</i>
       </button>
       <div id="menuBar" class="dropdown-menu dropdown-menu-right" aria-labelledby="lr1">
-        <button class="dropdown-item" type="button" data-toggle="modal" data-target="#searchtimeline"> 
+        <button class="dropdown-item" type="button" data-toggle="modal" data-target="#searchEvent"> 
           <i class="material-icons">search</i>&nbsp;&nbsp;&nbsp;Search
         </button>
         <button id="addNewEventButton" class="dropdown-item" type="button" data-toggle="modal" data-target="#addNewEvent" hidden>
@@ -73,37 +73,35 @@
 
 
    <!-- Searching Modal -->
-   <div class="modal fade" id="searchtimeline" tabindex="-1" role="dialog" aria-labelledby="Search Timeline" aria-hidden="true">
+   <div class="modal fade" id="searchEvent" tabindex="-1" role="dialog" aria-labelledby="Search Event" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Searching Timeline</h5>
+          <h5 class="modal-title">Event Search</h5>
         </div>
         <div class="modal-body">
           <div class="form-group bmd-form-group"> 
-            <!-- <label for="inputTimelineTitle" class="bmd-label-floating">Title</label> -->
-            <input type="text" class="form-control" id="inputTimelineTitle" placeholder="">
+            <input type="text" class="form-control" id="inputSearchString" placeholder="">
           </div>
           <div>
             <label>Search by</label>
             <div class="radio">
               <label>
-                <input type="radio" name="searchRadios" id="searchname" value="true" checked>
+                <input type="radio" name="searchRadios" id="searchName" value="true" checked>
                 Name (Event Name)
               </label>
             </div>
             <div class="radio">
               <label>
-                <input type="radio" name="searchRadios" id="searchtime" value="true">
+                <input type="radio" name="searchRadios" id="searchTime" value="true">
                 Time (The start year of event)
               </label>
             </div>
           </div>
-  
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
-          <button id="submitAddTimeline" type="button" class="btn btn-primary" data-dismiss="modal">Search</button>
+          <button id="submitSearch" type="button" class="btn btn-primary" data-dismiss="modal">Search</button>
         </div>
       </div>
     </div>

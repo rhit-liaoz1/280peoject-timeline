@@ -144,6 +144,17 @@ html{
 
 /* Profile Page */
 
+.favoriteEventItem{
+  border: none;
+  background-color: white;
+}
+
+.favoriteEventItem:hover{
+  background-color: var(--main-blue);
+  color: white;
+  border-radius: 8px;
+}
+
 #profilePage {
     text-align: center;
 }
@@ -162,13 +173,6 @@ html{
     left: 10%;
     color: white;
 }
-
-@media (min-width: 450px) {
-
-  /* 
-  } */
-}
-
 
 #profileSignOutButton{
     position: absolute;
@@ -222,14 +226,16 @@ html{
 }
 
 .mainTimelineItemTitle:hover{
-  border: solid 1px var(--main-blue);
+  background-color: var(--main-blue);
+  color: white;
   border-radius: 8px;
 }
 
 /* timeline */
 
 .timelineEventItemTitle:hover{
-  border: solid 1px var(--main-blue);
+  background-color: var(--main-blue);
+  color: white;
   border-radius: 8px;
 }
 

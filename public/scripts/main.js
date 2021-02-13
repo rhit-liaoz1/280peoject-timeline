@@ -18,7 +18,11 @@ rhit.FB_KEY_AUTHOR = "Author";
 rhit.FB_COLLECTION_EVENT_LIST = "EventList";
 rhit.FB_KEY_START_DATE = "StartDate";
 rhit.FB_KEY_END_DATE = "EndDate";
-rhit.FB_KEY_LANGUAGE = "fb";
+rhit.FB_KEY_CONTRIBUTORS = "Contributors";
+rhit.FB_KEY_FAVORITED_BY = "Favorited By";
+rhit.FB_KEY_CREATED_EVENTS = "Created Events";
+rhit.FB_KEY_FAVORITE_EVENTS_NAME = "Favorite Events Name";
+rhit.FB_KEY_FAVORITE_EVENTS_PARAMS = "Favorite Events Params";
 
 // Singletons
 rhit.loginPageModel = null;
@@ -538,6 +542,8 @@ rhit.SingleTimelineModel = class {
       [rhit.FB_KEY_TITLE]: title,
       [rhit.FB_KEY_IMAGE_URL]: imageURL,
       [rhit.FB_KEY_DESCRIPTION]: description,
+      [rhit.FB_KEY_FAVORITED_BY]: [],
+      [rhit.FB_KEY_CONTRIBUTORS]: [],
     })
     .then((docRef) => {
 
@@ -621,6 +627,14 @@ rhit.Event = class {
 rhit.EventPageController = class {
 
 	constructor(){
+
+    document.querySelector("#favoriteButton").addEventListener("click", () => {
+
+      let favorited = rhit.eventPageModel.favoritedByContains(rhit.loginPageModel.uid);
+
+      if (favorited) rhit.eventPageModel.removeFavoritedBy(rhit.loginPageModel.uid);
+      else rhit.eventPageModel.addFavoritedBy(rhit.loginPageModel.uid); 
+    });
 
     document.querySelector("#profilePicture").addEventListener("click", () => {
 
@@ -711,6 +725,10 @@ rhit.EventPageController = class {
 
 	updateView(){
 
+    let favorited = rhit.eventPageModel.favoritedByContains(rhit.loginPageModel.uid);
+    if (favorited) document.querySelector("#favoriteIcon").style.color = "#6091F1";
+    else document.querySelector("#favoriteIcon").style.color = "#FFFFFF";
+
     if (rhit.eventPageModel.author == rhit.loginPageModel.uid){
 
       document.querySelector("#deleteEventButton").hidden = false;
@@ -735,6 +753,7 @@ rhit.EventPageModel = class {
 
     this._timelineID = timelineID;
     this._privateEdit = privateEdit == "true";
+    this._eventID = eventID;
 
 		this._documentSnapshot = null;
 		this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_TIMELINE_LIST).doc(timelineID).collection(rhit.FB_COLLECTION_EVENT_LIST).doc(eventID);
@@ -768,7 +787,7 @@ rhit.EventPageModel = class {
     return this._ref.delete();
 	}
 
-	updateEvent(startDate, endDate, title, imageURL, description){
+	updateEvent(startDate, endDate, title, imageURL, description, favoritedBy){
 
     this._ref.update({
 
@@ -778,6 +797,8 @@ rhit.EventPageModel = class {
       [rhit.FB_KEY_TITLE]: title,
       [rhit.FB_KEY_IMAGE_URL]: imageURL,
       [rhit.FB_KEY_DESCRIPTION]: description,
+      [rhit.FB_KEY_FAVORITED_BY]: favoritedBy,
+      [rhit.FB_KEY_CONTRIBUTORS]: [],
     })
     .then((docRef) => {
 
@@ -788,6 +809,60 @@ rhit.EventPageModel = class {
       console.log("Error updating event document: ", error);
     });
 	}
+
+  addFavoritedBy(uid){
+
+    this._ref.update({
+
+      [rhit.FB_KEY_FAVORITED_BY]: firebase.firestore.FieldValue.arrayUnion(uid),
+    })
+    .then((docRef) => {
+    
+      console.log("Added favorite successfully");
+    })
+    .catch((error) => {
+
+      console.log("Error adding favorite");
+    });
+
+    rhit.loginPageModel.getUserDoc().update({
+
+      [rhit.FB_KEY_FAVORITE_EVENTS_NAME]: firebase.firestore.FieldValue.arrayUnion(this.title),
+      [rhit.FB_KEY_FAVORITE_EVENTS_PARAMS]: firebase.firestore.FieldValue.arrayUnion(
+        `?eventID=${this._eventID}&timelineID=${this._timelineID}&privateEdit=${this._privateEdit}`),
+    });
+  }
+
+  removeFavoritedBy(uid){
+
+    this._ref.update({
+
+      [rhit.FB_KEY_FAVORITED_BY]: firebase.firestore.FieldValue.arrayRemove(uid),
+    })
+    .then((docRef) => {
+    
+      console.log("Removed favorite successfully");
+    })
+    .catch((error) => {
+
+      console.log("Error removing favorite");
+    });
+
+    rhit.loginPageModel.getUserDoc().update({
+
+      [rhit.FB_KEY_FAVORITE_EVENTS_NAME]: firebase.firestore.FieldValue.arrayRemove(this.title),
+      [rhit.FB_KEY_FAVORITE_EVENTS_PARAMS]: firebase.firestore.FieldValue.arrayRemove(
+        `?eventID=${this._eventID}&timelineID=${this._timelineID}&privateEdit=${this._privateEdit}`),
+    });
+  }
+
+  favoritedByContains(uid){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_FAVORITED_BY).find((element) => {
+      
+      return uid == element; 
+    });
+  }
   
   get timelineID(){
 
@@ -837,6 +912,12 @@ rhit.EventPageModel = class {
 rhit.ProfilePageController = class {
 
 	constructor(){
+
+    document.querySelector("#favoriteEventsButton").addEventListener("click", () => {
+
+      let section = document.querySelector("#favoriteEventsList");
+      section.hidden = ! section.hidden;
+    });
 
     document.querySelector("#profileSignOutButton").addEventListener("click", () => {
 
@@ -898,7 +979,36 @@ rhit.ProfilePageController = class {
     document.querySelector("#member").textContent = `Member Since: ${rhit.profilePageModel.memberSince}`;
     document.querySelector("#profileUsername").textContent = `Username: ${rhit.profilePageModel.username}`;
     document.querySelector("#profileImage").src = rhit.profilePageModel.imageURL;
+
+    let newSection = htmlToElement(`<ul id="favoriteEventsList" hidden></ul>`);
+
+    for (let i = 0; i < rhit.profilePageModel.favoriteEventsLength; i++){
+
+      let eventName = rhit.profilePageModel.getFavoriteEventNameAtIndex(i);
+      let eventParams = rhit.profilePageModel.getFavoriteEventParamsAtIndex(i);
+      let item = this._createEventItem(eventName, eventParams);
+      newSection.appendChild(item);
+    }
+
+    let oldSection = document.querySelector("#favoriteEventsList");
+    oldSection.removeAttribute("id");
+    oldSection.parentElement.appendChild(newSection);
+    oldSection.parentElement.removeChild(oldSection);
 	}
+
+  _createEventItem(name, params){
+
+    let nameButton = htmlToElement(`<button class="favoriteEventItem">${name}</button>`);
+    nameButton.addEventListener("click", () => {
+
+      window.location.href = `detail.html${params}`;
+    });
+
+    let item = htmlToElement(`<li></li>`);
+    item.appendChild(nameButton);
+
+    return item;
+  }
 } 
 
 rhit.ProfilePageModel = class {
@@ -980,13 +1090,20 @@ rhit.ProfilePageModel = class {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getYear() + 1900}`;
 	}
 
-	get favoriteEvents(){
+	getFavoriteEventNameAtIndex(index){
 
+    return this._documentSnapshot.get(rhit.FB_KEY_FAVORITE_EVENTS_NAME)[index];
 	}
 
-	get createdEvents(){
+	getFavoriteEventParamsAtIndex(index){
 
+    return this._documentSnapshot.get(rhit.FB_KEY_FAVORITE_EVENTS_PARAMS)[index];
 	}
+
+  get favoriteEventsLength(){
+
+    return this._documentSnapshot.get(rhit.FB_KEY_FAVORITE_EVENTS_NAME).length;
+  }
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------
@@ -1230,6 +1347,8 @@ rhit.LoginPageModel = class {
         [rhit.FB_KEY_IMAGE_URL]: imageURL || "https://i.stack.imgur.com/l60Hf.png",
         [rhit.FB_KEY_USERNAME]: username,
         [rhit.FB_KEY_MEMBER_SINCE]: firebase.firestore.Timestamp.now(),
+        [rhit.FB_KEY_CREATED_EVENTS]: [],
+        [rhit.FB_KEY_FAVORITE_EVENTS]: [],
       };
     })
     .catch((error) => {
@@ -1275,6 +1394,11 @@ rhit.LoginPageModel = class {
       console.log(`Signed out error`);
     });
 	}
+
+  getUserDoc(){
+
+    return rhit.loginPageModel._ref.doc(rhit.loginPageModel.uid);
+  }
 
 	get isSignedIn(){
 
@@ -1350,7 +1474,7 @@ rhit.initializePage = function(){
     const privateEdit = urlParams.get("privateEdit");
 
     rhit.eventPageModel = new rhit.EventPageModel(timelineID, eventID, privateEdit);
-    new rhit.EventPageController()
+    new rhit.EventPageController();
   }
 
   else if (document.querySelector("#profilePage")){
