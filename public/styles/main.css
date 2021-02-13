@@ -77,7 +77,7 @@ html{
 }
 
 .buttonContainer {
-    /* display: flex; */
+    display: flex;
 } 
 
 .buttonContainer > button {
@@ -370,7 +370,7 @@ html{
     font-size: x-large;
     right: 0%;
   }
-  
+
   #timelineToolbar{
     height: 87vh;
   }
