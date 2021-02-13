@@ -119,7 +119,7 @@ rhit.TimelineListController = class {
   _createTimelineSection(timeline, index){
 
     const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab timelineItemButton">
-                                    <i class="material-icons">add</i>
+                                    <i class="material-icons">keyboard_arrow_down</i>
                                   </button>
                                   `);
 
@@ -419,7 +419,7 @@ rhit.SingleTimelineController = class {
   _createEventGroup(startYear, endYear){
 
     const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab timelineItemButton">
-                                    <i class="material-icons">add</i>
+                                    <i class="material-icons">keyboard_arrow_down</i>
                                   </button>
                                   <br>`);
 
