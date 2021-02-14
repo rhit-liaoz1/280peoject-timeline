@@ -80,7 +80,7 @@ rhit.searching = function(inputtxt){
       var divs = document.querySelector("#eventListContainer").getElementsByTagName("li");
       // console.log(divs);
       for (var i = 0; i < divs.length; i++) {
-          if (divs[i].innerHTML == pattern) {
+          if (divs[i].innerHTML.split(": ")[1] == pattern) {
             index = i;
             // divs[i].scrollIntoView();
             divs[i].style.color = "blue";
