@@ -1300,19 +1300,12 @@ rhit.SettingsPageController = class {
     document.querySelector("#submitUpdatePassword").addEventListener("click", () => {
     
       const newPassword = document.querySelector("#newPassword").value.trim();
-      const oldPassword = document.querySelector("#oldPassword").value.trim();
-      if(newPassword.length <6){
-        alert('Password need be longer than 6 charaters');
-      }else{
-        rhit.settingsPageModel.setPassword(password);
-      }
-      
+      rhit.settingsPageModel.setPassword(newPassword);
     });
 
     $("#updatePassword").on("show.bs.modal", (event) => {
 
       document.querySelector("#newPassword").value = "";
-      document.querySelector("#oldPassword").value = "";
     });
 
     $("#updatePassword").on("shown.bs.modal", (event) => {
