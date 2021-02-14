@@ -1,5 +1,6 @@
 // TODO verify user action for critical operations (delete event/timeline/profile)
-// TODO zoom function doesn't work on mobile
+// TODO do rest of search functionality
+// TODO system test before Monday
 
 var rhit = rhit || {};
 
@@ -775,7 +776,18 @@ rhit.EventPageController = class {
 
 	constructor(){
 
-    document.querySelector("#contributorsButton").addEventListener("click", () => {
+    let contributorsButton = document.querySelector("#contributorsButton")
+    contributorsButton.addEventListener("click", () => {
+
+      if (contributorsButton.querySelector(".material-icons").textContent == "keyboard_arrow_right"){
+
+        contributorsButton.querySelector(".material-icons").textContent = "keyboard_arrow_down"
+      }
+
+      else {
+
+        contributorsButton.querySelector(".material-icons").textContent = "keyboard_arrow_right"
+      }
 
       let section = document.querySelector("#contributorsList");
       section.hidden = ! section.hidden;
@@ -784,7 +796,6 @@ rhit.EventPageController = class {
     document.querySelector("#favoriteButton").addEventListener("click", () => {
 
       let favorited = rhit.eventPageModel.favoritedByContains(rhit.loginPageModel.uid);
-
       if (favorited) rhit.eventPageModel.removeFavoritedBy(rhit.loginPageModel.uid);
       else rhit.eventPageModel.addFavoritedBy(rhit.loginPageModel.uid); 
     });
@@ -1105,13 +1116,35 @@ rhit.ProfilePageController = class {
 
 	constructor(){
 
-    document.querySelector("#createdEventsButton").addEventListener("click", () => {
+    let createdButton = document.querySelector("#createdEventsButton")
+    createdButton.addEventListener("click", () => {
+
+      if (createdButton.querySelector(".material-icons").textContent == "keyboard_arrow_right"){
+
+        createdButton.querySelector(".material-icons").textContent = "keyboard_arrow_down"
+      }
+
+      else {
+
+        createdButton.querySelector(".material-icons").textContent = "keyboard_arrow_right"
+      }
 
       let section = document.querySelector("#createdEventsList");
       section.hidden = ! section.hidden;
     });
 
-    document.querySelector("#favoriteEventsButton").addEventListener("click", () => {
+    let favoriteButton = document.querySelector("#favoriteEventsButton")
+    favoriteButton.addEventListener("click", () => {
+
+      if (favoriteButton.querySelector(".material-icons").textContent == "keyboard_arrow_right"){
+
+        favoriteButton.querySelector(".material-icons").textContent = "keyboard_arrow_down"
+      }
+
+      else {
+
+        favoriteButton.querySelector(".material-icons").textContent = "keyboard_arrow_right"
+      }
 
       let section = document.querySelector("#favoriteEventsList");
       section.hidden = ! section.hidden;
