@@ -188,6 +188,12 @@ rhit.TimelineListController = class {
 
 	updateView(){
 
+    if (! rhit.loginPageModel.isGuest) {
+      
+      document.querySelector("#profilePicture").hidden = false;
+      document.querySelector("#profilePicture").src = rhit.loginPageModel.image;
+    }
+
     if (! rhit.loginPageModel.isGuest) document.querySelector("#addNewTimelineButton").hidden = false;
 
     const newTimelineList = htmlToElement(`<div id="timelineListContainer"></div>`);
@@ -463,6 +469,12 @@ rhit.SingleTimelineController = class {
 	}
 
 	updateView(){
+
+    if (! rhit.loginPageModel.isGuest) {
+      
+      document.querySelector("#profilePicture").hidden = false;
+      document.querySelector("#profilePicture").src = rhit.loginPageModel.image;
+    }
 
     if (rhit.singleTimelineModel.author == rhit.loginPageModel.uid){
 
@@ -840,6 +852,12 @@ rhit.EventPageController = class {
 	}
 
 	updateView(){
+
+    if (! rhit.loginPageModel.isGuest) {
+      
+      document.querySelector("#profilePicture").hidden = false;
+      document.querySelector("#profilePicture").src = rhit.loginPageModel.image;
+    }
 
     let favorited = rhit.eventPageModel.favoritedByContains(rhit.loginPageModel.uid);
     if (favorited) document.querySelector("#favoriteIcon").style.color = "#6091F1";
@@ -1226,7 +1244,7 @@ rhit.ProfilePageModel = class {
     })
     .then(() => {
 
-      return rhit.loginPageModel.setUsername(username);
+      return rhit.loginPageModel.updateProfile(username, imageURL);
     })
     .then(() => {
 
@@ -1501,6 +1519,7 @@ rhit.LoginPageModel = class {
           return this._user.updateProfile({
 
             displayName: this._profileObject[rhit.FB_KEY_USERNAME],
+            photoURL: this._profileObject[rhit.FB_KEY_IMAGE_URL],
           });
         })
         .then(() => {
@@ -1610,17 +1629,23 @@ rhit.LoginPageModel = class {
     return this._user.isAnonymous;
   }
 
-  setUsername(name){
+  updateProfile(name, image){
 
     return this._user.updateProfile({
 
       displayName: name,
+      photoURL: image,
     });
   }
 
   get username(){
 
     return this._user.displayName;
+  }
+
+  get image(){
+
+    return this._user.photoURL;
   }
 
 	get uid(){
