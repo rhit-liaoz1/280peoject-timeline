@@ -41,6 +41,78 @@ function googleTranslateElementInit() {
   new google.translate.TranslateElement({pageLanguage: "en"}, "google_translate_element");
 }
 
+// --------------------------------------------------------------------------------------------------------------------------------------
+// Searching ------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------------
+
+rhit.searching = function(inputtxt){
+  let re = /^[0-9]+$/;
+  if (document.querySelector("#mainTimelinePage")){
+    console.log("Main page searching for:", inputtxt);
+    // var pattern = inputtxt.toLowerCase();
+    let index =-1;
+    var divs = document.querySelector("#timelineListContainer").getElementsByTagName("h5");
+    console.log(divs);
+    for (var i = 0; i < divs.length; i++) {
+        if (divs[i].innerHTML == inputtxt) {
+          index = i;
+          // divs[i].scrollIntoView();
+          divs[i].style.color = "blue";
+          console.log("founded");
+          break;
+      } 
+    }  
+    if(index == -1)alert('Sorry. Please try another word.');
+   
+  }
+  if (document.querySelector("#timelinePage")){
+    // console.log("search time:", document.querySelector("#searchTime").checked );
+    // console.log("search Name:",document.querySelector("#searchName").checked );
+    if(document.querySelector("#searchName").checked === true)
+    {
+      console.log("Timeline page searching for Name:", inputtxt);
+      var pattern = inputtxt.toLowerCase();
+      let index =-1;
+      var divs = document.querySelector("#eventListContainer").getElementsByTagName("li");
+      // console.log(divs);
+      for (var i = 0; i < divs.length; i++) {
+          if (divs[i].innerHTML == pattern) {
+            index = i;
+            // divs[i].scrollIntoView();
+            divs[i].style.color = "red";
+            console.log("founded");
+            break;
+        } 
+      }  
+      if(index == -1)alert('Sorry. Please try another word.');
+    }else if(document.querySelector("#searchTime").checked === true && re.test(inputtxt))
+    {
+      // console.log("Timeline page searching for Time:", inputtxt);
+      // console.log("Timeline page searching for Name:", inputtxt);
+      // var pattern = inputtxt.toLowerCase();
+      // let index =-1;
+      // var divs = document.querySelector("#eventListContainer").getElementsByTagName("h5");
+      // // console.log(divs);
+      // for (var i = 0; i < divs.length; i++) {
+      //     if (divs[i].innerHTML == pattern) {
+      //       index = i;
+      //       // divs[i].scrollIntoView();
+      //       divs[i].style.color = "red";
+      //       console.log("founded");
+      //       break;
+      //   } 
+      // }  
+      // if(index == -1)alert('Sorry. Please try another word.');
+     
+      }else{
+      alert('Please input numeric characters only');
+      }
+
+     
+    
+  }
+}
+
 function htmlToElement(html){
 
   var template = document.createElement("template");
@@ -65,6 +137,11 @@ rhit.TimelineListController = class {
     document.querySelector("#signOutButton").addEventListener("click", () => {
 
       rhit.loginPageModel.signOut();
+    });
+
+    document.querySelector("#submitSearch").addEventListener("click", () => {
+
+      rhit.searching(document.querySelector("#inputSearchString").value);
     });
 
     document.querySelector("#submitAddTimeline").addEventListener("click", () => {
@@ -244,6 +321,12 @@ rhit.SingleTimelineController = class {
 
       if (! rhit.loginPageModel.isGuest) window.location.href = `/profile.html`;
     });
+
+    document.querySelector("#submitSearch").addEventListener("click", () => {
+
+     rhit.searching( document.querySelector("#inputSearchString").value);
+    });
+
 
     document.querySelector("#signOutButton").addEventListener("click", () => {
 
@@ -1209,7 +1292,12 @@ rhit.SettingsPageController = class {
     
       const newPassword = document.querySelector("#newPassword").value.trim();
       const oldPassword = document.querySelector("#oldPassword").value.trim();
-      rhit.settingsPageModel.setPassword(password);
+      if(newPassword.length <6){
+        alert('Password need be longer than 6 charaters');
+      }else{
+        rhit.settingsPageModel.setPassword(password);
+      }
+      
     });
 
     $("#updatePassword").on("show.bs.modal", (event) => {
@@ -1336,7 +1424,8 @@ rhit.LoginPageController = class {
       const age = document.querySelector("#modalAge").value.trim();
       const inputEmail = document.querySelector("#inputEmail");
       const inputPassword = document.querySelector("#inputPassword");
-
+    
+     
       if (username == "") {
         
         alert("Invalid Username");
@@ -1424,6 +1513,7 @@ rhit.LoginPageModel = class {
   }
 
   createUserWithEmailAndPassword(email, password, username, imageURL, location, age){
+  
 
     console.log(`Create account for email: ${email} password: ${password}`);
   
