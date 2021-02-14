@@ -851,9 +851,14 @@ rhit.EventPageController = class {
       document.querySelector("#updateEventButton").hidden = false;
     }
 
-    if (! rhit.eventPageModel.privateEdit){
+    if (! rhit.eventPageModel.privateEdit && ! rhit.loginPageModel.isGuest){
 
       document.querySelector("#updateEventButton").hidden = false;
+    }
+
+    if (! rhit.loginPageModel.isGuest){
+
+      document.querySelector("#favoriteButton").hidden = false;
     }
 
     document.querySelector("#eventDate").textContent = `${rhit.eventPageModel.startDate}-${rhit.eventPageModel.endDate}`;
