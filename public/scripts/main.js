@@ -58,6 +58,9 @@ rhit.searching = function(inputtxt){
           index = i;
           // divs[i].scrollIntoView();
           divs[i].style.color = "blue";
+          let a = divs[i].parentElement.parentElement.parentElement;
+          a.getElementsByTagName("h5")[0].style.color = "blue";
+         a.getElementsByTagName("button")[0].click();
           console.log("founded");
           break;
       } 
@@ -79,7 +82,13 @@ rhit.searching = function(inputtxt){
           if (divs[i].innerHTML == pattern) {
             index = i;
             // divs[i].scrollIntoView();
-            divs[i].style.color = "red";
+            divs[i].style.color = "blue";
+            let a = divs[i].parentElement.parentElement.parentElement;
+            a.getElementsByTagName("h5")[0].style.color = "blue";
+
+           a.getElementsByTagName("button")[0].click();
+            // console.log(b);
+            // let c =  let b = console.log(c);
             console.log("founded");
             break;
         } 
@@ -89,7 +98,7 @@ rhit.searching = function(inputtxt){
     {
       // console.log("Timeline page searching for Time:", inputtxt);
       // console.log("Timeline page searching for Name:", inputtxt);
-      // var pattern = inputtxt.toLowerCase();
+      // var pattern = inputtxt;
       // let index =-1;
       // var divs = document.querySelector("#eventListContainer").getElementsByTagName("h5");
       // // console.log(divs);
