@@ -638,8 +638,7 @@ rhit.SingleTimelineModel = class {
       [rhit.FB_KEY_IMAGE_URL]: imageURL,
       [rhit.FB_KEY_DESCRIPTION]: description,
       [rhit.FB_KEY_FAVORITED_BY]: [],
-      // TODO Replace with actual username below
-      [rhit.FB_KEY_CONTRIBUTORS]: [rhit.loginPageModel.uid],
+      [rhit.FB_KEY_CONTRIBUTORS]: [rhit.loginPageModel.username],
     })
     .then((docRef) => {
 
@@ -933,8 +932,7 @@ rhit.EventPageModel = class {
       [rhit.FB_KEY_TITLE]: title,
       [rhit.FB_KEY_IMAGE_URL]: imageURL,
       [rhit.FB_KEY_DESCRIPTION]: description,
-      // TODO add username instead of uid below
-      [rhit.FB_KEY_CONTRIBUTORS]: firebase.firestore.FieldValue.arrayUnion(rhit.loginPageModel.uid),
+      [rhit.FB_KEY_CONTRIBUTORS]: firebase.firestore.FieldValue.arrayUnion(rhit.loginPageModel.username),
     })
     .then((docRef) => {
 
@@ -1223,6 +1221,10 @@ rhit.ProfilePageModel = class {
     })
     .then(() => {
 
+      return rhit.loginPageModel.setUsername(username);
+    })
+    .then(() => {
+
       console.log("Profile document successfully updated");
       window.location.href = "/profile.html";
     })
@@ -1491,6 +1493,13 @@ rhit.LoginPageModel = class {
         this._createProfile()
         .then(() => {
 
+          return this._user.updateProfile({
+
+            displayName: this._profileObject[rhit.FB_KEY_USERNAME],
+          });
+        })
+        .then(() => {
+
           changeListener();
         });
       }
@@ -1523,6 +1532,7 @@ rhit.LoginPageModel = class {
     .then(() => {
 
       console.log("Account creation successful");
+
       this._profileObject = {
 
         [rhit.FB_KEY_LOCATION]: location,
@@ -1593,6 +1603,19 @@ rhit.LoginPageModel = class {
   get isGuest(){
 
     return this._user.isAnonymous;
+  }
+
+  setUsername(name){
+
+    return this._user.updateProfile({
+
+      displayName: name,
+    });
+  }
+
+  get username(){
+
+    return this._user.displayName;
   }
 
 	get uid(){
