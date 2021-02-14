@@ -1,5 +1,5 @@
-// TODO profile image on maintimeline page and timeline page
 // TODO verify user action for critical operations (delete event/timeline/profile)
+// TODO zoom function doesn't work on mobile
 
 var rhit = rhit || {};
 
@@ -218,7 +218,7 @@ rhit.TimelineListController = class {
   _createTimelineSection(timeline, index){
 
     const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab timelineItemButton">
-                                    <i class="material-icons">keyboard_arrow_down</i>
+                                    <i class="material-icons">keyboard_arrow_right</i>
                                   </button>
                                   `);
 
@@ -226,6 +226,16 @@ rhit.TimelineListController = class {
 
       const item = document.querySelector(`#descriptionOfItem${index}`).parentElement;
       item.hidden = ! item.hidden;
+
+      if (button.querySelector(".material-icons").textContent == "keyboard_arrow_down"){
+
+        button.querySelector(".material-icons").textContent = "keyboard_arrow_right";
+      }
+
+      else {
+
+        button.querySelector(".material-icons").textContent = "keyboard_arrow_down";
+      }
     });
 
     const title = htmlToElement(`<h5 class="mainTimelineItemTitle">${timeline.title}</h5>`);
@@ -530,7 +540,7 @@ rhit.SingleTimelineController = class {
   _createEventGroup(startYear, endYear){
 
     const button = htmlToElement(`<button type="button" class="btn bmd-btn-fab-sm bmd-btn-fab timelineItemButton">
-                                    <i class="material-icons">keyboard_arrow_down</i>
+                                    <i class="material-icons">keyboard_arrow_right</i>
                                   </button>
                                   <br>`);
 
@@ -546,6 +556,16 @@ rhit.SingleTimelineController = class {
 
       const item = group.querySelector(`#containerForRange${startYear}-${endYear}`).parentElement;
       item.hidden = ! item.hidden;
+
+      if (button.querySelector(".material-icons").textContent == "keyboard_arrow_down"){
+
+        button.querySelector(".material-icons").textContent = "keyboard_arrow_right";
+      }
+
+      else {
+
+        button.querySelector(".material-icons").textContent = "keyboard_arrow_down";
+      }
     });
 
     group.prepend(button);
@@ -678,7 +698,6 @@ rhit.SingleTimelineModel = class {
     });
   }
   
-  // TODO: check if return value is null when calling
   getMinDate(){
 
     return this._eventListRef.orderBy(rhit.FB_KEY_START_DATE).limit(1).get()
