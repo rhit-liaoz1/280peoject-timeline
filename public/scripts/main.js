@@ -337,6 +337,12 @@ rhit.SingleTimelineController = class {
 
 	constructor(){
 
+    // mouseup event doesn't work on mobile. 
+    document.querySelector("#zoomSlider").addEventListener("touchend", () => {
+
+      this.updateView();
+    });
+
     document.querySelector("#zoomSlider").addEventListener("mouseup", () => {
 
       this.updateView();
