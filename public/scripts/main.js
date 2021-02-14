@@ -1343,12 +1343,15 @@ rhit.SettingsPageController = class {
 
     document.querySelector("#submitUpdatePassword").addEventListener("click", () => {
     
+      const oldPassword = document.querySelector("#oldPassword").value.trim();
       const newPassword = document.querySelector("#newPassword").value.trim();
-      rhit.settingsPageModel.setPassword(newPassword);
+
+      rhit.settingsPageModel.setPassword(oldPassword, newPassword);
     });
 
     $("#updatePassword").on("show.bs.modal", (event) => {
 
+      document.querySelector("#oldPassword").value = "";
       document.querySelector("#newPassword").value = "";
     });
 
@@ -1430,9 +1433,20 @@ rhit.SettingsPageModel = class {
     });
   }
 
-  setPassword(password){
+  setPassword(oldPassword, newPassword){
 
-    firebase.auth().currentUser.updatePassword(password)
+    let user = firebase.auth().currentUser;
+    const credential = firebase.auth.EmailAuthProvider.credential(
+
+      rhit.loginPageModel.email, 
+      oldPassword,
+    );
+
+    user.reauthenticateWithCredential(credential)
+    .then(() => {
+
+      return user.updatePassword(newPassword);
+    })
     .then(() => {
 
       console.log("Password successfully updated.");
@@ -1665,6 +1679,11 @@ rhit.LoginPageModel = class {
   get image(){
 
     return this._user.photoURL;
+  }
+
+  get email(){
+
+    return this._user.email;
   }
 
 	get uid(){
