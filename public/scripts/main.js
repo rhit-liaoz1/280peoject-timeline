@@ -1357,7 +1357,7 @@ rhit.SettingsPageController = class {
 
     $("#updatePassword").on("shown.bs.modal", (event) => {
 
-      document.querySelector("#newPassword").focus();
+      document.querySelector("#oldPassword").focus();
     });
 
     document.querySelector("#profileSignOutButton").addEventListener("click", () => {
@@ -1450,6 +1450,7 @@ rhit.SettingsPageModel = class {
     .then(() => {
 
       console.log("Password successfully updated.");
+      alert("Password Successfully Changed.");
     })
     .catch((error) => {
 
@@ -1619,6 +1620,7 @@ rhit.LoginPageModel = class {
       var errorCode = error.code;
       var errorMessage = error.message;
       console.log(`Existing Account Log In Error ${errorCode} ${errorMessage}`);
+      alert("Incorrect Sign in Credentials.");
     });
   }
 
