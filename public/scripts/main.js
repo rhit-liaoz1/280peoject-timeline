@@ -71,7 +71,7 @@ rhit.searching = function(inputtxt){
     if(document.querySelector("#searchName").checked === true)
     {
       console.log("Timeline page searching for Name:", inputtxt);
-      var pattern = inputtxt.toLowerCase();
+      var pattern = inputtxt;
       let index =-1;
       var divs = document.querySelector("#eventListContainer").getElementsByTagName("li");
       // console.log(divs);
