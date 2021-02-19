@@ -60,14 +60,20 @@ rhit.searching = function(inputtxt){
       var pattern = new RegExp(inputtxt, "i");
       // console.log(pattern);
       let conte =divs[i].innerHTML;
+      let a = divs[i].parentElement;
+      if( divs[i].style.color == "blue"){
+        a.getElementsByTagName("button")[0].click();
+      }
+      divs[i].style.color = "black";
+      a.getElementsByTagName("h5")[0].style.color = "balck";
         if (pattern.test(conte)) {
           index = i;
           divs[i].style.color = "blue";
-          let a = divs[i].parentElement;
+         
           // console.log(a[0]);
           a.getElementsByTagName("h5")[0].style.color = "blue";
           a.getElementsByTagName("button")[0].click();
-          console.log("founded");
+          console.log("founded main");
           // break;
       } 
     }  
@@ -83,19 +89,27 @@ rhit.searching = function(inputtxt){
       var pattern = new RegExp(inputtxt +'$', "i");
       let index =-1;
       var divs = document.querySelector("#eventListContainer").getElementsByTagName("li");
-      console.log(divs[0]);
+      // console.log(divs[0]);
+
       for (var i = 0; i < divs.length; i++) {
+       
+        let a = divs[i].parentElement.parentElement.parentElement;
+        if( divs[i].style.color == "blue"){
+          a.getElementsByTagName("button")[0].click();
+       }
+        divs[i].style.color = "black";
+        a.getElementsByTagName("h5")[0].style.color = "black"
           if (pattern.test(divs[i].innerHTML.split(": ")[1])) {
             index = i;
           //   // divs[i].scrollIntoView();
             divs[i].style.color = "blue";
-            let a = divs[i].parentElement.parentElement.parentElement;
+            // let a = divs[i].parentElement.parentElement.parentElement;
             a.getElementsByTagName("h5")[0].style.color = "blue";
 
            a.getElementsByTagName("button")[0].click();
             // console.log(b);
             // let c =  let b = console.log(c);
-            console.log("founded");
+            console.log("founded name");
             // break;
         } 
       }  
@@ -121,12 +135,17 @@ rhit.searching = function(inputtxt){
         var res = divs[i].innerHTML.split("-");
         // console.log(res[0]);
         // console.log(res[1]);
+        if( divs[i].style.color == "blue"){
+          divs[i].parentElement.getElementsByTagName("button")[0].click();
+       }
+        divs[i].style.color = "black";
+    
           if(inputtxt<=res[1] && inputtxt >= res[0]) {
             index = i;
             // divs[i].scrollIntoView();
             divs[i].style.color = "blue";
             divs[i].parentElement.getElementsByTagName("button")[0].click();
-            console.log("founded");
+            console.log("founded num");
             // break;
         } 
       }  
@@ -168,7 +187,7 @@ rhit.TimelineListController = class {
     });
 
     document.querySelector("#submitSearch").addEventListener("click", () => {
-       setTimeout(location.reload(),2000);
+      //  setTimeout(location.reload(),2000);
      
       rhit.searching(document.querySelector("#inputSearchString").value);
     });
