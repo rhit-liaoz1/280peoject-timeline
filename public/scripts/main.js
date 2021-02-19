@@ -27,6 +27,7 @@ rhit.FB_KEY_CREATED_EVENTS_NAME = "Created Events Name";
 rhit.FB_KEY_CREATED_EVENTS_PARAMS = "Created Events Params";
 rhit.FB_KEY_FAVORITE_EVENTS_NAME = "Favorite Events Name";
 rhit.FB_KEY_FAVORITE_EVENTS_PARAMS = "Favorite Events Params";
+rhit.FB_KEY_LANGUAGE = "Language";
 
 // Singletons
 rhit.loginPageModel = null;
@@ -1400,6 +1401,12 @@ rhit.SettingsPageController = class {
 
   constructor(){
 
+    let translateSelect = document.querySelector(".goog-te-combo");
+    translateSelect.addEventListener("click", () => {
+
+      rhit.settingsPageModel.setLanguage(translateSelect.value);
+    });
+
     document.querySelector("#submitUpdatePassword").addEventListener("click", () => {
     
       const oldPassword = document.querySelector("#oldPassword").value.trim();
@@ -1473,6 +1480,22 @@ rhit.SettingsPageModel = class {
   stopListening(){
 
     this._unsubcribe();
+  }
+
+  setLanguage(language){
+
+    rhit.loginPageModel.getUserDoc().update({
+
+      [rhit.FB_KEY_LANGUAGE]: language,
+    })
+    .then(() => {
+
+      console.log("Language updated successfully.");
+    })
+    .catch((error) => {
+
+      console.log("Error while updating language: ", error);
+    });
   }
 
   delete(){
@@ -1604,6 +1627,8 @@ rhit.LoginPageModel = class {
 
       this._user = user;
 
+      this._setLanguage();
+
       if (this._profileObject){
 
         this._createProfile()
@@ -1625,6 +1650,26 @@ rhit.LoginPageModel = class {
     });
 	}
 
+  _setLanguage(){
+
+    if (this._user){
+
+      let translateSelect = document.querySelector(".goog-te-combo");
+      this.getUserDoc().onSnapshot((doc) => {
+
+        if (doc.exists && translateSelect){
+  
+          translateSelect.value = doc.get(rhit.FB_KEY_LANGUAGE);
+
+          // https://stackoverflow.com/questions/78932/how-do-i-programmatically-set-the-value-of-a-select-box-element-using-javascript
+          // Programatically setting value of select tag
+          translateSelect.dispatchEvent(new Event('change'));
+          console.log("HERE");
+        }
+      });
+    }
+  }
+
 	_createProfile(){
     
     if (this.uid && this._profileObject){
@@ -1642,7 +1687,6 @@ rhit.LoginPageModel = class {
 
   createUserWithEmailAndPassword(email, password, username, imageURL, location, age){
   
-
     console.log(`Create account for email: ${email} password: ${password}`);
   
     firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -1661,6 +1705,7 @@ rhit.LoginPageModel = class {
         [rhit.FB_KEY_FAVORITE_EVENTS_NAME]: [],
         [rhit.FB_KEY_CREATED_EVENTS_PARAMS]: [],
         [rhit.FB_KEY_FAVORITE_EVENTS_PARAMS]: [],
+        [rhit.FB_KEY_LANGUAGE]: "en",
       };
     })
     .catch((error) => {
